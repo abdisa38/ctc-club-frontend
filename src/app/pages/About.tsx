@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Link } from "react-router";
 import { ArrowRight, Code2, Heart, Award, Shield, Users, Terminal } from "lucide-react";
-import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/Button";
 
 export function About() {
   return (
