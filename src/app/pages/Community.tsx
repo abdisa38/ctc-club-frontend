@@ -158,9 +158,17 @@ export function Community() {
   return (
     <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
       <div className="flex-1 space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Community Forum</h1>
-          <p className="text-slate-500 dark:text-slate-400">Discuss courses, ask questions, and help each other grow.</p>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b pb-6 dark:border-slate-800">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Community Forum</h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-2">Discuss courses, ask questions, and help each other grow. Join our Telegram for real-time chat!</p>
+          </div>
+          <Button asChild className="mt-4 sm:mt-0 bg-[#2AABEE] hover:bg-[#229ED9] text-white shadow-lg shadow-blue-500/20 px-6 py-2 h-auto text-base transition-all duration-300">
+            <a href="https://t.me/officialCTCclub" target="_blank" rel="noreferrer">
+              <MessageSquare className="w-5 h-5 mr-2" />
+              Join Telegram
+            </a>
+          </Button>
         </div>
 
         {error ? <ErrorBanner message={error} /> : null}
