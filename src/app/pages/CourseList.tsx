@@ -162,7 +162,10 @@ export function CourseList() {
   };
 
   const handleEnroll = async (course: CourseType) => {
-    if (!user) return; // need to be logged in
+    if (!user) {
+      window.location.href = "/login";
+      return; 
+    }
     setActionError("");
 
     const id = course._id;
