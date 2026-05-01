@@ -156,7 +156,7 @@ export function Community() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto">
+    <div className="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
       <div className="flex-1 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b pb-6 dark:border-slate-800">
           <div>
