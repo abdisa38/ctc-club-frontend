@@ -198,6 +198,43 @@ export function CourseEditor() {
           </div>
 
           <div className="space-y-2">
+            
+          <div className="grid gap-6 md:grid-cols-2 pt-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Access Mode (Manual Lock Check)</label>
+              <select
+                className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-950"
+                value={accessMode}
+                onChange={(e) => setAccessMode(e.target.value as any)}
+              >
+                <option value="open">Open (Auto-enroll or Chapa)</option>
+                <option value="locked">Locked (Only I manually enroll)</option>
+                <option value="coming_soon">Coming Soon</option>
+              </select>
+            </div>
+            
+            {isEditing && (
+             <div className="space-y-2 bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+              <label className="text-sm font-medium text-slate-800 dark:text-slate-200">Manual Student Enrollment</label>
+              <p className="text-xs text-slate-500 mb-2">Manually unlock course for student via email (Telegram payment workflow)</p>
+              <div className="flex gap-2">
+               <Input 
+                type="email" 
+                placeholder="student@example.com"
+                value={enrollEmail}
+                onChange={(e) => setEnrollEmail(e.target.value)}
+                className="flex-1 bg-white dark:bg-slate-950"
+               />
+               <Button type="button" onClick={handleManualEnroll} disabled={!enrollEmail || isEnrolling}>
+                 {isEnrolling ? "..." : "Enroll"}
+               </Button>
+              </div>
+              {enrollMessage && <p className="text-xs mt-2 text-indigo-600 font-medium">{enrollMessage}</p>}
+             </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
             <label className="text-sm font-medium">Price (ETB) *</label>
             <Input
               type="number"
