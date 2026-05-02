@@ -2348,7 +2348,7 @@ export function CourseDetail() {
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                  {resource.name}
+                                  {resource.title || resource.name || "Attached Resource"}
                                 </p>
                               </div>
                             </a>
