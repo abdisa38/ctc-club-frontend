@@ -201,7 +201,7 @@ export const manualEnroll = asyncHandler(async (req: AuthRequest, res: Response)
 });
 
 export const enrollCourse = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const existingCourse = await Course.findById(req.params.id).select('price');
+  const existingCourse = await Course.findById(req.params.id).select('price accessMode');
   if (!existingCourse) {
     res.status(404);
     throw new Error('Course not found');

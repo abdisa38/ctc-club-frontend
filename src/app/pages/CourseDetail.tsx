@@ -279,8 +279,7 @@ export function CourseDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDiscussionLoading, setIsDiscussionLoading] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
-  const [isStartingCoursePayment, setIsStartingCoursePayment] = useState(false);
-  const [isVerifyingCoursePayment, setIsVerifyingCoursePayment] = useState(false);
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteBusy, setFavoriteBusy] = useState(false);
   const [myRating, setMyRating] = useState(0);
@@ -706,41 +705,19 @@ export function CourseDetail() {
     setError("");
     setSuccessMsg("");
 
-    if (isPaidCourse) {
-      setIsStartingCoursePayment(true);
-
-      try {
-        const init = await apiService.initializeCoursePayment(id);
-
-        if (init.isEnrolled || init.alreadyEnrolled || init.requiresPayment === false) {
-          const updatedCourse = await apiService.getCourseById(id);
-          setCourse(updatedCourse);
-          setSuccessMsg("Course access activated.");
-          return;
-        }
-
-        if (!init.checkoutUrl) {
-          throw new Error("Checkout URL was not returned by the server.");
-        }
-
-        window.location.href = init.checkoutUrl;
-      } catch (checkoutError: any) {
-        setError(extractErrorMessage(checkoutError, "Failed to start course checkout."));
-      } finally {
-        setIsStartingCoursePayment(false);
-      }
-
-      return;
-    }
-
     setIsEnrolling(true);
     try {
       await apiService.enrollCourse(id);
       const updatedCourse = await apiService.getCourseById(id);
       setCourse(updatedCourse);
+      
+      // refresh lessons explicitly
+      const loadedLessons = await apiService.getCourseLessons(id).catch(() => []);
+      setLessons(loadedLessons);
+
       setSuccessMsg("Successfully enrolled. Start learning now.");
     } catch (enrollError: any) {
-      setError(extractErrorMessage(enrollError, "Failed to enroll in this course"));
+      setError(extractErrorMessage(enrollError, "Failed to enroll in this course. It might be locked or paid."));
     } finally {
       setIsEnrolling(false);
     }
@@ -1387,7 +1364,7 @@ export function CourseDetail() {
                     <h3 className="font-bold text-xl mb-2">
                        {(course as any).accessMode === 'coming_soon' ? "Coming Soon!" : 
                          (course as any).accessMode === 'locked' ? "Restricted Access Only" :
-                         isPaidCourse ? "Purchase to Start Learning" : "Enroll to Start Learning"
+                         "Enroll to Start Learning"
                        }
                     </h3>
                     <p className="text-sm opacity-80 mb-4">
@@ -1404,17 +1381,11 @@ export function CourseDetail() {
                       className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
                       size="lg"
                       onClick={() => void handleEnroll()}
-                      disabled={isEnrolling || isStartingCoursePayment || isVerifyingCoursePayment}
+                      disabled={isEnrolling}
                     >
-                      {isVerifyingCoursePayment
-                        ? "Verifying Payment..."
-                        : isStartingCoursePayment
-                          ? "Opening Checkout..."
-                          : isEnrolling
+                      {isEnrolling
                             ? "Enrolling..."
-                            : isPaidCourse
-                              ? `Pay ${coursePrice.toFixed(2)} ${courseCurrency}`
-                              : "Enroll Free"}
+                            : "Enroll Free"}
                     </Button>
                     )}
 
@@ -1468,76 +1439,9 @@ export function CourseDetail() {
             </div>
           ) : null}
 
-          {isVerifyingCoursePayment ? (
-            <div className="mb-4 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm text-indigo-700 flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Verifying your payment and unlocking course access...
-            </div>
-          ) : null}
-
-          <div className="flex justify-between items-start gap-4 mb-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{course.title}</h1>
-                <Badge className={`font-extrabold tracking-wide ${isPaidCourse ? "bg-indigo-600 text-white hover:bg-indigo-600" : "bg-emerald-600 text-white hover:bg-emerald-600"}`}>
-                  {isPaidCourse ? `PAID ${coursePrice.toFixed(2)} ${courseCurrency}` : "FREE COURSE"}
-                </Badge>
-                {isAdmin ? <Badge variant="secondary">Manage Course</Badge> : null}
-              </div>
-              <div className="flex items-center gap-4 text-sm text-slate-500">
-                <span className="flex items-center gap-1">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={course.instructor?.avatar || "https://i.pravatar.cc/150?u=instructor"} />
-                    <AvatarFallback>{initials(course.instructor?.name)}</AvatarFallback>
-                  </Avatar>
-                  {course.instructor?.name || "Unknown Instructor"}
-                </span>
-                <span className="flex items-center gap-1 text-amber-500">
-                  <Star className="h-4 w-4 fill-amber-500" />
-                  {reviewCount > 0 ? `${ratingValue.toFixed(1)} (${reviewCount} reviews)` : "No ratings yet"}
-                </span>
-                <span>{Array.isArray(course.students) ? course.students.length : 0} students</span>
-                <span className={`font-semibold ${isPaidCourse ? "text-indigo-600 dark:text-indigo-400" : "text-emerald-600 dark:text-emerald-400"}`}>
-                  {isPaidCourse ? `${coursePrice.toFixed(2)} ${courseCurrency}` : "Free"}
-                </span>
-              </div>
-              {role === "student" && isEnrolled ? (
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-medium text-slate-500">Your rating:</span>
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <button
-                      key={`rate-${value}`}
-                      type="button"
-                      onClick={() => void handleRateCourse(value)}
-                      disabled={ratingBusy}
-                      className="rounded p-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-                      aria-label={`Rate ${value} star${value > 1 ? "s" : ""}`}
-                    >
-                      <Star className={`h-4 w-4 ${value <= myRating ? "text-amber-500 fill-amber-500" : "text-slate-300"}`} />
-                    </button>
-                  ))}
-                  <span className="text-xs text-slate-500">{ratingBusy ? "Saving..." : (myRating > 0 ? `${myRating}/5` : "Tap a star")}</span>
-                </div>
-              ) : null}
-            </div>
-            <div className="flex gap-2">
-              {isAdmin ? (
-                <Button variant="destructive" size="sm">Delete Course</Button>
-              ) : (
-                <>
-                  {role === "student" && !canAccessLessons ? (
-                    <Button
-                      size="sm"
-                      onClick={() => void handleEnroll()}
-                      disabled={isEnrolling || isStartingCoursePayment || isVerifyingCoursePayment}
-                    >
-                      {isStartingCoursePayment
-                        ? "Opening Checkout..."
-                        : isEnrolling
+          {isEnrolling
                           ? "Enrolling..."
-                          : isPaidCourse
-                            ? `Pay ${coursePrice.toFixed(2)} ${courseCurrency}`
-                            : "Enroll Free"}
+                          : "Enroll Free"}
                     </Button>
                   ) : null}
 
