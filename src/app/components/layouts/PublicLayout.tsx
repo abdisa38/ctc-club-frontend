@@ -91,7 +91,7 @@ export function PublicLayout() {
                     key={link.to}
                     href={link.to}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="relative px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wide transition-all duration-200 text-slate-300 hover:text-white hover:bg-white/5"
                   >
                     {link.label}
