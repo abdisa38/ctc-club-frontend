@@ -18,6 +18,7 @@ export interface ICourse extends Document {
   currency: string;
   isPublished: boolean;
   status: 'draft' | 'published' | 'archived';
+  accessMode?: 'open' | 'locked' | 'coming_soon';
   
   // Gamification & Requirements
   level: 'beginner' | 'intermediate' | 'advanced';
@@ -99,6 +100,11 @@ const courseSchema = new Schema<ICourse>(
     isPublished: {
       type: Boolean,
       default: false,
+    },
+    accessMode: {
+      type: String,
+      enum: ['open', 'locked', 'coming_soon'],
+      default: 'open',
     },
     status: {
       type: String,

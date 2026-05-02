@@ -5,7 +5,7 @@ import { createCourseSchema, updateCourseSchema } from '../validators/courseVali
 import {
   createCourse,
   deleteCourse,
-  enrollCourse,
+  enrollCourse, manualEnroll,
   getMyCourseRating,
   getCourseById,
   getCourses,

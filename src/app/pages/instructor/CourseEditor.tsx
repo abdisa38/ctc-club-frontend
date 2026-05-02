@@ -24,6 +24,10 @@ export function CourseEditor() {
   const [pricingMode, setPricingMode] = useState<"free" | "paid">("free");
   const [price, setPrice] = useState("0");
   const [coverImage, setCoverImage] = useState("");
+  const [accessMode, setAccessMode] = useState<"open" | "locked" | "coming_soon">("open");
+  const [enrollEmail, setEnrollEmail] = useState("");
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [enrollMessage, setEnrollMessage] = useState("");
 
   useEffect(() => {
     const loadCourse = async () => {
@@ -38,6 +42,7 @@ export function CourseEditor() {
         setPrice(String(loadedPrice));
         setPricingMode(loadedPrice > 0 ? "paid" : "free");
         setCoverImage(course.coverImage || "");
+        setAccessMode((course as any).accessMode || "open");
       } catch (err: any) {
         setError(err?.response?.data?.message || "Failed to load course for editing");
       } finally {

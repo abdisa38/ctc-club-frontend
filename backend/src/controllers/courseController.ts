@@ -159,6 +159,47 @@ export const deleteCourse = asyncHandler(async (req: AuthRequest, res: Response)
 // @desc    Enroll in a course
 // @route   POST /api/courses/:id/enroll
 // @access  Private (student role etc)
+
+// @desc    Manually enroll a student by email
+// @route   POST /api/courses/:id/manual-enroll
+// @access  Private (instructor/admin)
+export const manualEnroll = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400);
+    throw new Error('Email is required');
+  }
+
+  const course = await Course.findById(req.params.id);
+  if (!course) {
+    res.status(404);
+    throw new Error('Course not found');
+  }
+
+  // Authorize
+  if (req.user?.role !== 'admin' && course.instructor.toString() !== req.user?._id.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to enroll students in this course');
+  }
+
+  const student = await User.findOne({ email });
+  if (!student) {
+    res.status(404);
+    throw new Error('User not found with this email');
+  }
+
+  if (!course.students.includes(student._id)) {
+    course.students.push(student._id);
+    await course.save();
+    
+    await User.findByIdAndUpdate(student._id, {
+      $addToSet: { enrolledCourses: course._id },
+    });
+  }
+
+  sendSuccess(res, {}, { message: `Successfully enrolled ${student.firstName} (${student.email})` });
+});
+
 export const enrollCourse = asyncHandler(async (req: AuthRequest, res: Response) => {
   const existingCourse = await Course.findById(req.params.id).select('price');
   if (!existingCourse) {
