@@ -1371,7 +1371,7 @@ export function CourseDetail() {
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
       <div ref={scrollContainerRef} className="flex-1 flex flex-col overflow-y-auto bg-slate-50 dark:bg-slate-950/50">
-        <div className="w-full bg-slate-900 relative overflow-hidden lg:h-[550px] aspect-video">
+        <div className="w-full bg-slate-900 relative overflow-hidden lg:min-h-[600px] min-h-[300px]">
           {!canAccessLessons ? (
             <>
               <img
@@ -2294,43 +2294,68 @@ export function CourseDetail() {
                   const isSelected = selectedLesson?._id === lesson._id;
 
                   return (
-                    <button
-                      key={lesson._id}
-                      className={`w-full flex items-start gap-3 p-4 transition-colors text-left ${
-                        !canAccessLessons
-                          ? "opacity-60 cursor-not-allowed"
-                          : isSelected
-                            ? "bg-indigo-50 dark:bg-indigo-950/20"
-                            : "hover:bg-slate-50 dark:hover:bg-slate-900"
-                      }`}
-                      onClick={() => {
-                        if (!canAccessLessons) return;
-                        setSelectedLessonId(lesson._id);
-                      }}
-                    >
-                      <div className="mt-0.5">
-                        {canAccessLessons && i < completedCount ? (
-                          <CheckCircle className="h-5 w-5 text-emerald-500" />
-                        ) : !canAccessLessons ? (
-                          <Lock className="h-5 w-5 text-slate-400" />
-                        ) : (
-                          <PlayCircle className="h-5 w-5 text-indigo-500" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className={`text-sm truncate ${
-                            !canAccessLessons ? "text-slate-500" : "font-medium text-slate-900 dark:text-white"
-                          }`}
-                        >
-                          {lesson.title}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
-                          <PlayCircle className="h-3 w-3" />
-                          <span>{formatDuration(lesson.duration)}</span>
+                    <div key={lesson._id} className="flex flex-col border-b border-slate-100 dark:border-slate-800/50 last:border-0">
+                      <button
+                        className={`w-full flex items-start gap-3 p-4 transition-colors text-left ${
+                          !canAccessLessons
+                            ? "opacity-60 cursor-not-allowed"
+                            : isSelected
+                              ? "bg-indigo-50 dark:bg-indigo-950/20"
+                              : "hover:bg-slate-50 dark:hover:bg-slate-900"
+                        }`}
+                        onClick={() => {
+                          if (!canAccessLessons) return;
+                          setSelectedLessonId(lesson._id);
+                        }}
+                      >
+                        <div className="mt-0.5">
+                          {canAccessLessons && i < completedCount ? (
+                            <CheckCircle className="h-5 w-5 text-emerald-500" />
+                          ) : !canAccessLessons ? (
+                            <Lock className="h-5 w-5 text-slate-400" />
+                          ) : (
+                            <PlayCircle className="h-5 w-5 text-indigo-500" />
+                          )}
                         </div>
-                      </div>
-                    </button>
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className={`text-sm truncate ${
+                              !canAccessLessons ? "text-slate-500" : "font-medium text-slate-900 dark:text-white"
+                            }`}
+                          >
+                            {lesson.title}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                            <PlayCircle className="h-3 w-3" />
+                            <span>{formatDuration(lesson.duration)}</span>
+                          </div>
+                        </div>
+                      </button>
+                      
+                      {/* Render resources if any exist for this lesson. */}
+                      {lesson.attachments && lesson.attachments.length > 0 && (
+                        <div className="pl-12 pr-4 pb-4 space-y-2">
+                          {Array.isArray(lesson.attachments) ? lesson.attachments.map((resource: any, index: number) => (
+                            <a
+                              key={index}
+                              href={resource.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 p-2 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-sm transition-all group"
+                            >
+                              <div className="p-1.5 bg-indigo-50 dark:bg-indigo-900/30 rounded text-indigo-600 dark:text-indigo-400">
+                                {resource.fileType === "pdf" ? <FileText className="h-4 w-4" /> : <Download className="h-4 w-4" />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                  {resource.name}
+                                </p>
+                              </div>
+                            </a>
+                          )) : null}
+                        </div>
+                      )}
+                    </div>
                   );
                 })
               ) : (
