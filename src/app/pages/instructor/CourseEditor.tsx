@@ -80,6 +80,21 @@ export function CourseEditor() {
     return issues;
   }, [title, description, price, category, pricingMode]);
 
+  const handleManualEnroll = async () => {
+    if (!enrollEmail || !id) return;
+    setIsEnrolling(true);
+    setEnrollMessage("");
+    try {
+      await apiService.api.post(`/courses/${id}/manual-enroll`, { email: enrollEmail });
+      setEnrollMessage("Successfully enrolled user!");
+      setEnrollEmail("");
+    } catch (e: any) {
+      setEnrollMessage(e.response?.data?.message || "Failed to enroll user. Make sure email exists.");
+    } finally {
+      setIsEnrolling(false);
+    }
+  };
+
   const handleSave = async () => {
     if (formErrors.length > 0) {
       setError(formErrors[0]);
