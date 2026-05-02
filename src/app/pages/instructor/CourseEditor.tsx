@@ -220,7 +220,7 @@ export function CourseEditor() {
                 value={accessMode}
                 onChange={(e) => setAccessMode(e.target.value as any)}
               >
-                <option value="open">Open (Auto-enroll or Chapa)</option>
+                <option value="open">Open (Auto-enroll)</option>
                 <option value="locked">Locked (Only I manually enroll)</option>
                 <option value="coming_soon">Coming Soon</option>
               </select>
