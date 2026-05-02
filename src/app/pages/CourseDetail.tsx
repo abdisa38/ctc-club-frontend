@@ -436,7 +436,7 @@ export function CourseDetail() {
 
   useEffect(() => {
     const availableTabs = canAccessLessons
-      ? ["overview", "resources", "quizzes", "projects", "discussion"]
+      ? ["overview", "discussion"]
       : ["overview"];
 
     if (!availableTabs.includes(activeTab)) {
@@ -452,7 +452,7 @@ export function CourseDetail() {
     }
 
     const availableTabs = canAccessLessons
-      ? ["overview", "resources", "quizzes", "projects", "discussion"]
+      ? ["overview", "discussion"]
       : ["overview"];
 
     if (availableTabs.includes(requestedTab) && requestedTab !== activeTab) {
@@ -1547,7 +1547,7 @@ export function CourseDetail() {
 
           <div className="border-b border-slate-200 dark:border-slate-800 mb-6">
             <nav className="flex gap-6">
-              {["overview", "resources", "quizzes", "projects", "discussion"].map((tab) => (
+              {["overview", "discussion"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
