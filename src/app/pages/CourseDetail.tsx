@@ -1371,7 +1371,7 @@ export function CourseDetail() {
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
       <div ref={scrollContainerRef} className="flex-1 flex flex-col overflow-y-auto bg-slate-50 dark:bg-slate-950/50">
-        <div className="aspect-video bg-slate-900 relative overflow-hidden">
+        <div className="w-full bg-slate-900 relative overflow-hidden lg:h-[550px] aspect-video">
           {!canAccessLessons ? (
             <>
               <img
