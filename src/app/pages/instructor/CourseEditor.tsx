@@ -170,7 +170,7 @@ export function CourseEditor() {
             <p className="text-xs text-slate-500">
               Minimum 10 characters ({description.trim().length}/10)
             </p>
-          </div>
+          </div> 
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
