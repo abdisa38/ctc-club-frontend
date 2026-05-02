@@ -1383,12 +1383,23 @@ export function CourseDetail() {
                 <div className="text-center">
                   <div className="bg-black/60 backdrop-blur-sm p-6 rounded-2xl border border-white/10 text-white max-w-sm">
                     <Lock className="h-8 w-8 mx-auto mb-3 opacity-80" />
-                    <h3 className="font-bold text-xl mb-2">{isPaidCourse ? "Purchase to Start Learning" : "Enroll to Start Learning"}</h3>
+                    
+                    <h3 className="font-bold text-xl mb-2">
+                       {(course as any).accessMode === 'coming_soon' ? "Coming Soon!" : 
+                         (course as any).accessMode === 'locked' ? "Restricted Access Only" :
+                         isPaidCourse ? "Purchase to Start Learning" : "Enroll to Start Learning"
+                       }
+                    </h3>
                     <p className="text-sm opacity-80 mb-4">
-                      {isPaidCourse
+                      {(course as any).accessMode === 'coming_soon'
+                        ? "This course phase is currently under development. Stay tuned!"
+                        : (course as any).accessMode === 'locked'
+                        ? "This phase is manually unlocked by the instructor via Telegram check."
+                        : isPaidCourse
                         ? `This paid course unlocks after checkout (${coursePrice.toFixed(2)} ${courseCurrency}).`
                         : "This lesson video is available after free enrollment."}
                     </p>
+                    {(!course || ((course as any).accessMode !== 'locked' && (course as any).accessMode !== 'coming_soon')) && (
                     <Button
                       className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
                       size="lg"
@@ -1405,6 +1416,8 @@ export function CourseDetail() {
                               ? `Pay ${coursePrice.toFixed(2)} ${courseCurrency}`
                               : "Enroll Free"}
                     </Button>
+                    )}
+
                   </div>
                 </div>
               </div>
