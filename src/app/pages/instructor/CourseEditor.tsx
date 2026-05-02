@@ -197,8 +197,6 @@ export function CourseEditor() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            
           <div className="grid gap-6 md:grid-cols-2 pt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Access Mode (Manual Lock Check)</label>
