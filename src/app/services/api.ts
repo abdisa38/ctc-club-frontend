@@ -1115,6 +1115,26 @@ export const apiService = {
     const res = await api.post("/notifications/broadcast", input);
     return pickData<{ count: number }>(res.data);
   },
+
+  async initializePremiumPayment(): Promise<PremiumPaymentInitResponse> {
+    const res = await api.post('/payments/premium/initialize');
+    return pickData<PremiumPaymentInitResponse>(res.data);
+  },
+
+  async verifyPremiumPayment(txRef: string): Promise<PremiumPaymentVerifyResponse> {
+    const res = await api.get(`/payments/premium/verify/${encodeURIComponent(txRef)}`);
+    return pickData<PremiumPaymentVerifyResponse>(res.data);
+  },
+
+  async initializeCoursePayment(courseId: string): Promise<CoursePaymentInitResponse> {
+    const res = await api.post(`/payments/courses/${encodeURIComponent(courseId)}/initialize`);
+    return pickData<CoursePaymentInitResponse>(res.data);
+  },
+
+  async verifyCoursePayment(courseId: string, txRef: string): Promise<CoursePaymentVerifyResponse> {
+    const res = await api.get(`/payments/courses/${encodeURIComponent(courseId)}/verify/${encodeURIComponent(txRef)}`);
+    return pickData<CoursePaymentVerifyResponse>(res.data);
+  },
 };
 
 export default apiService;
