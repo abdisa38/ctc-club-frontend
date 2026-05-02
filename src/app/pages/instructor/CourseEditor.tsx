@@ -111,6 +111,7 @@ export function CourseEditor() {
         category,
         price: pricingMode === "free" ? 0 : Number(price),
         currency: "ETB",
+        accessMode,
         coverImage: coverImage.trim() || undefined,
       };
 
