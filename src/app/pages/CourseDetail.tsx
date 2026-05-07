@@ -260,7 +260,7 @@ const defaultProjectForm: CourseProjectForm = {
   isPublished: true,
 };
 
-const TELEGRAM_PAYMENT_HANDLE = import.meta.env.VITE_TELEGRAM_PAYMENT_HANDLE || "@telegram_handle";
+const TELEGRAM_PAYMENT_HANDLE = import.meta.env.VITE_TELEGRAM_PAYMENT_HANDLE || "@bdisa38";
 
 export function CourseDetail() {
   const { id } = useParams();
