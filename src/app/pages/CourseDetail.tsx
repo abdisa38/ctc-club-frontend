@@ -659,6 +659,28 @@ export function CourseDetail() {
     }
   };
 
+  const handleUploadPaymentProof = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    setIsUploadingPaymentProof(true);
+    setPaymentProofMessage("");
+    setError("");
+
+    try {
+      const uploaded = await apiService.uploadPaymentProof(file);
+      setPaymentProofUrl(uploaded.url);
+      setPaymentProofMessage("Screenshot uploaded. Send it to Telegram for manual approval.");
+    } catch (uploadError: any) {
+      setError(extractErrorMessage(uploadError, "Failed to upload payment proof."));
+    } finally {
+      setIsUploadingPaymentProof(false);
+      event.target.value = "";
+    }
+  };
+
   const handlePostComment = async () => {
     if (!id || !newComment.trim() || isPostingComment) {
       return;
