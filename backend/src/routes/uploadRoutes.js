@@ -10,5 +10,6 @@ const uploadController_1 = require("../controllers/uploadController");
 const router = express_1.default.Router();
 router.post('/video', authMiddleware_1.protect, (0, authMiddleware_1.authorizeRoles)('instructor', 'admin'), uploadMiddleware_1.handleVideoUpload, uploadController_1.uploadLessonVideo);
 router.post('/resource', authMiddleware_1.protect, (0, authMiddleware_1.authorizeRoles)('instructor', 'admin'), uploadMiddleware_1.handleResourceUpload, uploadController_1.uploadLessonResource);
+router.post('/payment-proof', authMiddleware_1.protect, uploadMiddleware_1.handleImageUpload, uploadController_1.uploadPaymentProof);
 exports.default = router;
 //# sourceMappingURL=uploadRoutes.js.map

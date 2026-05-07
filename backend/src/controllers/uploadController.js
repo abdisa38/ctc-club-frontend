@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadLessonResource = exports.uploadLessonVideo = void 0;
+exports.uploadPaymentProof = exports.uploadLessonResource = exports.uploadLessonVideo = void 0;
 const apiResponse_1 = require("../utils/apiResponse");
 const buildPublicUrl = (req, filename) => {
     return `${req.protocol}://${req.get('host')}/uploads/${filename}`;
@@ -31,4 +31,17 @@ const uploadLessonResource = (req, res) => {
     }, { message: 'Resource uploaded successfully' });
 };
 exports.uploadLessonResource = uploadLessonResource;
+const uploadPaymentProof = (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No payment proof uploaded' });
+    }
+    return (0, apiResponse_1.sendSuccess)(res, {
+        url: buildPublicUrl(req, req.file.filename),
+        fileType: req.file.mimetype,
+        size: req.file.size,
+        originalName: req.file.originalname,
+        filename: req.file.filename,
+    }, { message: 'Payment proof uploaded successfully' });
+};
+exports.uploadPaymentProof = uploadPaymentProof;
 //# sourceMappingURL=uploadController.js.map

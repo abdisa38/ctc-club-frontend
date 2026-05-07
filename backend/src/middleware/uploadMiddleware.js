@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleResourceUpload = exports.handleVideoUpload = void 0;
+exports.handleImageUpload = exports.handleResourceUpload = exports.handleVideoUpload = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
@@ -44,6 +44,19 @@ const resourceUploader = (0, multer_1.default)({
         fileSize: 50 * 1024 * 1024, // 50MB
     },
 });
+const imageUploader = (0, multer_1.default)({
+    storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB
+    },
+    fileFilter: (_req, file, cb) => {
+        if (!file.mimetype?.startsWith('image/')) {
+            cb(new Error('Only image files are allowed for payment proofs'));
+            return;
+        }
+        cb(null, true);
+    },
+});
 const handleVideoUpload = (req, res, next) => {
     videoUploader.single('video')(req, res, (err) => {
         if (err) {
@@ -66,4 +79,15 @@ const handleResourceUpload = (req, res, next) => {
     });
 };
 exports.handleResourceUpload = handleResourceUpload;
+const handleImageUpload = (req, res, next) => {
+    imageUploader.single('proof')(req, res, (err) => {
+        if (err) {
+            res.status(err?.code === 'LIMIT_FILE_SIZE' ? 413 : 400);
+            next(err);
+            return;
+        }
+        next();
+    });
+};
+exports.handleImageUpload = handleImageUpload;
 //# sourceMappingURL=uploadMiddleware.js.map

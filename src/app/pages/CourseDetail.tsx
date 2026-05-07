@@ -1306,6 +1306,50 @@ export function CourseDetail() {
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
       <div ref={scrollContainerRef} className="flex-1 flex flex-col overflow-y-auto bg-slate-50 dark:bg-slate-950/50">
+        {!canAccessLessons && isPaidCourse ? (
+          <div className="mx-6 md:mx-8 mt-6 rounded-xl border border-indigo-200/70 bg-indigo-50/60 p-4 text-sm text-slate-700 dark:border-indigo-800/60 dark:bg-indigo-950/20 dark:text-slate-200">
+            <div className="flex items-start gap-3">
+              <UploadCloud className="h-5 w-5 text-indigo-600 mt-0.5" />
+              <div className="space-y-2">
+                <p className="font-semibold text-slate-900 dark:text-white">Manual Telebirr payment</p>
+                <ol className="list-decimal pl-4 space-y-1">
+                  <li>Pay the course fee using Telebirr.</li>
+                  <li>Upload the payment screenshot below.</li>
+                  <li>Send the screenshot to {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
+                </ol>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => paymentProofInputRef.current?.click()}
+                    disabled={isUploadingPaymentProof}
+                  >
+                    {isUploadingPaymentProof ? "Uploading..." : "Upload payment screenshot"}
+                  </Button>
+                  {paymentProofUrl ? (
+                    <a
+                      href={paymentProofUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-indigo-600 underline text-sm self-center"
+                    >
+                      View uploaded proof
+                    </a>
+                  ) : null}
+                </div>
+                {paymentProofMessage ? (
+                  <p className="text-xs text-emerald-700">{paymentProofMessage}</p>
+                ) : null}
+                <input
+                  ref={paymentProofInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleUploadPaymentProof}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="w-full bg-slate-900 relative overflow-hidden lg:min-h-[600px] min-h-[300px]">
           {!canAccessLessons ? (
             <>
@@ -1394,51 +1438,6 @@ export function CourseDetail() {
           {successMsg ? (
             <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
               {successMsg}
-            </div>
-          ) : null}
-
-          {!canAccessLessons && isPaidCourse ? (
-            <div className="mb-6 rounded-xl border border-indigo-200/70 bg-indigo-50/60 p-4 text-sm text-slate-700 dark:border-indigo-800/60 dark:bg-indigo-950/20 dark:text-slate-200">
-              <div className="flex items-start gap-3">
-                <UploadCloud className="h-5 w-5 text-indigo-600 mt-0.5" />
-                <div className="space-y-2">
-                  <p className="font-semibold text-slate-900 dark:text-white">Manual Telebirr payment</p>
-                  <ol className="list-decimal pl-4 space-y-1">
-                    <li>Pay the course fee using Telebirr.</li>
-                    <li>Upload the payment screenshot below.</li>
-                    <li>Send the screenshot to {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
-                  </ol>
-                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => paymentProofInputRef.current?.click()}
-                      disabled={isUploadingPaymentProof}
-                    >
-                      {isUploadingPaymentProof ? "Uploading..." : "Upload payment screenshot"}
-                    </Button>
-                    {paymentProofUrl ? (
-                      <a
-                        href={paymentProofUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-indigo-600 underline text-sm self-center"
-                      >
-                        View uploaded proof
-                      </a>
-                    ) : null}
-                  </div>
-                  {paymentProofMessage ? (
-                    <p className="text-xs text-emerald-700">{paymentProofMessage}</p>
-                  ) : null}
-                  <input
-                    ref={paymentProofInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleUploadPaymentProof}
-                  />
-                </div>
-              </div>
             </div>
           ) : null}
 
