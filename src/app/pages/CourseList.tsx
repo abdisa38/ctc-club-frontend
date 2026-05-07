@@ -174,18 +174,7 @@ export function CourseList() {
     setEnrollingId(id);
     try {
       if (isPaidCourse) {
-        const init = await apiService.initializeCoursePayment(id);
-
-        if (init.isEnrolled || init.alreadyEnrolled || init.requiresPayment === false) {
-          markCourseEnrolledLocally(id);
-          return;
-        }
-
-        if (!init.checkoutUrl) {
-          throw new Error("Checkout URL was not returned by the server.");
-        }
-
-        window.location.href = init.checkoutUrl;
+        window.location.href = `/app/courses/${id}`;
         return;
       }
 
@@ -400,8 +389,8 @@ export function CourseList() {
                           disabled={enrollingId === course._id}
                         >
                           {enrollingId === course._id
-                            ? (isPaidCourse ? "Opening checkout..." : "Enrolling...")
-                            : (isPaidCourse ? `Pay ${Number(course.price || 0).toFixed(2)} ETB` : "Enroll Free")}
+                            ? (isPaidCourse ? "Opening course..." : "Enrolling...")
+                            : (isPaidCourse ? "Request Access" : "Enroll Free")}
                         </Button>
                       ) : null}
                     </div>
