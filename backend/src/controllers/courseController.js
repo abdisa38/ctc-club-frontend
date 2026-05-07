@@ -3,22 +3,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMyCourseRating = exports.rateCourse = exports.enrollCourse = exports.deleteCourse = exports.updateCourse = exports.getCourseById = exports.getCourses = exports.createCourse = void 0;
+exports.getMyCourseRating = exports.rateCourse = exports.enrollCourse = exports.manualEnroll = exports.deleteCourse = exports.updateCourse = exports.getCourseById = exports.getCourses = exports.createCourse = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const courseModel_1 = __importDefault(require("../models/courseModel"));
 const courseReviewModel_1 = __importDefault(require("../models/courseReviewModel"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 const apiResponse_1 = require("../utils/apiResponse");
+const normalizeAccessMode = (value) => {
+    const normalized = String(value || '').trim();
+    if (normalized === 'open' || normalized === 'locked' || normalized === 'coming_soon') {
+        return normalized;
+    }
+    return undefined;
+};
 // @desc    Create a course
 // @route   POST /api/courses
 // @access  Private/Instructor
 exports.createCourse = (0, express_async_handler_1.default)(async (req, res) => {
-    const { title, description, coverImage, category, price } = req.body;
+    const { title, description, coverImage, category, price, accessMode } = req.body;
     const normalizedPrice = Number(price ?? 0);
     if (!Number.isFinite(normalizedPrice) || normalizedPrice < 0) {
         res.status(400);
         throw new Error('Price must be a valid non-negative number');
     }
+    const requestedAccessMode = normalizeAccessMode(accessMode);
+    const resolvedAccessMode = normalizedPrice > 0 ? 'locked' : (requestedAccessMode || 'open');
     const course = await courseModel_1.default.create({
         title,
         description,
@@ -29,6 +38,7 @@ exports.createCourse = (0, express_async_handler_1.default)(async (req, res) => 
         currency: 'ETB',
         isPublished: true,
         status: 'published',
+        accessMode: resolvedAccessMode,
     });
     (0, apiResponse_1.sendSuccess)(res, course, { statusCode: 201, message: 'Course created successfully' });
 });
@@ -91,7 +101,7 @@ exports.getCourseById = (0, express_async_handler_1.default)(async (req, res) =>
 // @route   PUT /api/courses/:id
 // @access  Private/Instructor
 exports.updateCourse = (0, express_async_handler_1.default)(async (req, res) => {
-    const { title, description, coverImage, category, price } = req.body;
+    const { title, description, coverImage, category, price, accessMode } = req.body;
     const course = await courseModel_1.default.findById(req.params.id);
     if (!course) {
         res.status(404);
@@ -106,6 +116,10 @@ exports.updateCourse = (0, express_async_handler_1.default)(async (req, res) => 
     course.description = description || course.description;
     course.coverImage = coverImage || course.coverImage;
     course.category = category || course.category;
+    const requestedAccessMode = normalizeAccessMode(accessMode);
+    if (requestedAccessMode) {
+        course.accessMode = requestedAccessMode;
+    }
     if (price !== undefined) {
         const normalizedPrice = Number(price);
         if (!Number.isFinite(normalizedPrice) || normalizedPrice < 0) {
@@ -113,6 +127,9 @@ exports.updateCourse = (0, express_async_handler_1.default)(async (req, res) => 
             throw new Error('Price must be a valid non-negative number');
         }
         course.price = normalizedPrice;
+    }
+    if (Number(course.price || 0) > 0 && course.accessMode === 'open') {
+        course.accessMode = 'locked';
     }
     // Course checkout supports ETB in this flow.
     course.currency = 'ETB';
@@ -138,16 +155,54 @@ exports.deleteCourse = (0, express_async_handler_1.default)(async (req, res) => 
 // @desc    Enroll in a course
 // @route   POST /api/courses/:id/enroll
 // @access  Private (student role etc)
+// @desc    Manually enroll a student by email
+// @route   POST /api/courses/:id/manual-enroll
+// @access  Private (instructor/admin)
+exports.manualEnroll = (0, express_async_handler_1.default)(async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        res.status(400);
+        throw new Error('Email is required');
+    }
+    const course = await courseModel_1.default.findById(req.params.id);
+    if (!course) {
+        res.status(404);
+        throw new Error('Course not found');
+    }
+    // Authorize
+    if (req.user?.role !== 'admin' && course.instructor.toString() !== req.user?._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to enroll students in this course');
+    }
+    const student = await userModel_1.default.findOne({ email });
+    if (!student) {
+        res.status(404);
+        throw new Error('User not found with this email');
+    }
+    if (!course.students.includes(student._id)) {
+        course.students.push(student._id);
+        await course.save();
+        await userModel_1.default.findByIdAndUpdate(student._id, {
+            $addToSet: { enrolledCourses: course._id },
+        });
+    }
+    (0, apiResponse_1.sendSuccess)(res, {}, { message: `Successfully enrolled ${student.firstName} (${student.email})` });
+});
 exports.enrollCourse = (0, express_async_handler_1.default)(async (req, res) => {
-    const existingCourse = await courseModel_1.default.findById(req.params.id).select('price');
+    const existingCourse = await courseModel_1.default.findById(req.params.id).select('price accessMode');
     if (!existingCourse) {
         res.status(404);
         throw new Error('Course not found');
     }
+    const accessMode = existingCourse.accessMode || 'open';
+    if ((accessMode === 'locked' || accessMode === 'coming_soon') && req.user.role === 'student') {
+        res.status(403);
+        throw new Error('This course is locked. An instructor must enroll you manually.');
+    }
     const isPaidCourse = Number(existingCourse.price || 0) > 0;
     if (isPaidCourse && req.user.role === 'student') {
         res.status(402);
-        throw new Error('This is a paid course. Start checkout first to access it.');
+        throw new Error('This is a paid course. An instructor must enroll you manually after payment confirmation.');
     }
     // Use $addToSet to avoid race conditions. This guarantees a user is only added once natively by MongoDB
     const course = await courseModel_1.default.findByIdAndUpdate(req.params.id, { $addToSet: { students: req.user._id } }, { new: true } // Returns the updated document
