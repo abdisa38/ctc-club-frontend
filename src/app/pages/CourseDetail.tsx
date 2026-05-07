@@ -1331,10 +1331,10 @@ export function CourseDetail() {
                         : (course as any).accessMode === 'locked'
                         ? "This phase is manually unlocked by the instructor via Telegram check."
                         : isPaidCourse
-                        ? `This paid course unlocks after checkout (${coursePrice.toFixed(2)} ${courseCurrency}).`
+                        ? `This paid course unlocks after manual Telebirr approval (${coursePrice.toFixed(2)} ${courseCurrency}).`
                         : "This lesson video is available after free enrollment."}
                     </p>
-                    {(!course || ((course as any).accessMode !== 'locked' && (course as any).accessMode !== 'coming_soon')) && (
+                    {(!isPaidCourse && (!course || ((course as any).accessMode !== 'locked' && (course as any).accessMode !== 'coming_soon'))) && (
                     <Button
                       className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
                       size="lg"
@@ -1397,6 +1397,51 @@ export function CourseDetail() {
             </div>
           ) : null}
 
+          {!canAccessLessons && isPaidCourse ? (
+            <div className="mb-6 rounded-xl border border-indigo-200/70 bg-indigo-50/60 p-4 text-sm text-slate-700 dark:border-indigo-800/60 dark:bg-indigo-950/20 dark:text-slate-200">
+              <div className="flex items-start gap-3">
+                <UploadCloud className="h-5 w-5 text-indigo-600 mt-0.5" />
+                <div className="space-y-2">
+                  <p className="font-semibold text-slate-900 dark:text-white">Manual Telebirr payment</p>
+                  <ol className="list-decimal pl-4 space-y-1">
+                    <li>Pay the course fee using Telebirr.</li>
+                    <li>Upload the payment screenshot below.</li>
+                    <li>Send the screenshot to {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
+                  </ol>
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => paymentProofInputRef.current?.click()}
+                      disabled={isUploadingPaymentProof}
+                    >
+                      {isUploadingPaymentProof ? "Uploading..." : "Upload payment screenshot"}
+                    </Button>
+                    {paymentProofUrl ? (
+                      <a
+                        href={paymentProofUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-indigo-600 underline text-sm self-center"
+                      >
+                        View uploaded proof
+                      </a>
+                    ) : null}
+                  </div>
+                  {paymentProofMessage ? (
+                    <p className="text-xs text-emerald-700">{paymentProofMessage}</p>
+                  ) : null}
+                  <input
+                    ref={paymentProofInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleUploadPaymentProof}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
+
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -1433,7 +1478,7 @@ export function CourseDetail() {
                   </>
                 ) : (
                   <>
-                    {(!course || ((course as any).accessMode !== 'locked' && (course as any).accessMode !== 'coming_soon')) && (
+                    {(!isPaidCourse && (!course || ((course as any).accessMode !== 'locked' && (course as any).accessMode !== 'coming_soon'))) && (
                       <Button 
                         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white" 
                         onClick={() => void handleEnroll()}
