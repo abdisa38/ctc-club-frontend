@@ -13,7 +13,6 @@ export function CourseEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = Boolean(id);
-
   const [isLoading, setIsLoading] = useState(isEditing);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -277,7 +276,7 @@ export function CourseEditor() {
           {isSaving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
+              Saving....
             </>
           ) : (
             <>
