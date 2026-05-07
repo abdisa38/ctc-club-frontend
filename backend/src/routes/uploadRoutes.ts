@@ -1,7 +1,7 @@
 import express from 'express';
 import { protect, authorizeRoles } from '../middleware/authMiddleware';
-import { handleResourceUpload, handleVideoUpload } from '../middleware/uploadMiddleware';
-import { uploadLessonResource, uploadLessonVideo } from '../controllers/uploadController';
+import { handleImageUpload, handleResourceUpload, handleVideoUpload } from '../middleware/uploadMiddleware';
+import { uploadLessonResource, uploadLessonVideo, uploadPaymentProof } from '../controllers/uploadController';
 
 const router = express.Router();
 
@@ -19,6 +19,13 @@ router.post(
   authorizeRoles('instructor', 'admin'),
   handleResourceUpload as any,
   uploadLessonResource as any
+);
+
+router.post(
+  '/payment-proof',
+  protect as any,
+  handleImageUpload as any,
+  uploadPaymentProof as any
 );
 
 export default router;

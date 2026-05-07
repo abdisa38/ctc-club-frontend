@@ -69,43 +69,6 @@ export interface CoursePaymentInitResponse {
   isEnrolled: boolean;
 }
 
-export interface CoursePaymentVerifyResponse {
-  courseId: string;
-  txRef: string;
-  status: string;
-  paymentVerified: boolean;
-  isEnrolled: boolean;
-  reason?: string;
-}
-
-export interface Course {
-  _id: string;
-  title: string;
-  description: string;
-  shortDescription?: string;
-  category: string;
-  coverImage?: string;
-  status?: "draft" | "published" | "archived";
-  level?: "beginner" | "intermediate" | "advanced";
-  price: number;
-  currency?: string;
-  instructor?: {
-    _id: string;
-    name: string;
-    email?: string;
-    avatar?: string;
-  };
-  students?: Array<string | { _id: string }>;
-  rating?: number;
-  numReviews?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface Lesson {
-  _id: string;
-  title: string;
-  content?: string;
   videoUrl?: string;
   course?: string;
   order?: number;
@@ -723,6 +686,14 @@ export const apiService = {
     return pickData<UploadedFile>(res.data);
   },
 
+  async uploadPaymentProof(file: File): Promise<UploadedFile> {
+    const formData = new FormData();
+    formData.append("proof", file);
+
+    const res = await api.post("/uploads/payment-proof", formData);
+    return pickData<UploadedFile>(res.data);
+  },
+
   async getQuizzes(courseId?: string): Promise<Quiz[]> {
     const res = await api.get("/quizzes", { params: courseId ? { courseId } : undefined });
     return pickData<Quiz[]>(res.data);
@@ -1116,25 +1087,6 @@ export const apiService = {
     return pickData<{ count: number }>(res.data);
   },
 
-  async initializePremiumPayment(): Promise<PremiumPaymentInitResponse> {
-    const res = await api.post('/payments/premium/initialize');
-    return pickData<PremiumPaymentInitResponse>(res.data);
-  },
-
-  async verifyPremiumPayment(txRef: string): Promise<PremiumPaymentVerifyResponse> {
-    const res = await api.get(`/payments/premium/verify/${encodeURIComponent(txRef)}`);
-    return pickData<PremiumPaymentVerifyResponse>(res.data);
-  },
-
-  async initializeCoursePayment(courseId: string): Promise<CoursePaymentInitResponse> {
-    const res = await api.post(`/payments/courses/${encodeURIComponent(courseId)}/initialize`);
-    return pickData<CoursePaymentInitResponse>(res.data);
-  },
-
-  async verifyCoursePayment(courseId: string, txRef: string): Promise<CoursePaymentVerifyResponse> {
-    const res = await api.get(`/payments/courses/${encodeURIComponent(courseId)}/verify/${encodeURIComponent(txRef)}`);
-    return pickData<CoursePaymentVerifyResponse>(res.data);
-  },
 };
 
 export default apiService;

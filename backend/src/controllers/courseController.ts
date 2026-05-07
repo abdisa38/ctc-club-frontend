@@ -9,14 +9,26 @@ import { sendSuccess } from '../utils/apiResponse';
 // @desc    Create a course
 // @route   POST /api/courses
 // @access  Private/Instructor
+const normalizeAccessMode = (value: unknown): 'open' | 'locked' | 'coming_soon' | undefined => {
+  const normalized = String(value || '').trim();
+  if (normalized === 'open' || normalized === 'locked' || normalized === 'coming_soon') {
+    return normalized;
+  }
+
+  return undefined;
+};
+
 export const createCourse = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { title, description, coverImage, category, price } = req.body;
+  const { title, description, coverImage, category, price, accessMode } = req.body;
   const normalizedPrice = Number(price ?? 0);
 
   if (!Number.isFinite(normalizedPrice) || normalizedPrice < 0) {
     res.status(400);
     throw new Error('Price must be a valid non-negative number');
   }
+
+  const requestedAccessMode = normalizeAccessMode(accessMode);
+  const resolvedAccessMode = normalizedPrice > 0 ? 'locked' : (requestedAccessMode || 'open');
 
   const course = await Course.create({
     title,
@@ -28,6 +40,7 @@ export const createCourse = asyncHandler(async (req: AuthRequest, res: Response)
     currency: 'ETB',
     isPublished: true,
     status: 'published',
+    accessMode: resolvedAccessMode,
   });
 
   sendSuccess(res, course, { statusCode: 201, message: 'Course created successfully' });
@@ -100,7 +113,7 @@ export const getCourseById = asyncHandler(async (req: AuthRequest, res: Response
 // @route   PUT /api/courses/:id
 // @access  Private/Instructor
 export const updateCourse = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { title, description, coverImage, category, price } = req.body;
+  const { title, description, coverImage, category, price, accessMode } = req.body;
   const course = await Course.findById(req.params.id);
 
   if (!course) {
@@ -119,6 +132,11 @@ export const updateCourse = asyncHandler(async (req: AuthRequest, res: Response)
   course.coverImage = coverImage || course.coverImage;
   course.category = category || course.category;
 
+  const requestedAccessMode = normalizeAccessMode(accessMode);
+  if (requestedAccessMode) {
+    course.accessMode = requestedAccessMode;
+  }
+
   if (price !== undefined) {
     const normalizedPrice = Number(price);
     if (!Number.isFinite(normalizedPrice) || normalizedPrice < 0) {
@@ -127,6 +145,10 @@ export const updateCourse = asyncHandler(async (req: AuthRequest, res: Response)
     }
 
     course.price = normalizedPrice;
+  }
+
+  if (Number(course.price || 0) > 0 && course.accessMode === 'open') {
+    course.accessMode = 'locked';
   }
 
   // Course checkout supports ETB in this flow.
@@ -207,10 +229,16 @@ export const enrollCourse = asyncHandler(async (req: AuthRequest, res: Response)
     throw new Error('Course not found');
   }
 
+  const accessMode = existingCourse.accessMode || 'open';
+  if ((accessMode === 'locked' || accessMode === 'coming_soon') && req.user.role === 'student') {
+    res.status(403);
+    throw new Error('This course is locked. An instructor must enroll you manually.');
+  }
+
   const isPaidCourse = Number(existingCourse.price || 0) > 0;
   if (isPaidCourse && req.user.role === 'student') {
     res.status(402);
-    throw new Error('This is a paid course. Start checkout first to access it.');
+    throw new Error('This is a paid course. An instructor must enroll you manually after payment confirmation.');
   }
 
   // Use $addToSet to avoid race conditions. This guarantees a user is only added once natively by MongoDB
