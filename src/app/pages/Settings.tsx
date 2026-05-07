@@ -51,19 +51,6 @@ const applyThemePreference = (theme: ThemePreference) => {
   localStorage.setItem("theme", "system");
 };
 
-const formatPremiumDate = (value?: string) => {
-  if (!value) {
-    return "";
-  }
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-
-  return date.toLocaleDateString();
-};
-
 const formatDate = (value?: string) => {
   if (!value) {
     return "N/A";
@@ -128,8 +115,6 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
   const [isSavingEmail, setIsSavingEmail] = useState(false);
   const [isSavingNotifications, setIsSavingNotifications] = useState(false);
   const [isSavingTheme, setIsSavingTheme] = useState(false);
-  const [isStartingPremiumPayment, setIsStartingPremiumPayment] = useState(false);
-  const [isVerifyingPremiumPayment, setIsVerifyingPremiumPayment] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -250,66 +235,6 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
       ignore = true;
     };
   }, []);
-
-  useEffect(() => {
-    let ignore = false;
-
-    const params = new URLSearchParams(window.location.search);
-    const shouldVerify = params.get("premium") === "verify";
-    const txRef = params.get("tx_ref") || "";
-
-    if (!shouldVerify || !txRef) {
-      return;
-    }
-
-    const verifyPremium = async () => {
-      setIsVerifyingPremiumPayment(true);
-      setErrorMsg("");
-      setSuccessMsg("");
-
-      try {
-        const verification = await apiService.verifyPremiumPayment(txRef);
-
-        if (ignore) {
-          return;
-        }
-
-        const refreshedUser = await apiService.getCurrentUser();
-        if (ignore) {
-          return;
-        }
-
-        login(refreshedUser as any);
-        hydrateSettingsForm(refreshedUser);
-
-        if (verification.paymentVerified && verification.isPremium) {
-          setSuccessMsg("Premium payment verified. Your account is now premium.");
-        } else {
-          setErrorMsg(verification.reason || "Payment has not completed yet. If you already paid, try again in a few seconds.");
-        }
-      } catch (error: any) {
-        if (!ignore) {
-          console.error('Settings init/verify error:', error);
-          setErrorMsg(extractErrorMessage(error, "Failed to verify premium payment."));
-        }
-      } finally {
-        if (!ignore) {
-          setIsVerifyingPremiumPayment(false);
-        }
-
-        const cleanUrl = new URL(window.location.href);
-        cleanUrl.searchParams.delete("premium");
-        cleanUrl.searchParams.delete("tx_ref");
-        window.history.replaceState({}, "", `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`);
-      }
-    };
-
-    void verifyPremium();
-
-    return () => {
-      ignore = true;
-    };
-  }, [login]);
 
   const updateProfile = async (input: {
     name?: string;
@@ -500,39 +425,6 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
     }
   };
 
-  const handleStartPremiumPayment = async () => {
-    if (user?.isPremium) {
-      setSuccessMsg("Premium access is already active on your account.");
-      setErrorMsg("");
-      return;
-    }
-
-    setIsStartingPremiumPayment(true);
-    setErrorMsg("");
-    setSuccessMsg("");
-
-    try {
-      const init = await apiService.initializePremiumPayment();
-
-      if (init.alreadyPremium || init.isPremium) {
-        const refreshedUser = await apiService.getCurrentUser();
-        login(refreshedUser as any);
-        hydrateSettingsForm(refreshedUser);
-        setSuccessMsg("Premium access is already active on your account.");
-        return;
-      }
-
-      if (!init.checkoutUrl) {
-        throw new Error("Checkout URL was not returned by the server.");
-      }
-
-      window.location.href = init.checkoutUrl;
-    } catch (error: any) {
-      setErrorMsg(extractErrorMessage(error, "Failed to start premium checkout."));
-    } finally {
-      setIsStartingPremiumPayment(false);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -874,11 +766,11 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
               <Card>
                 <CardHeader>
                   <CardTitle>Course Access Payments</CardTitle>
-                  <CardDescription>Payments are now handled directly on each paid course page.</CardDescription>
+                  <CardDescription>Paid courses unlock after manual Telebirr verification.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="rounded-xl border border-indigo-200/70 bg-indigo-50/60 dark:border-indigo-800/60 dark:bg-indigo-950/20 p-4 text-sm text-slate-700 dark:text-slate-300">
-                    Open a paid course and click the payment button there. Free courses remain accessible without checkout.
+                    Open a paid course to upload your payment screenshot, then send it to the instructor on Telegram for manual approval.
                   </div>
                 </CardContent>
               </Card>
