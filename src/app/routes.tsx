@@ -9,6 +9,12 @@ const lazyComponent = <T extends Record<string, any>>(loader: () => Promise<T>, 
   };
 };
 
+const HydrateFallback = () => (
+  <div className="min-h-screen flex items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+    Loading app...
+  </div>
+);
+
 function RedirectLegacyInstructorLessons() {
   const { id } = useParams();
   return <Navigate to={id ? `/app/courses/${id}` : "/app/instructor/courses"} replace />;
@@ -18,6 +24,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: PublicLayout,
+    HydrateFallback,
     children: [
       { index: true, lazy: lazyComponent(() => import("./pages/Home"), "Home") },
       { path: "login", lazy: lazyComponent(() => import("./pages/Auth"), "Auth") },
@@ -33,6 +40,7 @@ export const router = createBrowserRouter([
   {
     path: "/app",
     Component: AppLayout,
+    HydrateFallback,
     children: [
       { index: true, element: <Navigate to="/app/dashboard" replace /> },
       { path: "dashboard", lazy: lazyComponent(() => import("./pages/Dashboard"), "Dashboard") },
