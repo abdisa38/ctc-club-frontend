@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, useParams } from "react-router";
 import { AppLayout } from "./components/layouts/AppLayout";
 import { PublicLayout } from "./components/layouts/PublicLayout";
+import { RouterFallback } from "./components/RouterFallback";
 
 const lazyComponent = <T extends Record<string, any>>(loader: () => Promise<T>, exportName: keyof T) => {
   return async () => {
@@ -9,11 +10,6 @@ const lazyComponent = <T extends Record<string, any>>(loader: () => Promise<T>, 
   };
 };
 
-const HydrateFallback = () => (
-  <div className="min-h-screen flex items-center justify-center text-sm text-slate-500 dark:text-slate-400">
-    Loading app...
-  </div>
-);
 
 function RedirectLegacyInstructorLessons() {
   const { id } = useParams();
@@ -24,7 +20,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: PublicLayout,
-    HydrateFallback,
+    HydrateFallback: RouterFallback,
     children: [
       { index: true, lazy: lazyComponent(() => import("./pages/Home"), "Home") },
       { path: "login", lazy: lazyComponent(() => import("./pages/Auth"), "Auth") },
@@ -40,7 +36,7 @@ export const router = createBrowserRouter([
   {
     path: "/app",
     Component: AppLayout,
-    HydrateFallback,
+    HydrateFallback: RouterFallback,
     children: [
       { index: true, element: <Navigate to="/app/dashboard" replace /> },
       { path: "dashboard", lazy: lazyComponent(() => import("./pages/Dashboard"), "Dashboard") },
