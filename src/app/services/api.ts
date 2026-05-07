@@ -588,6 +588,7 @@ export const apiService = {
     category: string;
     price: number;
     currency?: string;
+    accessMode?: "open" | "locked" | "coming_soon";
     coverImage?: string;
   }): Promise<Course> {
     const res = await api.post("/courses", input);
@@ -602,6 +603,7 @@ export const apiService = {
       category: string;
       price: number;
       currency?: string;
+      accessMode?: "open" | "locked" | "coming_soon";
       coverImage?: string;
     }>
   ): Promise<Course> {
