@@ -261,6 +261,7 @@ const defaultProjectForm: CourseProjectForm = {
 };
 
 const TELEGRAM_PAYMENT_HANDLE = import.meta.env.VITE_TELEGRAM_PAYMENT_HANDLE || "@bdisa38";
+const TELEGRAM_PAYMENT_LINK = `https://t.me/${TELEGRAM_PAYMENT_HANDLE.replace(/^@/, "")}`;
 
 export function CourseDetail() {
   const { id } = useParams();
@@ -1324,6 +1325,11 @@ export function CourseDetail() {
                     disabled={isUploadingPaymentProof}
                   >
                     {isUploadingPaymentProof ? "Uploading..." : "Upload payment screenshot"}
+                  </Button>
+                  <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <a href={TELEGRAM_PAYMENT_LINK} target="_blank" rel="noreferrer">
+                      Send on Telegram
+                    </a>
                   </Button>
                   {paymentProofUrl ? (
                     <a
