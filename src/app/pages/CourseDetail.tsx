@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
@@ -260,7 +260,7 @@ const defaultProjectForm: CourseProjectForm = {
   isPublished: true,
 };
 
-const TELEGRAM_PAYMENT_HANDLE = import.meta.env.VITE_TELEGRAM_PAYMENT_HANDLE || "@bdisa38";
+const TELEGRAM_PAYMENT_HANDLE = "@bdisa38";
 const TELEGRAM_PAYMENT_LINK = `https://t.me/${TELEGRAM_PAYMENT_HANDLE.replace(/^@/, "")}`;
 
 export function CourseDetail() {
@@ -645,7 +645,7 @@ export function CourseDetail() {
       setCourse(updatedCourse);
       
       // refresh lessons explicitly
-      const loadedLessons = await apiService.getCourseLessons(id).catch(() => []);
+      const loadedLessons = await apiService.getLessons(id).catch(() => []);
       setLessons(loadedLessons);
 
       setSuccessMsg("Successfully enrolled. Start learning now.");
