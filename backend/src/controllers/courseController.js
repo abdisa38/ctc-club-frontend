@@ -9,6 +9,7 @@ const courseModel_1 = __importDefault(require("../models/courseModel"));
 const courseReviewModel_1 = __importDefault(require("../models/courseReviewModel"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 const apiResponse_1 = require("../utils/apiResponse");
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const normalizeAccessMode = (value) => {
     const normalized = String(value || '').trim();
     if (normalized === 'open' || normalized === 'locked' || normalized === 'coming_soon') {
@@ -159,8 +160,8 @@ exports.deleteCourse = (0, express_async_handler_1.default)(async (req, res) => 
 // @route   POST /api/courses/:id/manual-enroll
 // @access  Private (instructor/admin)
 exports.manualEnroll = (0, express_async_handler_1.default)(async (req, res) => {
-    const { email } = req.body;
-    if (!email) {
+    const normalizedEmail = String(req.body?.email || '').trim().toLowerCase();
+    if (!normalizedEmail) {
         res.status(400);
         throw new Error('Email is required');
     }
@@ -174,10 +175,10 @@ exports.manualEnroll = (0, express_async_handler_1.default)(async (req, res) => 
         res.status(403);
         throw new Error('Not authorized to enroll students in this course');
     }
-    const student = await userModel_1.default.findOne({ email });
+    const student = await userModel_1.default.findOne({ email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, 'i') });
     if (!student) {
         res.status(404);
-        throw new Error('User not found with this email');
+        throw new Error('User not found. Ask the student to register or log in once before enrolling.');
     }
     if (!course.students.includes(student._id)) {
         course.students.push(student._id);

@@ -185,9 +185,11 @@ export const deleteCourse = asyncHandler(async (req: AuthRequest, res: Response)
 // @desc    Manually enroll a student by email
 // @route   POST /api/courses/:id/manual-enroll
 // @access  Private (instructor/admin)
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 export const manualEnroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { email } = req.body;
-  if (!email) {
+  const normalizedEmail = String(req.body?.email || '').trim().toLowerCase();
+  if (!normalizedEmail) {
     res.status(400);
     throw new Error('Email is required');
   }
@@ -204,10 +206,10 @@ export const manualEnroll = asyncHandler(async (req: AuthRequest, res: Response)
     throw new Error('Not authorized to enroll students in this course');
   }
 
-  const student = await User.findOne({ email });
+  const student = await User.findOne({ email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, 'i') });
   if (!student) {
     res.status(404);
-    throw new Error('User not found with this email');
+    throw new Error('User not found. Ask the student to register or log in once before enrolling.');
   }
 
   if (!course.students.includes(student._id)) {
