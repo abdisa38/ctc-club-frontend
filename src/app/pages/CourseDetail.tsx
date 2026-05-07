@@ -24,6 +24,7 @@ import {
   BookmarkPlus,
   Send,
   Loader2,
+  UploadCloud,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { CourseEditor } from "./instructor/CourseEditor";
@@ -259,6 +260,8 @@ const defaultProjectForm: CourseProjectForm = {
   isPublished: true,
 };
 
+const TELEGRAM_PAYMENT_HANDLE = import.meta.env.VITE_TELEGRAM_PAYMENT_HANDLE || "@telegram_handle";
+
 export function CourseDetail() {
   const { id } = useParams();
   const location = useLocation();
@@ -280,6 +283,10 @@ export function CourseDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDiscussionLoading, setIsDiscussionLoading] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [isUploadingPaymentProof, setIsUploadingPaymentProof] = useState(false);
+  const [paymentProofUrl, setPaymentProofUrl] = useState("");
+  const [paymentProofMessage, setPaymentProofMessage] = useState("");
+  const paymentProofInputRef = useRef<HTMLInputElement | null>(null);
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteBusy, setFavoriteBusy] = useState(false);
@@ -422,8 +429,9 @@ export function CourseDetail() {
   const coursePrice = Number(course?.price || 0);
   const courseCurrency = "ETB";
   const isPaidCourse = coursePrice > 0;
-
-  const canAccessLessons = isEnrolled || isInstructor || !isPaidCourse;
+  const accessMode = (course as any)?.accessMode || "open";
+  const isAccessLocked = accessMode === "locked" || accessMode === "coming_soon";
+  const canAccessLessons = isEnrolled || isInstructor || (!isPaidCourse && !isAccessLocked);
   const selectedLessonIndex = selectedLesson ? visibleLessons.findIndex((lesson) => lesson._id === selectedLesson._id) : -1;
   const completedCount = canAccessLessons && selectedLessonIndex >= 0 ? selectedLessonIndex + 1 : 0;
   const progress = visibleLessons.length > 0 ? Math.round((completedCount / visibleLessons.length) * 100) : 0;
