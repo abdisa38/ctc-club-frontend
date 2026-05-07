@@ -1,12 +1,11 @@
 import { Link, useLocation } from 'react-router';
-import { LayoutDashboard, FileText, HelpCircle, Users, CreditCard, Trophy, MessageCircle, Settings } from 'lucide-react';
+import { LayoutDashboard, FileText, HelpCircle, Users, Trophy, MessageCircle, Settings } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'Exams', href: '/admin/exams', icon: FileText },
   { name: 'Questions', href: '/admin/questions', icon: HelpCircle },
   { name: 'Students', href: '/admin/students', icon: Users },
-  { name: 'Payments', href: '/admin/payments', icon: CreditCard },
   { name: 'Leaderboard', href: '/leaderboard', icon: Trophy },
   { name: 'Messaging', href: '/admin/messaging', icon: MessageCircle },
 ];
