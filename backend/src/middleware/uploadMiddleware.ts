@@ -46,20 +46,6 @@ const resourceUploader = multer({
   },
 });
 
-const imageUploader = multer({
-  storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB
-  },
-  fileFilter: (_req, file, cb) => {
-    if (!file.mimetype?.startsWith('image/')) {
-      cb(new Error('Only image files are allowed for payment proofs'));
-      return;
-    }
-
-    cb(null, true);
-  },
-});
 
 export const handleVideoUpload: RequestHandler = (req, res, next) => {
   videoUploader.single('video')(req, res, (err: any) => {
@@ -85,14 +71,3 @@ export const handleResourceUpload: RequestHandler = (req, res, next) => {
   });
 };
 
-export const handleImageUpload: RequestHandler = (req, res, next) => {
-  imageUploader.single('proof')(req, res, (err: any) => {
-    if (err) {
-      res.status(err?.code === 'LIMIT_FILE_SIZE' ? 413 : 400);
-      next(err);
-      return;
-    }
-
-    next();
-  });
-};

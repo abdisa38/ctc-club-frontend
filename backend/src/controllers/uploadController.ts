@@ -34,16 +34,3 @@ export const uploadLessonResource = (req: AuthRequest, res: Response) => {
   }, { message: 'Resource uploaded successfully' });
 };
 
-export const uploadPaymentProof = (req: AuthRequest, res: Response) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No payment proof uploaded' });
-  }
-
-  return sendSuccess(res, {
-    url: buildPublicUrl(req, req.file.filename),
-    fileType: req.file.mimetype,
-    size: req.file.size,
-    originalName: req.file.originalname,
-    filename: req.file.filename,
-  }, { message: 'Payment proof uploaded successfully' });
-};

@@ -686,13 +686,6 @@ export const apiService = {
     return pickData<UploadedFile>(res.data);
   },
 
-  async uploadPaymentProof(file: File): Promise<UploadedFile> {
-    const formData = new FormData();
-    formData.append("proof", file);
-
-    const res = await api.post("/uploads/payment-proof", formData);
-    return pickData<UploadedFile>(res.data);
-  },
 
   async getQuizzes(courseId?: string): Promise<Quiz[]> {
     const res = await api.get("/quizzes", { params: courseId ? { courseId } : undefined });

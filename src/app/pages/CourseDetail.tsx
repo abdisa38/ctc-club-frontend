@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
@@ -284,10 +284,6 @@ export function CourseDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDiscussionLoading, setIsDiscussionLoading] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
-  const [isUploadingPaymentProof, setIsUploadingPaymentProof] = useState(false);
-  const [paymentProofUrl, setPaymentProofUrl] = useState("");
-  const [paymentProofMessage, setPaymentProofMessage] = useState("");
-  const paymentProofInputRef = useRef<HTMLInputElement | null>(null);
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteBusy, setFavoriteBusy] = useState(false);
@@ -660,27 +656,6 @@ export function CourseDetail() {
     }
   };
 
-  const handleUploadPaymentProof = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    setIsUploadingPaymentProof(true);
-    setPaymentProofMessage("");
-    setError("");
-
-    try {
-      const uploaded = await apiService.uploadPaymentProof(file);
-      setPaymentProofUrl(uploaded.url);
-      setPaymentProofMessage("Screenshot uploaded. Send it to Telegram for manual approval.");
-    } catch (uploadError: any) {
-      setError(extractErrorMessage(uploadError, "Failed to upload payment proof."));
-    } finally {
-      setIsUploadingPaymentProof(false);
-      event.target.value = "";
-    }
-  };
 
   const handlePostComment = async () => {
     if (!id || !newComment.trim() || isPostingComment) {
@@ -1315,43 +1290,15 @@ export function CourseDetail() {
                 <p className="font-semibold text-slate-900 dark:text-white">Manual Telebirr payment</p>
                 <ol className="list-decimal pl-4 space-y-1">
                   <li>Pay the course fee using Telebirr.</li>
-                  <li>Upload the payment screenshot below.</li>
-                  <li>Send the screenshot to {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
+                  <li>Send the payment screenshot to {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
                 </ol>
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => paymentProofInputRef.current?.click()}
-                    disabled={isUploadingPaymentProof}
-                  >
-                    {isUploadingPaymentProof ? "Uploading..." : "Upload payment screenshot"}
-                  </Button>
                   <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
                     <a href={TELEGRAM_PAYMENT_LINK} target="_blank" rel="noreferrer">
                       Send on Telegram
                     </a>
                   </Button>
-                  {paymentProofUrl ? (
-                    <a
-                      href={paymentProofUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-indigo-600 underline text-sm self-center"
-                    >
-                      View uploaded proof
-                    </a>
-                  ) : null}
                 </div>
-                {paymentProofMessage ? (
-                  <p className="text-xs text-emerald-700">{paymentProofMessage}</p>
-                ) : null}
-                <input
-                  ref={paymentProofInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleUploadPaymentProof}
-                />
               </div>
             </div>
           </div>
