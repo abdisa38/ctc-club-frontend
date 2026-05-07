@@ -7,6 +7,7 @@ export const createCourseSchema = z.object({
     category: z.string().min(2, 'Category is required'),
     coverImage: z.string().url('Must be a valid URL').optional().or(z.literal('')),
     price: z.number().min(0, 'Price must be a positive number').optional().default(0),
+    accessMode: z.enum(['open', 'locked', 'coming_soon']).optional(),
   }),
 });
 
@@ -17,5 +18,6 @@ export const updateCourseSchema = z.object({
     category: z.string().min(2).optional(),
     coverImage: z.string().url('Must be a valid URL').optional().or(z.literal('')),
     price: z.number().min(0).optional(),
+    accessMode: z.enum(['open', 'locked', 'coming_soon']).optional(),
   }),
 });

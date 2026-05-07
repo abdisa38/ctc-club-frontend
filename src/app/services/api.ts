@@ -40,35 +40,33 @@ export interface UserPreferences {
   };
 }
 
-export interface PremiumPaymentInitResponse {
-  txRef: string;
-  checkoutUrl: string;
-  amount: number;
-  currency: 'ETB';
-  alreadyPremium?: boolean;
-  isPremium?: boolean;
+export interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  shortDescription?: string;
+  coverImage?: string;
+  category?: string;
+  tags?: string[];
+  instructor?: { _id: string; name: string; email?: string; avatar?: string } | string;
+  students?: Array<{ _id: string } | string>;
+  price?: number;
+  currency?: string;
+  accessMode?: "open" | "locked" | "coming_soon";
+  isPublished?: boolean;
+  status?: "draft" | "published" | "archived";
+  level?: string;
+  rating?: number;
+  numReviews?: number;
+  ratings?: { average?: number; count?: number };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export interface PremiumPaymentVerifyResponse {
-  txRef: string;
-  status: string;
-  paymentVerified: boolean;
-  isPremium: boolean;
-  premiumActivatedAt?: string;
-  reason?: string;
-}
-
-export interface CoursePaymentInitResponse {
-  courseId: string;
-  txRef?: string;
-  checkoutUrl?: string;
-  amount: number;
-  currency: 'ETB';
-  requiresPayment?: boolean;
-  alreadyEnrolled?: boolean;
-  isEnrolled: boolean;
-}
-
+export interface Lesson {
+  _id: string;
+  title: string;
+  content?: string;
   videoUrl?: string;
   course?: string;
   order?: number;
