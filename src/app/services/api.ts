@@ -260,6 +260,10 @@ export interface FavoriteResourceMutationResult {
   isFavorite: boolean;
 }
 
+export interface ApprovedEmailResult {
+  email: string;
+}
+
 export interface PasswordResetRequestResult {
   sent: boolean;
 }
@@ -616,6 +620,11 @@ export const apiService = {
   async enrollCourse(courseId: string): Promise<Course> {
     const res = await api.post(`/courses/${courseId}/enroll`);
     return pickData<Course>(res.data);
+  },
+
+  async approveCourseEmail(courseId: string, email: string): Promise<ApprovedEmailResult> {
+    const res = await api.post(`/courses/${courseId}/approve-email`, { email });
+    return pickData<ApprovedEmailResult>(res.data);
   },
 
   async rateCourse(courseId: string, input: { rating: number; comment?: string }): Promise<CourseRatingSummary> {

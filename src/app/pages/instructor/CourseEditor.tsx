@@ -85,7 +85,7 @@ export function CourseEditor() {
     setIsEnrolling(true);
     setEnrollMessage("");
     try {
-      await apiService.api.post(`/courses/${id}/approve-email`, { email: normalizedEmail });
+      await apiService.approveCourseEmail(id, normalizedEmail);
       setEnrollMessage("Email approved. Student will auto-enroll on next login.");
       setEnrollEmail("");
     } catch (e: any) {
