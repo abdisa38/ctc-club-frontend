@@ -6,6 +6,7 @@ export interface ICourse extends Document {
     shortDescription?: string;
     instructor: mongoose.Types.ObjectId;
     students: mongoose.Types.ObjectId[];
+    approvedEmails?: string[];
     coverImage?: string;
     category: string;
     tags: string[];
