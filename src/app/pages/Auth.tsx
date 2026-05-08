@@ -12,7 +12,7 @@ import apiService from "../services/api";
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const GOOGLE_EMAIL_REGEX = /^[^\s@]+@(gmail\.com|googlemail\.com)$/i;
+const GOOGLE_EMAIL_REGEX = /^[a-z0-9](?:[a-z0-9._%+-]{0,62}[a-z0-9])?@(gmail\.com|googlemail\.com)$/i;
 const MIN_PASSWORD_LENGTH = 8;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
@@ -361,7 +361,7 @@ export function Auth() {
                   onChange={handleInputChange}
                   placeholder="student@university.edu" 
                   autoComplete="email"
-                  pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                  pattern="^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]{0,62}[a-zA-Z0-9])?@(gmail\.com|googlemail\.com)$"
                   required 
                   className="h-10 rounded-xl" 
                 />

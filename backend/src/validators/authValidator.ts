@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
+const GOOGLE_EMAIL_REGEX = /^[a-z0-9](?:[a-z0-9._%+-]{0,62}[a-z0-9])?@(gmail\.com|googlemail\.com)$/i;
+
 export const registerSchema = z.object({
   body: z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
+    email: z.string().email('Invalid email address').regex(GOOGLE_EMAIL_REGEX, 'Email must be a valid Gmail address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     // Notice: we do not accept 'role' in public registration here for security reasons.
     // If we need an admin creating users, we'd create a separate admin-only endpoint.
@@ -13,6 +15,7 @@ export const registerSchema = z.object({
 export const loginSchema = z.object({
   body: z.object({
     email: z.string().email('Invalid email address'),
+    email: z.string().email('Invalid email address').regex(GOOGLE_EMAIL_REGEX, 'Email must be a valid Gmail address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
   }),
 });
@@ -20,12 +23,14 @@ export const loginSchema = z.object({
 export const forgotPasswordSchema = z.object({
   body: z.object({
     email: z.string().email('Invalid email address'),
+    email: z.string().email('Invalid email address').regex(GOOGLE_EMAIL_REGEX, 'Email must be a valid Gmail address'),
   }),
 });
 
 export const resetPasswordSchema = z.object({
   body: z.object({
     email: z.string().email('Invalid email address'),
+    email: z.string().email('Invalid email address').regex(GOOGLE_EMAIL_REGEX, 'Email must be a valid Gmail address'),
     code: z.string().regex(/^\d{6}$/, 'Reset code must be 6 digits'),
     newPassword: z.string().min(8, 'Password must be at least 8 characters'),
   }),
