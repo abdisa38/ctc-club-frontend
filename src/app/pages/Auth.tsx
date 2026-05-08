@@ -12,9 +12,11 @@ import apiService from "../services/api";
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const GOOGLE_EMAIL_REGEX = /^[^\s@]+@(gmail\.com|googlemail\.com)$/i;
 const MIN_PASSWORD_LENGTH = 8;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
+const isGoogleEmail = (value: string) => GOOGLE_EMAIL_REGEX.test(normalizeEmail(value));
 const isValidPassword = (value: string) => value.trim().length >= MIN_PASSWORD_LENGTH;
 
 export function Auth() {
@@ -107,6 +109,11 @@ export function Auth() {
 
     if (!isValidEmail(normalizedEmail)) {
       setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isGoogleEmail(normalizedEmail)) {
+      setErrorMsg("Please use a valid Google email (gmail.com).");
       return;
     }
 
