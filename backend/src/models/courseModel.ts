@@ -7,6 +7,7 @@ export interface ICourse extends Document {
   shortDescription?: string;
   instructor: mongoose.Types.ObjectId;
   students: mongoose.Types.ObjectId[];
+  approvedEmails?: string[];
   
   // Media & Categorization
   coverImage?: string;
@@ -70,6 +71,13 @@ const courseSchema = new Schema<ICourse>(
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
+      },
+    ],
+    approvedEmails: [
+      {
+        type: String,
+        trim: true,
+        lowercase: true,
       },
     ],
     coverImage: {

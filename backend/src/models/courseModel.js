@@ -68,6 +68,13 @@ const courseSchema = new mongoose_1.Schema({
             ref: 'User',
         },
     ],
+    approvedEmails: [
+        {
+            type: String,
+            trim: true,
+            lowercase: true,
+        },
+    ],
     coverImage: {
         type: String,
         default: 'no-photo.jpg'
