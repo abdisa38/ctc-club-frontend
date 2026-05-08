@@ -2,6 +2,8 @@ import { motion } from "motion/react";
 import { Link } from "react-router";
 import { ArrowRight, Code2, Heart, Award, Shield, Users, Terminal } from "lucide-react";
 import { Button } from "../components/ui/Button";
+import developerPhoto from "../../assets/photo_2026-05-08_09-02-56.jpg";
+import presidentPhoto from "../../assets/photo_2026-05-08_09-04-28.jpg";
 
 export function About() {
   return (
@@ -36,6 +38,12 @@ export function About() {
             <div className="h-12 w-12 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center mb-6">
               <Code2 className="w-6 h-6" />
             </div>
+            <img
+              src={developerPhoto}
+              alt="Developer Abdisa Awel"
+              className="h-24 w-24 rounded-2xl object-cover border border-indigo-500/30 mb-4"
+              loading="lazy"
+            />
             <h3 className="text-xl font-bold mb-2">Developer</h3>
             <p className="text-indigo-300 font-medium mb-4">Abdisa Awel</p>
             <p className="text-slate-400 text-sm leading-relaxed">
@@ -47,6 +55,12 @@ export function About() {
             <div className="h-12 w-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center mb-6">
               <Award className="w-6 h-6" />
             </div>
+            <img
+              src={presidentPhoto}
+              alt="CTC President Shimelis Solomon"
+              className="h-24 w-24 rounded-2xl object-cover border border-purple-500/30 mb-4"
+              loading="lazy"
+            />
             <h3 className="text-xl font-bold mb-2">CTC President</h3>
             <p className="text-purple-300 font-medium mb-4">Shimelis Solomon</p>
             <p className="text-slate-400 text-sm leading-relaxed">
