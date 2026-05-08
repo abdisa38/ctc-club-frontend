@@ -224,6 +224,43 @@ export const manualEnroll = asyncHandler(async (req: AuthRequest, res: Response)
   sendSuccess(res, {}, { message: `Successfully enrolled ${student.firstName} (${student.email})` });
 });
 
+// @desc    Approve a student email for manual unlock
+// @route   POST /api/courses/:id/approve-email
+// @access  Private (instructor/admin)
+export const approveStudentEmail = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const normalizedEmail = String(req.body?.email || '').trim().toLowerCase();
+  if (!normalizedEmail) {
+    res.status(400);
+    throw new Error('Email is required');
+  }
+
+  const course = await Course.findById(req.params.id);
+  if (!course) {
+    res.status(404);
+    throw new Error('Course not found');
+  }
+
+  if (req.user?.role !== 'admin' && course.instructor.toString() !== req.user?._id.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to approve students for this course');
+  }
+
+  const approvedList = Array.isArray(course.approvedEmails) ? course.approvedEmails : [];
+  if (!approvedList.includes(normalizedEmail)) {
+    approvedList.push(normalizedEmail);
+    course.approvedEmails = approvedList;
+    await course.save();
+  }
+
+  const student = await User.findOne({ email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, 'i') }).select('_id');
+  if (student) {
+    await Course.findByIdAndUpdate(course._id, { $addToSet: { students: student._id } });
+    await User.findByIdAndUpdate(student._id, { $addToSet: { enrolledCourses: course._id } });
+  }
+
+  sendSuccess(res, { email: normalizedEmail }, { message: 'Student email approved for this course.' });
+});
+
 export const enrollCourse = asyncHandler(async (req: AuthRequest, res: Response) => {
   const existingCourse = await Course.findById(req.params.id).select('price accessMode');
   if (!existingCourse) {

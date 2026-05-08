@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMyCourseRating = exports.rateCourse = exports.enrollCourse = exports.manualEnroll = exports.deleteCourse = exports.updateCourse = exports.getCourseById = exports.getCourses = exports.createCourse = void 0;
+exports.getMyCourseRating = exports.rateCourse = exports.enrollCourse = exports.approveStudentEmail = exports.manualEnroll = exports.deleteCourse = exports.updateCourse = exports.getCourseById = exports.getCourses = exports.createCourse = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const courseModel_1 = __importDefault(require("../models/courseModel"));
 const courseReviewModel_1 = __importDefault(require("../models/courseReviewModel"));
@@ -188,6 +188,37 @@ exports.manualEnroll = (0, express_async_handler_1.default)(async (req, res) => 
         });
     }
     (0, apiResponse_1.sendSuccess)(res, {}, { message: `Successfully enrolled ${student.firstName} (${student.email})` });
+});
+// @desc    Approve a student email for manual unlock
+// @route   POST /api/courses/:id/approve-email
+// @access  Private (instructor/admin)
+exports.approveStudentEmail = (0, express_async_handler_1.default)(async (req, res) => {
+    const normalizedEmail = String(req.body?.email || '').trim().toLowerCase();
+    if (!normalizedEmail) {
+        res.status(400);
+        throw new Error('Email is required');
+    }
+    const course = await courseModel_1.default.findById(req.params.id);
+    if (!course) {
+        res.status(404);
+        throw new Error('Course not found');
+    }
+    if (req.user?.role !== 'admin' && course.instructor.toString() !== req.user?._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to approve students for this course');
+    }
+    const approvedList = Array.isArray(course.approvedEmails) ? course.approvedEmails : [];
+    if (!approvedList.includes(normalizedEmail)) {
+        approvedList.push(normalizedEmail);
+        course.approvedEmails = approvedList;
+        await course.save();
+    }
+    const student = await userModel_1.default.findOne({ email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, 'i') }).select('_id');
+    if (student) {
+        await courseModel_1.default.findByIdAndUpdate(course._id, { $addToSet: { students: student._id } });
+        await userModel_1.default.findByIdAndUpdate(student._id, { $addToSet: { enrolledCourses: course._id } });
+    }
+    (0, apiResponse_1.sendSuccess)(res, { email: normalizedEmail }, { message: 'Student email approved for this course.' });
 });
 exports.enrollCourse = (0, express_async_handler_1.default)(async (req, res) => {
     const existingCourse = await courseModel_1.default.findById(req.params.id).select('price accessMode');

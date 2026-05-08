@@ -85,11 +85,11 @@ export function CourseEditor() {
     setIsEnrolling(true);
     setEnrollMessage("");
     try {
-      await apiService.api.post(`/courses/${id}/manual-enroll`, { email: normalizedEmail });
-      setEnrollMessage("Successfully enrolled user!");
+      await apiService.api.post(`/courses/${id}/approve-email`, { email: normalizedEmail });
+      setEnrollMessage("Email approved. Student will auto-enroll on next login.");
       setEnrollEmail("");
     } catch (e: any) {
-      setEnrollMessage(e.response?.data?.message || "User not found. Ask the student to register or log in once before enrolling.");
+      setEnrollMessage(e.response?.data?.message || "Approval failed. Please confirm the email and try again.");
     } finally {
       setIsEnrolling(false);
     }
@@ -229,8 +229,8 @@ export function CourseEditor() {
             
             {isEditing && (
              <div className="space-y-2 bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-              <label className="text-sm font-medium text-slate-800 dark:text-slate-200">Manual Student Enrollment</label>
-              <p className="text-xs text-slate-500 mb-2">Manually unlock course for student via email (Telegram payment workflow)</p>
+              <label className="text-sm font-medium text-slate-800 dark:text-slate-200">Approve Student Email</label>
+              <p className="text-xs text-slate-500 mb-2">Approve an email so the student is auto-enrolled on next login.</p>
               <div className="flex gap-2">
                <Input 
                 type="email" 
@@ -240,7 +240,7 @@ export function CourseEditor() {
                 className="flex-1 bg-white dark:bg-slate-950"
                />
                <Button type="button" onClick={handleManualEnroll} disabled={!enrollEmail || isEnrolling}>
-                 {isEnrolling ? "..." : "Enroll"}
+                 {isEnrolling ? "..." : "Approve"}
                </Button>
               </div>
               {enrollMessage && <p className="text-xs mt-2 text-indigo-600 font-medium">{enrollMessage}</p>}
