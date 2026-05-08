@@ -85,10 +85,12 @@ export function CourseEditor() {
     setIsEnrolling(true);
     setEnrollMessage("");
     try {
-      await apiService.approveCourseEmail(id, normalizedEmail);
+      console.log("approve-email: sending", { courseId: id, email: normalizedEmail });
+      await apiService.api.post(`/courses/${id}/approve-email`, { email: normalizedEmail });
       setEnrollMessage("Email approved. Student will auto-enroll on next login.");
       setEnrollEmail("");
     } catch (e: any) {
+      console.error("approve-email: failed", e?.response?.status, e?.response?.data || e?.message);
       setEnrollMessage(e.response?.data?.message || "Approval failed. Please confirm the email and try again.");
     } finally {
       setIsEnrolling(false);

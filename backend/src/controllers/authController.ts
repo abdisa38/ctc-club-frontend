@@ -297,9 +297,6 @@ const fetchGitHubProfile = async (code: string, callbackUrl: string) => {
 // @route   POST /api/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
-  res.status(403);
-  throw new Error('Email/password registration is disabled. Use Google sign-in.');
-
   const { name, email, password } = req.body;
   const normalizedEmail = normalizeEmail(email);
 
@@ -339,9 +336,6 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 // @route   POST /api/auth/login
 // @access  Public
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
-  res.status(403);
-  throw new Error('Email/password login is disabled. Use Google sign-in.');
-
   const { email, password } = req.body;
   const normalizedEmail = normalizeEmail(email);
 

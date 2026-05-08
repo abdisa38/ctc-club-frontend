@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Button } from "../components/ui/Button";
-import { Card, CardContent } from "../components/ui/Card";
+import { Card, CardContent, CardFooter } from "../components/ui/Card";
 import ctcLogo from "../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png";
 import { motion } from "motion/react";
-import { Mail } from "lucide-react";
+import { Github, Mail } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import apiService from "../services/api";
 
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+const MIN_PASSWORD_LENGTH = 8;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
-const isStrongPassword = (value: string) => PASSWORD_REGEX.test(value);
+const isValidPassword = (value: string) => value.trim().length >= MIN_PASSWORD_LENGTH;
 
 export function Auth() {
   const { pathname, search } = useLocation();
@@ -36,7 +36,7 @@ export function Auth() {
   });
   const [isSendingResetCode, setIsSendingResetCode] = useState(false);
   const [isResettingPassword, setIsResettingPassword] = useState(false);
-  const emailPasswordDisabled = true;
+  const emailPasswordDisabled = false;
 
   useEffect(() => {
     setIsLogin(pathname === "/login" || pathname === "/");
@@ -114,8 +114,8 @@ export function Auth() {
       return;
     }
 
-    if (!isLogin && !isStrongPassword(formData.password)) {
-      setErrorMsg("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
+    if (!isLogin && !isValidPassword(formData.password)) {
+      setErrorMsg("Password must be at least 8 characters.");
       return;
     }
 
@@ -213,8 +213,8 @@ export function Auth() {
       return;
     }
 
-    if (!isStrongPassword(forgotFormData.newPassword)) {
-      setErrorMsg("New password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
+    if (!isValidPassword(forgotFormData.newPassword)) {
+      setErrorMsg("New password must be at least 8 characters.");
       return;
     }
 
