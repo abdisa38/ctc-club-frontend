@@ -12,8 +12,10 @@ import apiService from "../services/api";
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
+const isStrongPassword = (value: string) => PASSWORD_REGEX.test(value);
 
 export function Auth() {
   const { pathname, search } = useLocation();
@@ -104,6 +106,11 @@ export function Auth() {
 
     if (!isLogin && !formData.name.trim()) {
       setErrorMsg("Please enter your full name.");
+      return;
+    }
+
+    if (!isLogin && !isStrongPassword(formData.password)) {
+      setErrorMsg("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
       return;
     }
 
@@ -198,6 +205,11 @@ export function Auth() {
 
     if (!isValidEmail(normalizedEmail)) {
       setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isStrongPassword(forgotFormData.newPassword)) {
+      setErrorMsg("New password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
       return;
     }
 

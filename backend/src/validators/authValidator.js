@@ -6,7 +6,10 @@ exports.registerSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z.string().min(2, 'Name must be at least 2 characters'),
         email: zod_1.z.string().email('Invalid email address'),
-        password: zod_1.z.string().min(6, 'Password must be at least 6 characters'),
+        password: zod_1.z
+            .string()
+            .min(8, 'Password must be at least 8 characters')
+            .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])/, 'Password must include uppercase, lowercase, number, and symbol'),
         // Notice: we do not accept 'role' in public registration here for security reasons.
         // If we need an admin creating users, we'd create a separate admin-only endpoint.
     }),
@@ -14,7 +17,7 @@ exports.registerSchema = zod_1.z.object({
 exports.loginSchema = zod_1.z.object({
     body: zod_1.z.object({
         email: zod_1.z.string().email('Invalid email address'),
-        password: zod_1.z.string().min(1, 'Password is required'),
+        password: zod_1.z.string().min(6, 'Password must be at least 6 characters'),
     }),
 });
 exports.forgotPasswordSchema = zod_1.z.object({
@@ -26,7 +29,10 @@ exports.resetPasswordSchema = zod_1.z.object({
     body: zod_1.z.object({
         email: zod_1.z.string().email('Invalid email address'),
         code: zod_1.z.string().regex(/^\d{6}$/, 'Reset code must be 6 digits'),
-        newPassword: zod_1.z.string().min(6, 'Password must be at least 6 characters'),
+        newPassword: zod_1.z
+            .string()
+            .min(8, 'Password must be at least 8 characters')
+            .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])/, 'Password must include uppercase, lowercase, number, and symbol'),
     }),
 });
 const optionalUrl = zod_1.z
@@ -52,7 +58,10 @@ exports.updateProfileSettingsSchema = zod_1.z.object({
 exports.changePasswordSchema = zod_1.z.object({
     body: zod_1.z.object({
         currentPassword: zod_1.z.string().min(1, 'Current password is required'),
-        newPassword: zod_1.z.string().min(6, 'New password must be at least 6 characters'),
+        newPassword: zod_1.z
+            .string()
+            .min(8, 'New password must be at least 8 characters')
+            .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])/, 'New password must include uppercase, lowercase, number, and symbol'),
     }),
 });
 exports.changeEmailSchema = zod_1.z.object({
