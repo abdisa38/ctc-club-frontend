@@ -12,10 +12,8 @@ import apiService from "../services/api";
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
-const isStrongPassword = (value: string) => PASSWORD_REGEX.test(value);
 
 export function Auth() {
   const { pathname, search } = useLocation();
@@ -109,10 +107,6 @@ export function Auth() {
       return;
     }
 
-    if (!isLogin && !isStrongPassword(formData.password)) {
-      setErrorMsg("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
-      return;
-    }
 
     setIsLoading(true);
     setErrorMsg("");
@@ -208,10 +202,6 @@ export function Auth() {
       return;
     }
 
-    if (!isStrongPassword(forgotFormData.newPassword)) {
-      setErrorMsg("New password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
-      return;
-    }
 
     setErrorMsg("");
     setForgotMsg("");
@@ -286,193 +276,21 @@ export function Auth() {
               {forgotMsg}
             </div>
           )}
-          <form onSubmit={handleSubmit}>
-            <CardContent className="space-y-4 pt-6">
-              {/* Social login buttons */}
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-10 rounded-xl text-[13px] font-semibold"
-                  onClick={() => handleOAuth("github")}
-                  disabled={Boolean(socialLoadingProvider)}
-                >
-                  <Github className="h-4 w-4 mr-2" />
-                  {socialLoadingProvider === "github" ? "Connecting..." : "GitHub"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-10 rounded-xl text-[13px] font-semibold"
-                  onClick={() => handleOAuth("google")}
-                  disabled={Boolean(socialLoadingProvider)}
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  {socialLoadingProvider === "google" ? "Connecting..." : "Google"}
-                </Button>
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-100 dark:border-white/[0.06]" />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="bg-card px-3 text-slate-400">or continue with email</span>
-                </div>
-              </div>
-
-              {!isLogin && (
-                <div className="space-y-1.5">
-                  <label className="text-[13px] font-medium text-slate-700 dark:text-slate-300">
-                    Full Name
-                  </label>
-                  <Input 
-                    type="text" 
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="John Doe" 
-                    required={!isLogin} 
-                    className="h-10 rounded-xl" 
-                  />
-                </div>
-              )}
-              <div className="space-y-1.5">
-                <label className="text-[13px] font-medium text-slate-700 dark:text-slate-300">
-                  Email Address
-                </label>
-                <Input 
-                  type="email" 
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="student@university.edu" 
-                  autoComplete="email"
-                  pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                  required 
-                  className="h-10 rounded-xl" 
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[13px] font-medium text-slate-700 dark:text-slate-300">
-                  Password
-                </label>
-                <Input 
-                  type="password" 
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="••••••••" 
-                  required 
-                  className="h-10 rounded-xl" 
-                />
-              </div>
-
-              {isLogin && (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 block text-[13px] text-slate-600 dark:text-slate-400">
-                      Remember me
-                    </label>
-                  </div>
-                  <button
-                    type="button"
-                    className="text-[13px] font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-                    onClick={toggleForgotPassword}
-                  >
-                    {forgotOpen ? "Close reset" : "Forgot password?"}
-                  </button>
-                </div>
-              )}
-
-              {isLogin && forgotOpen && (
-                <div className="rounded-xl border border-slate-200 dark:border-white/[0.08] p-3 space-y-3 bg-slate-50/70 dark:bg-white/[0.02]">
-                  <p className="text-xs text-slate-500">Send a reset code to your email, then set a new password.</p>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[12px] font-medium text-slate-700 dark:text-slate-300">Email</label>
-                    <Input
-                      type="email"
-                      name="email"
-                      value={forgotFormData.email}
-                      onChange={handleForgotInputChange}
-                      placeholder="student@university.edu"
-                      autoComplete="email"
-                      pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                      className="h-9 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[12px] font-medium text-slate-700 dark:text-slate-300">Reset Code</label>
-                    <Input
-                      type="text"
-                      name="code"
-                      value={forgotFormData.code}
-                      onChange={handleForgotInputChange}
-                      placeholder="6-digit code"
-                      inputMode="numeric"
-                      className="h-9 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[12px] font-medium text-slate-700 dark:text-slate-300">New Password</label>
-                    <Input
-                      type="password"
-                      name="newPassword"
-                      value={forgotFormData.newPassword}
-                      onChange={handleForgotInputChange}
-                      placeholder="Enter a new password"
-                      className="h-9 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="h-9 rounded-lg text-xs"
-                      onClick={() => { void handleSendResetCode(); }}
-                      disabled={isSendingResetCode || isResettingPassword}
-                    >
-                      {isSendingResetCode ? "Sending..." : "Send Code"}
-                    </Button>
-                    <Button
-                      type="button"
-                      className="h-9 rounded-lg text-xs bg-indigo-600 hover:bg-indigo-700"
-                      onClick={() => { void handleResetPassword(); }}
-                      disabled={isResettingPassword || isSendingResetCode}
-                    >
-                      {isResettingPassword ? "Resetting..." : "Reset Password"}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-            <CardFooter className="flex-col gap-4">
-              <Button disabled={isLoading || isSendingResetCode || isResettingPassword || Boolean(socialLoadingProvider)} type="submit" className="w-full h-11 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-sm shadow-indigo-500/20">
-                {isLoading ? "Please wait..." : isLogin ? "Sign in" : "Create Account"}
-                {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
-              </Button>
-              <p className="text-[13px] text-slate-500 text-center">
-                {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-                <button
-                  type="button"
-                  onClick={toggleAuthMode}
-                  className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
-                >
-                  {isLogin ? "Sign up free" : "Sign in"}
-                </button>
-              </p>
-            </CardFooter>
-          </form>
+          <CardContent className="space-y-4 pt-6">
+            <div className="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50/70 dark:bg-white/[0.02] p-4 text-sm text-slate-600 dark:text-slate-300">
+              Email/password sign-in is disabled. Please use Google to continue.
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 rounded-xl text-[13px] font-semibold w-full"
+              onClick={() => handleOAuth("google")}
+              disabled={Boolean(socialLoadingProvider)}
+            >
+              <Mail className="h-4 w-4 mr-2" />
+              {socialLoadingProvider === "google" ? "Connecting..." : "Continue with Google"}
+            </Button>
+          </CardContent>
         </Card>
       </motion.div>
     </div>
