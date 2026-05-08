@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "../components/ui/Card";
 import { Input } from "../components/ui/Input";
 import ctcLogo from "../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png";
 import { motion } from "motion/react";
-import { Github, Mail } from "lucide-react";
+import { ArrowRight, Github, Mail } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import apiService from "../services/api";
 
