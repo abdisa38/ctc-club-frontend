@@ -263,8 +263,6 @@ const fetchGitHubProfile = async (code, callbackUrl) => {
 // @route   POST /api/auth/register
 // @access  Public
 exports.registerUser = (0, express_async_handler_1.default)(async (req, res) => {
-    res.status(403);
-    throw new Error('Email/password registration is disabled. Use Google sign-in.');
     const { name, email, password } = req.body;
     const normalizedEmail = normalizeEmail(email);
     const userExists = await userModel_1.default.findOne({ email: normalizedEmail });
