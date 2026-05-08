@@ -6,6 +6,7 @@ import {
   createCourse,
   deleteCourse,
   enrollCourse, manualEnroll,
+  approveStudentEmail,
   getMyCourseRating,
   getCourseById,
   getCourses,
@@ -30,6 +31,7 @@ router.route('/:id')
 // Enroll in a course (Students mostly, but maybe others too)
 router.post('/:id/enroll', protect as any, enrollCourse as any);
 router.post('/:id/manual-enroll', protect as any, authorizeRoles('instructor', 'admin'), manualEnroll as any);
+router.post('/:id/approve-email', protect as any, authorizeRoles('instructor', 'admin'), approveStudentEmail as any);
 router.post('/:id/rate', protect as any, rateCourse as any);
 router.get('/:id/rate/me', protect as any, getMyCourseRating as any);
 

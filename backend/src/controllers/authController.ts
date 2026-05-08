@@ -626,6 +626,14 @@ export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
 export const getUserProfile = asyncHandler(async (req: AuthRequest, res: Response) => {
   const user = await User.findById(req.user._id).select('-password');
   if (user) {
+    if (user.role === 'student' && user.email) {
+      const approvedCourses = await Course.find({ approvedEmails: user.email }).select('_id');
+      if (approvedCourses.length > 0) {
+        const approvedCourseIds = approvedCourses.map((course) => course._id);
+        await Course.updateMany({ _id: { $in: approvedCourseIds } }, { $addToSet: { students: user._id } });
+        await User.findByIdAndUpdate(user._id, { $addToSet: { enrolledCourses: { $each: approvedCourseIds } } });
+      }
+    }
     sendSuccess(res, user);
   } else {
     res.status(404);

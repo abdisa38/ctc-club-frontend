@@ -545,6 +545,14 @@ exports.logoutUser = (0, express_async_handler_1.default)(async (req, res) => {
 exports.getUserProfile = (0, express_async_handler_1.default)(async (req, res) => {
     const user = await userModel_1.default.findById(req.user._id).select('-password');
     if (user) {
+        if (user.role === 'student' && user.email) {
+            const approvedCourses = await courseModel_1.default.find({ approvedEmails: user.email }).select('_id');
+            if (approvedCourses.length > 0) {
+                const approvedCourseIds = approvedCourses.map((course) => course._id);
+                await courseModel_1.default.updateMany({ _id: { $in: approvedCourseIds } }, { $addToSet: { students: user._id } });
+                await userModel_1.default.findByIdAndUpdate(user._id, { $addToSet: { enrolledCourses: { $each: approvedCourseIds } } });
+            }
+        }
         (0, apiResponse_1.sendSuccess)(res, user);
     }
     else {
