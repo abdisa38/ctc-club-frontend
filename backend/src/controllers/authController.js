@@ -300,8 +300,6 @@ exports.registerUser = (0, express_async_handler_1.default)(async (req, res) => 
 // @route   POST /api/auth/login
 // @access  Public
 exports.loginUser = (0, express_async_handler_1.default)(async (req, res) => {
-    res.status(403);
-    throw new Error('Email/password login is disabled. Use Google sign-in.');
     const { email, password } = req.body;
     const normalizedEmail = normalizeEmail(email);
     const user = await userModel_1.default.findOne({ email: normalizedEmail });
@@ -396,8 +394,6 @@ exports.googleOAuthCallback = (0, express_async_handler_1.default)(async (req, r
 // @route   GET /api/auth/oauth/github
 // @access  Public
 exports.startGitHubOAuth = (0, express_async_handler_1.default)(async (req, res) => {
-    res.status(403);
-    throw new Error('GitHub login is disabled. Use Google sign-in.');
     const clientId = process.env.GITHUB_CLIENT_ID;
     const clientSecret = process.env.GITHUB_CLIENT_SECRET;
     if (!clientId || !clientSecret) {
@@ -422,8 +418,6 @@ exports.startGitHubOAuth = (0, express_async_handler_1.default)(async (req, res)
 // @route   GET /api/auth/oauth/github/callback
 // @access  Public
 exports.githubOAuthCallback = (0, express_async_handler_1.default)(async (req, res) => {
-    res.status(403);
-    throw new Error('GitHub login is disabled. Use Google sign-in.');
     const code = typeof req.query.code === 'string' ? req.query.code : '';
     const state = typeof req.query.state === 'string' ? req.query.state : '';
     const expectedState = req.cookies?.[oauthStateCookieName('github')];

@@ -445,9 +445,6 @@ export const googleOAuthCallback = asyncHandler(async (req: Request, res: Respon
 // @route   GET /api/auth/oauth/github
 // @access  Public
 export const startGitHubOAuth = asyncHandler(async (req: Request, res: Response) => {
-  res.status(403);
-  throw new Error('GitHub login is disabled. Use Google sign-in.');
-
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
 
@@ -478,9 +475,6 @@ export const startGitHubOAuth = asyncHandler(async (req: Request, res: Response)
 // @route   GET /api/auth/oauth/github/callback
 // @access  Public
 export const githubOAuthCallback = asyncHandler(async (req: Request, res: Response) => {
-  res.status(403);
-  throw new Error('GitHub login is disabled. Use Google sign-in.');
-
   const code = typeof req.query.code === 'string' ? req.query.code : '';
   const state = typeof req.query.state === 'string' ? req.query.state : '';
   const expectedState = req.cookies?.[oauthStateCookieName('github')];
