@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Button } from "../components/ui/Button";
-import { Input } from "../components/ui/Input";
-import { Card, CardContent, CardFooter } from "../components/ui/Card";
+import { Card, CardContent } from "../components/ui/Card";
 import ctcLogo from "../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png";
 import { motion } from "motion/react";
-import { ArrowRight, Github, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import apiService from "../services/api";
 
 type OAuthProvider = "google" | "github";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MIN_PASSWORD_LENGTH = 8;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 const isValidEmail = (value: string) => EMAIL_REGEX.test(normalizeEmail(value));
-const isValidPassword = (value: string) => value.trim().length >= MIN_PASSWORD_LENGTH;
+const isStrongPassword = (value: string) => PASSWORD_REGEX.test(value);
 
 export function Auth() {
   const { pathname, search } = useLocation();
@@ -115,8 +114,8 @@ export function Auth() {
       return;
     }
 
-    if (!isLogin && !isValidPassword(formData.password)) {
-      setErrorMsg("Password must be at least 8 characters.");
+    if (!isLogin && !isStrongPassword(formData.password)) {
+      setErrorMsg("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
       return;
     }
 
@@ -214,8 +213,8 @@ export function Auth() {
       return;
     }
 
-    if (!isValidPassword(forgotFormData.newPassword)) {
-      setErrorMsg("New password must be at least 8 characters.");
+    if (!isStrongPassword(forgotFormData.newPassword)) {
+      setErrorMsg("New password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
       return;
     }
 
@@ -326,10 +325,6 @@ export function Auth() {
                   <span className="bg-card px-3 text-slate-400">or continue with email</span>
                 </div>
               </div>
-
-              <p className="text-xs text-slate-500 text-center">
-                Email/password sign-in is disabled. Use Google to continue.
-              </p>
 
               {!isLogin && (
                 <div className="space-y-1.5">
@@ -467,7 +462,7 @@ export function Auth() {
               )}
             </CardContent>
             <CardFooter className="flex-col gap-4">
-              <Button disabled={emailPasswordDisabled || isLoading || isSendingResetCode || isResettingPassword || Boolean(socialLoadingProvider)} type="submit" className="w-full h-11 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-sm shadow-indigo-500/20">
+              <Button disabled={isLoading || isSendingResetCode || isResettingPassword || Boolean(socialLoadingProvider)} type="submit" className="w-full h-11 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-sm shadow-indigo-500/20">
                 {isLoading ? "Please wait..." : isLogin ? "Sign in" : "Create Account"}
                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
