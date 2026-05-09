@@ -164,7 +164,7 @@ export function Community() {
             <p className="text-slate-500 dark:text-slate-400 mt-2">Discuss courses, ask questions, and help each other grow. Join our Telegram for real-time chat!</p>
           </div>
           <Button asChild className="mt-4 sm:mt-0 bg-[#2AABEE] hover:bg-[#229ED9] text-white shadow-lg shadow-blue-500/20 px-6 py-2 h-auto text-base transition-all duration-300">
-            <a href="https://t.me/officialCTCclub" target="_blank" rel="noreferrer">
+            <a href="https://t.me/officialCTCclub" target="_blank" rel="noopener noreferrer">
               <MessageSquare className="w-5 h-5 mr-2" />
               Join Telegram
             </a>
