@@ -2,9 +2,9 @@ import axios from 'axios';
 
 // Create an Axios instance pointing to the API
 const api = axios.create({
-  baseURL: import.meta.env.PROD 
-    ? 'https://ctc-14efa787b23a.herokuapp.com/api'
-    : '/api',
+  baseURL: window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api'
+    : 'https://ctc-14efa787b23a.herokuapp.com/api',
   withCredentials: true, // Crucial for sending/receiving httpOnly cookies
 });
 
