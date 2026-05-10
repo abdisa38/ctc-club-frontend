@@ -153,7 +153,7 @@ export function PublicLayout() {
                         key={link.to}
                         href={link.to}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="block px-4 py-3 rounded-xl text-sm font-semibold transition-colors text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5"
                       >
                         {link.label}
