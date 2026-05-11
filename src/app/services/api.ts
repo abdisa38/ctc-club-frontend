@@ -478,7 +478,7 @@ export interface GetUsersParams {
 
 export const apiService = {
   getOAuthLoginUrl(provider: "google" | "github"): string {
-    return `/api/auth/oauth/${provider}`;
+    return `https://ctc-14efa787b23a.herokuapp.com/api/auth/oauth/${provider}`;
   },
 
   async loginUser(email: string, password: string): Promise<AuthUser> {
