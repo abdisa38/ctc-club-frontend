@@ -53,6 +53,7 @@ export function Auth() {
     const oauthStatus = params.get("oauth");
     const oauthEmail = params.get("email");
     const oauthMessage = params.get("message");
+    const oauthToken = params.get("token");
 
     if (oauthEmail) {
       setFormData((prev) => ({ ...prev, email: oauthEmail }));
@@ -63,7 +64,10 @@ export function Auth() {
       return;
     }
 
-    if (oauthStatus === "success") {
+    if (oauthStatus === "success" && oauthToken) {
+      // Store token in cookie for cross-domain OAuth
+      document.cookie = `jwt=${oauthToken}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=none`;
+      
       void (async () => {
         try {
           const currentUser = await apiService.getCurrentUser();
