@@ -13,6 +13,13 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log('Making API request to:', config.baseURL + config.url);
+    
+    // Add JWT token from localStorage to Authorization header
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
     return config;
   },
   (error) => {
@@ -31,6 +38,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // Handle unauthorized access globally (e.g., clear localStorage, redirect to login)
       localStorage.removeItem('userInfo');
+      localStorage.removeItem('jwt_token');
     }
     return Promise.reject(error);
   }

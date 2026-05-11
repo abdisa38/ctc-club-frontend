@@ -65,8 +65,8 @@ export function Auth() {
     }
 
     if (oauthStatus === "success" && oauthToken) {
-      // Store token in cookie for cross-domain OAuth
-      document.cookie = `jwt=${oauthToken}; path=/; max-age=${30 * 24 * 60 * 60}; secure; samesite=none`;
+      // Store token in localStorage for cross-domain OAuth
+      localStorage.setItem('jwt_token', oauthToken);
       
       void (async () => {
         try {

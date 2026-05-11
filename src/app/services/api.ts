@@ -483,12 +483,26 @@ export const apiService = {
 
   async loginUser(email: string, password: string): Promise<AuthUser> {
     const res = await api.post("/auth/login", { email, password });
-    return pickData<AuthUser>(res.data);
+    const data = pickData<AuthUser & { token?: string }>(res.data);
+    
+    // Store token in localStorage if provided
+    if (data.token) {
+      localStorage.setItem('jwt_token', data.token);
+    }
+    
+    return data;
   },
 
   async registerUser(input: { name: string; email: string; password: string }): Promise<AuthUser> {
     const res = await api.post("/auth/register", input);
-    return pickData<AuthUser>(res.data);
+    const data = pickData<AuthUser & { token?: string }>(res.data);
+    
+    // Store token in localStorage if provided
+    if (data.token) {
+      localStorage.setItem('jwt_token', data.token);
+    }
+    
+    return data;
   },
 
   async logoutUser(): Promise<void> {
