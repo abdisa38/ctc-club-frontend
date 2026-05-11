@@ -25,8 +25,9 @@ export default function App() {
       return;
     }
 
-    // Default to dark mode if no preference saved
-    root.classList.add('dark');
+    // Default to light mode if no preference saved
+    root.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
   }, []);
 
   return (
