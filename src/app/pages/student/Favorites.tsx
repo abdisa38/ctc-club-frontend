@@ -4,7 +4,7 @@ import { Button } from "../../components/ui/Button";
 import { Card, CardContent } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/Tabs";
-import { Star, Clock, Users, PlayCircle, Heart, FileText, Bookmark, Loader2, Trash2 } from "lucide-react";
+import { Clock, Users, PlayCircle, Heart, FileText, Bookmark, Loader2, Trash2 } from "lucide-react";
 import apiService from "../../services/api";
 
 type CourseItem = {
@@ -14,8 +14,6 @@ type CourseItem = {
   category?: string;
   instructor?: { name?: string };
   students?: Array<string | { _id: string }>;
-  rating?: number;
-  numReviews?: number;
 };
 
 type ResourceItem = {
@@ -55,8 +53,6 @@ export function Favorites() {
               category: course.category,
               instructor: course.instructor,
               students: Array.isArray(course.students) ? course.students : [],
-              rating: Number(course.rating || 0),
-              numReviews: Number(course.numReviews || 0),
             }))
           : [];
 
@@ -209,19 +205,6 @@ export function Favorites() {
                     </Button>
                   </div>
                   <CardContent className="p-5 flex-1 flex flex-col">
-                    {Number(course.numReviews || 0) > 0 ? (
-                      <div className="flex items-center gap-1 text-sm text-amber-500 font-medium mb-2">
-                        <Star className="h-4 w-4 fill-amber-500" />
-                        <span>{Number(course.rating || 0).toFixed(1)}</span>
-                        <span className="text-slate-400 mx-1">·</span>
-                        <span className="text-slate-500">({course.numReviews || 0})</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 text-sm text-slate-400 font-medium mb-2">
-                        <Star className="h-4 w-4" />
-                        <span>N/A</span>
-                      </div>
-                    )}
                     <Link to={`/app/courses/${course._id}`} className="block mb-2">
                       <h3 className="font-bold text-lg leading-tight text-slate-900 dark:text-white hover:text-indigo-600 transition-colors line-clamp-2">
                         {course.title}
