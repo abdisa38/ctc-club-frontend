@@ -693,6 +693,21 @@ export const apiService = {
     await api.delete(`/courses/${courseId}/lessons/${lessonId}`);
   },
 
+  async toggleLessonCompletion(courseId: string, lessonId: string): Promise<{
+    lessonId: string;
+    isCompleted: boolean;
+    progressPercentage: number;
+    completedLessons: string[];
+  }> {
+    const res = await api.post(`/courses/${courseId}/lessons/${lessonId}/complete`);
+    return pickData<{
+      lessonId: string;
+      isCompleted: boolean;
+      progressPercentage: number;
+      completedLessons: string[];
+    }>(res.data);
+  },
+
   async uploadLessonVideo(file: File): Promise<UploadedFile> {
     const formData = new FormData();
     formData.append("video", file);

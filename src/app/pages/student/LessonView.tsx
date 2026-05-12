@@ -327,19 +327,49 @@ export function LessonView() {
     [lessons]
   );
 
-  const handleMarkComplete = () => {
-    if (!activeLesson || lessonCompleted) {
+  const handleMarkComplete = async () => {
+    if (!activeLesson || !courseId) {
       return;
     }
 
+    // Optimistically update UI
+    const wasCompleted = lessonCompleted;
     setOptimisticCompletedLessons((prev) => {
       const next = new Set(prev);
-      next.add(activeLesson._id);
+      if (wasCompleted) {
+        next.delete(activeLesson._id);
+      } else {
+        next.add(activeLesson._id);
+      }
       return next;
     });
 
-    setShowCompleteBanner(true);
-    window.setTimeout(() => setShowCompleteBanner(false), 2800);
+    setShowCompleteBanner(!wasCompleted);
+    if (!wasCompleted) {
+      window.setTimeout(() => setShowCompleteBanner(false), 2800);
+    }
+
+    // Persist to backend
+    try {
+      const result = await apiService.toggleLessonCompletion(courseId, activeLesson._id);
+      
+      // Update completed lessons from server response
+      setCompletedLessons(new Set(result.completedLessons));
+      setOptimisticCompletedLessons(new Set());
+    } catch (error) {
+      console.error('Failed to update lesson completion:', error);
+      
+      // Revert optimistic update on error
+      setOptimisticCompletedLessons((prev) => {
+        const next = new Set(prev);
+        if (wasCompleted) {
+          next.add(activeLesson._id);
+        } else {
+          next.delete(activeLesson._id);
+        }
+        return next;
+      });
+    }
   };
 
   const handleAddNote = () => {
@@ -547,7 +577,7 @@ export function LessonView() {
                     className={lessonCompleted ? "border-emerald-500 text-emerald-600" : ""}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    {lessonCompleted ? "Completed" : "Mark Complete"}
+                    {lessonCompleted ? "Mark Incomplete" : "Mark Complete"}
                   </Button>
                 </motion.div>
 

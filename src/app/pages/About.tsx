@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { ArrowRight, Code2, Award } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import developerPhoto from "../../assets/photo_2026-05-08_09-02-56.jpg";
-import presidentPhoto from "../../assets/photo_2026-05-08_09-04-28.jpg";
+import presidentPhoto from "../../assets/president-shimelis.jpg";
 
 export function About() {
   return (
