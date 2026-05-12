@@ -70,8 +70,8 @@ const calculateQuizStats = (results: QuizResultItem[]): QuizStats => {
   const passRate = (passed / results.length) * 100;
 
   return {
-    averageScoreText: `${Math.round(average)}%`,
-    passRateText: `${Math.round(passRate)}%`,
+    averageScoreText: `${Math.round(average)}`,
+    passRateText: `${Math.round(passRate)}`,
     attempts: results.length,
   };
 };
@@ -597,7 +597,7 @@ export function InstructorQuizzes() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Passing Score (%)</label>
+                    <label className="text-sm font-medium">Passing Score</label>
                     <Input
                       type="number"
                       min={0}
@@ -721,7 +721,7 @@ export function InstructorQuizzes() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="text-sm font-medium">Passing Score (%)</label>
+                          <label className="text-sm font-medium">Passing Score</label>
                           <Input
                             type="number"
                             min={0}

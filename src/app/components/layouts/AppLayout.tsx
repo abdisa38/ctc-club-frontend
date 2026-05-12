@@ -484,7 +484,7 @@ export function AppLayout() {
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="group flex flex-col items-center gap-1 rounded-xl px-2 py-1 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                  className="group mt-1 flex flex-col items-center gap-1 rounded-xl px-2 py-1 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <Avatar className={cn("h-9 w-9 cursor-pointer ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0c0f1a] transition-all group-hover:ring-indigo-400",
                     role === 'student' ? "ring-indigo-200 dark:ring-indigo-800" :
