@@ -109,11 +109,11 @@ export function PublicCourses() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050117] text-white pt-20 pb-16">
+    <div className="min-h-screen bg-[#050117] text-white pt-16 pb-16">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <AnimatedSection>
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <Badge className="mb-5 py-1 px-3.5 text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20">
               Courses
             </Badge>
@@ -129,7 +129,7 @@ export function PublicCourses() {
 
         {/* Search Filter */}
         <AnimatedSection delay={0.1}>
-          <div className="max-w-md mx-auto mb-12">
+          <div className="max-w-md mx-auto mb-8">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <Input
