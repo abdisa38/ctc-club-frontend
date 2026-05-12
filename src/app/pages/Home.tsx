@@ -119,28 +119,28 @@ function CourseCard({ course }: { course: FeaturedCourse }) {
       <div className="relative overflow-hidden aspect-video">
         <ImageWithFallback src={course.image} alt={course.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute top-2 left-2 flex items-center gap-1.5">
-          <Badge className="bg-white/90 backdrop-blur-sm text-slate-700 text-[10px] font-semibold border-0 shadow-sm py-0.5 px-2">{course.category}</Badge>
-          <Badge className={`text-[10px] font-bold border-0 shadow-sm py-0.5 px-2 ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
+        <div className="absolute top-1.5 left-1.5 flex items-center gap-1">
+          <Badge className="bg-white/90 backdrop-blur-sm text-slate-700 text-[9px] font-semibold border-0 shadow-sm py-0 px-1.5">{course.category}</Badge>
+          <Badge className={`text-[9px] font-bold border-0 shadow-sm py-0 px-1.5 ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
             {isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "FREE"}
           </Badge>
         </div>
       </div>
-      <div className="p-4">
-        <h3 className="text-[13px] font-semibold text-white mb-1 line-clamp-1">{course.title}</h3>
-        <p className="text-[11px] text-slate-300 mb-2">{course.instructor}</p>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1 text-[11px]">
-            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+      <div className="p-3">
+        <h3 className="text-[12px] font-semibold text-white mb-0.5 line-clamp-1">{course.title}</h3>
+        <p className="text-[10px] text-slate-300 mb-1.5">{course.instructor}</p>
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="flex items-center gap-0.5 text-[10px]">
+            <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+            <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">
               {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
             </span>
-            <span className="text-[10px] text-slate-400">({Number(course.numReviews || 0)})</span>
+            <span className="text-[9px] text-slate-400">({Number(course.numReviews || 0)})</span>
           </div>
-          <span className="text-[10px] text-slate-400">{Number(course.students || 0)} students</span>
+          <span className="text-[9px] text-slate-400">{Number(course.students || 0)} students</span>
         </div>
-        <Button size="sm" className={`w-full h-8 text-[11px] font-bold rounded-lg shadow-sm ${isPaid ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`} asChild>
-          <Link to={`/app/courses/${course.id}`}>{isPaid ? `Pay ${Number(course.price || 0).toFixed(0)} ETB` : "Enroll Free"}</Link>
+        <Button size="sm" className={`w-full h-7 text-[10px] font-bold rounded-lg shadow-sm ${isPaid ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`} asChild>
+          <Link to={`/app/courses/${course.id}`}>{isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "Enroll Free"}</Link>
         </Button>
       </div>
     </PremiumCard>
@@ -447,7 +447,7 @@ export function Home() {
               <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-br from-sky-500/15 to-emerald-500/10 rounded-3xl blur-2xl" />
                 <div className="relative rounded-2xl overflow-hidden border border-slate-200/40 dark:border-white/[0.06] shadow-2xl shadow-slate-900/10">
-                  <ImageWithFallback src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&h=500&fit=crop&q=80" alt="African students learning tech" className="w-full h-auto" />
+                  <ImageWithFallback src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=700&h=500&fit=crop&q=80" alt="African student learning tech" className="w-full h-auto" />
                 </div>
                 {/* Floating cards */}
                 <motion.div
