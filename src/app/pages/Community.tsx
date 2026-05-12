@@ -5,7 +5,7 @@ import { Badge } from "../components/ui/Badge";
 import { Input } from "../components/ui/Input";
 import { Textarea } from "../components/ui/Textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
-import { MessageSquare, ArrowUp, ArrowDown, Search, User, Award, Loader2 } from "lucide-react";
+import { MessageSquare, ArrowUp, ArrowDown, Search, User, Award, Loader2, Edit2, Trash2, X, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import apiService, { CommunityPost, CommunityReply, LeaderboardEntry } from "../services/api";
 
@@ -31,6 +31,14 @@ export function Community() {
   const [replies, setReplies] = useState<Record<string, CommunityReply[]>>({});
   const [replyDraft, setReplyDraft] = useState<Record<string, string>>({});
   const [voteCounts, setVoteCounts] = useState<Record<string, { upvotes: number; downvotes: number }>>({});
+  
+  // Edit states
+  const [editingPostId, setEditingPostId] = useState<string>("");
+  const [editPostTitle, setEditPostTitle] = useState<string>("");
+  const [editPostContent, setEditPostContent] = useState<string>("");
+  const [editPostTags, setEditPostTags] = useState<string>("");
+  const [editingReplyId, setEditingReplyId] = useState<string>("");
+  const [editReplyContent, setEditReplyContent] = useState<string>("");
 
   const loadData = async () => {
     try {
@@ -145,6 +153,126 @@ export function Community() {
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to post reply");
     }
+  };
+
+  const handleEditPost = (post: CommunityPost) => {
+    setEditingPostId(post._id);
+    setEditPostTitle(post.title);
+    setEditPostContent(post.content);
+    setEditPostTags(post.tags.join(", "));
+  };
+
+  const handleSavePostEdit = async (postId: string) => {
+    if (!editPostTitle.trim() || !editPostContent.trim()) {
+      setError("Title and content are required");
+      return;
+    }
+
+    try {
+      const updated = await apiService.editCommunityPost(postId, {
+        title: editPostTitle.trim(),
+        content: editPostContent.trim(),
+        tags: editPostTags.split(",").map((t) => t.trim()).filter(Boolean),
+      });
+
+      setPosts((prev) =>
+        prev.map((post) => (post._id === postId ? { ...post, ...updated } : post))
+      );
+      setEditingPostId("");
+      setError("");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to update post");
+    }
+  };
+
+  const handleCancelPostEdit = () => {
+    setEditingPostId("");
+    setEditPostTitle("");
+    setEditPostContent("");
+    setEditPostTags("");
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (!confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      await apiService.deleteCommunityPost(postId);
+      setPosts((prev) => prev.filter((post) => post._id !== postId));
+      setError("");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to delete post");
+    }
+  };
+
+  const handleEditReply = (reply: CommunityReply) => {
+    setEditingReplyId(reply._id);
+    setEditReplyContent(reply.content);
+  };
+
+  const handleSaveReplyEdit = async (postId: string, replyId: string) => {
+    if (!editReplyContent.trim()) {
+      setError("Reply content is required");
+      return;
+    }
+
+    try {
+      const updated = await apiService.editCommunityReply(postId, replyId, editReplyContent.trim());
+      setReplies((prev) => ({
+        ...prev,
+        [postId]: (prev[postId] || []).map((reply) =>
+          reply._id === replyId ? { ...reply, ...updated } : reply
+        ),
+      }));
+      setEditingReplyId("");
+      setError("");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to update reply");
+    }
+  };
+
+  const handleCancelReplyEdit = () => {
+    setEditingReplyId("");
+    setEditReplyContent("");
+  };
+
+  const handleDeleteReply = async (postId: string, replyId: string) => {
+    if (!confirm("Are you sure you want to delete this reply?")) return;
+
+    try {
+      await apiService.deleteCommunityReply(postId, replyId);
+      setReplies((prev) => ({
+        ...prev,
+        [postId]: (prev[postId] || []).filter((reply) => reply._id !== replyId),
+      }));
+      setPosts((prev) =>
+        prev.map((post) =>
+          post._id === postId ? { ...post, repliesCount: Math.max(0, Number(post.repliesCount || 0) - 1) } : post
+        )
+      );
+      setError("");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to delete reply");
+    }
+  };
+
+  const canEditPost = (post: CommunityPost) => {
+    return user && post.user?._id === user._id;
+  };
+
+  const canDeletePost = (post: CommunityPost) => {
+    if (!user) return false;
+    if (user.role === "admin" || user.role === "instructor") return true;
+    return post.user?._id === user._id;
+  };
+
+  const canEditReply = (reply: CommunityReply) => {
+    return user && reply.user?._id === user._id;
+  };
+
+  const canDeleteReply = (reply: CommunityReply) => {
+    if (!user) return false;
+    if (user.role === "admin" || user.role === "instructor") return true;
+    return reply.user?._id === user._id;
   };
 
   if (isLoading) {
@@ -266,19 +394,64 @@ export function Community() {
                           ) : null}
                           <span className="text-xs text-slate-500 ml-2">• {new Date(post.createdAt).toLocaleString()}</span>
                         </div>
-                        {post.isPinned ? <Badge variant="outline">Pinned</Badge> : null}
+                        <div className="flex items-center gap-2">
+                          {post.isPinned ? <Badge variant="outline">Pinned</Badge> : null}
+                          {canEditPost(post) && editingPostId !== post._id && (
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleEditPost(post)}>
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {canDeletePost(post) && editingPostId !== post._id && (
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => void handleDeletePost(post._id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
 
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{post.title}</h3>
-                      <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">{post.content}</p>
+                      {editingPostId === post._id ? (
+                        <div className="space-y-3 mb-4">
+                          <Input
+                            placeholder="Post title..."
+                            value={editPostTitle}
+                            onChange={(e) => setEditPostTitle(e.target.value)}
+                          />
+                          <Textarea
+                            placeholder="Post content..."
+                            value={editPostContent}
+                            onChange={(e) => setEditPostContent(e.target.value)}
+                            rows={4}
+                          />
+                          <Input
+                            placeholder="Tags (comma separated)"
+                            value={editPostTags}
+                            onChange={(e) => setEditPostTags(e.target.value)}
+                          />
+                          <div className="flex gap-2">
+                            <Button size="sm" onClick={() => void handleSavePostEdit(post._id)}>
+                              <Check className="h-4 w-4 mr-1" />
+                              Save
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={handleCancelPostEdit}>
+                              <X className="h-4 w-4 mr-1" />
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{post.title}</h3>
+                          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">{post.content}</p>
 
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {post.tags.map((tag) => (
-                          <Badge key={`${post._id}-${tag}`} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {post.tags.map((tag) => (
+                              <Badge key={`${post._id}-${tag}`} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </>
+                      )}
 
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => void handleToggleReplies(post._id)}>
@@ -297,12 +470,47 @@ export function Community() {
                           ) : (
                             postReplies.map((reply) => (
                               <div key={reply._id} className="rounded-lg bg-slate-50 p-3 dark:bg-slate-900/60">
-                                <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                                  <span className="font-medium text-slate-700 dark:text-slate-300">{reply.user?.name || "User"}</span>
-                                  <span>•</span>
-                                  <span>{new Date(reply.createdAt).toLocaleString()}</span>
+                                <div className="flex items-start justify-between mb-1">
+                                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                                    <span className="font-medium text-slate-700 dark:text-slate-300">{reply.user?.name || "User"}</span>
+                                    <span>•</span>
+                                    <span>{new Date(reply.createdAt).toLocaleString()}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    {canEditReply(reply) && editingReplyId !== reply._id && (
+                                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleEditReply(reply)}>
+                                        <Edit2 className="h-3 w-3" />
+                                      </Button>
+                                    )}
+                                    {canDeleteReply(reply) && editingReplyId !== reply._id && (
+                                      <Button variant="ghost" size="icon" className="h-6 w-6 text-red-600 hover:text-red-700" onClick={() => void handleDeleteReply(post._id, reply._id)}>
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    )}
+                                  </div>
                                 </div>
-                                <p className="text-sm text-slate-700 dark:text-slate-300">{reply.content}</p>
+                                {editingReplyId === reply._id ? (
+                                  <div className="space-y-2">
+                                    <Textarea
+                                      placeholder="Edit reply..."
+                                      value={editReplyContent}
+                                      onChange={(e) => setEditReplyContent(e.target.value)}
+                                      rows={3}
+                                    />
+                                    <div className="flex gap-2">
+                                      <Button size="sm" onClick={() => void handleSaveReplyEdit(post._id, reply._id)}>
+                                        <Check className="h-3 w-3 mr-1" />
+                                        Save
+                                      </Button>
+                                      <Button size="sm" variant="outline" onClick={handleCancelReplyEdit}>
+                                        <X className="h-3 w-3 mr-1" />
+                                        Cancel
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-slate-700 dark:text-slate-300">{reply.content}</p>
+                                )}
                               </div>
                             ))
                           )}

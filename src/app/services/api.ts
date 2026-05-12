@@ -1070,6 +1070,11 @@ export const apiService = {
     return pickData<CommunityPost>(res.data);
   },
 
+  async editCommunityPost(postId: string, input: { title?: string; content?: string; tags?: string[] }): Promise<CommunityPost> {
+    const res = await api.put(`/community/posts/${postId}`, input);
+    return pickData<CommunityPost>(res.data);
+  },
+
   async voteCommunityPost(postId: string, vote: "up" | "down"): Promise<{ upvotes: number; downvotes: number }> {
     const res = await api.post(`/community/posts/${postId}/vote`, { vote });
     return pickData<{ upvotes: number; downvotes: number }>(res.data);
@@ -1083,6 +1088,15 @@ export const apiService = {
   async addCommunityReply(postId: string, content: string): Promise<CommunityReply> {
     const res = await api.post(`/community/posts/${postId}/replies`, { content });
     return pickData<CommunityReply>(res.data);
+  },
+
+  async editCommunityReply(postId: string, replyId: string, content: string): Promise<CommunityReply> {
+    const res = await api.put(`/community/posts/${postId}/replies/${replyId}`, { content });
+    return pickData<CommunityReply>(res.data);
+  },
+
+  async deleteCommunityReply(postId: string, replyId: string): Promise<void> {
+    await api.delete(`/community/posts/${postId}/replies/${replyId}`);
   },
 
   async pinCommunityPost(postId: string, isPinned: boolean): Promise<CommunityPost> {
