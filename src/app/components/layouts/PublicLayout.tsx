@@ -192,19 +192,19 @@ export function PublicLayout() {
       </main>
 
       {!isAuthPage && (
-        <footer className="bg-[#09090b] text-slate-400 pt-20 pb-10 border-t border-purple-500/10">
+        <footer className="bg-[#09090b] text-slate-400 py-8 border-t border-purple-500/10">
           <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
               {/* Brand */}
-              <div className="lg:col-span-1">
-                <Link to="/" className="flex items-center gap-2.5 mb-5 group">
-                  <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-xl transition-transform group-hover:scale-105" />
-                  <span className="text-lg font-bold text-white">
+              <div>
+                <Link to="/" className="flex items-center gap-2.5 mb-4 group">
+                  <img src={ctcLogo} alt="CTC Club" className="h-8 w-8 rounded-xl transition-transform group-hover:scale-105" />
+                  <span className="text-base font-bold text-white">
                     CTC <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Club</span>
                   </span>
                 </Link>
-                <p className="text-sm leading-relaxed text-slate-400 mb-6">
-                  The ultimate tech learning platform for university students. Learn, build, and grow your career.
+                <p className="text-xs leading-relaxed text-slate-400 mb-4">
+                  Tech learning platform for university students.
                 </p>
                 <div className="flex gap-2">
                   {[
@@ -218,95 +218,61 @@ export function PublicLayout() {
                       href={href}
                       target="_blank"
                       rel="noreferrer"
-                      className="h-9 w-9 rounded-xl bg-white/5 hover:bg-indigo-600 flex items-center justify-center transition-all duration-200 hover:scale-105"
+                      className="h-8 w-8 rounded-xl bg-white/5 hover:bg-indigo-600 flex items-center justify-center transition-all duration-200 hover:scale-105"
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-3.5 w-3.5" />
                     </a>
                   ))}
                 </div>
               </div>
 
-              {/* Platform Links */}
+              {/* Quick Links */}
               <div>
-                <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Platform</h4>
-                <ul className="space-y-3">
-                  {["Courses", "Resources", "Community", "Leaderboard", "Projects"].map((link) => (
+                <h4 className="text-white text-xs font-semibold mb-4 tracking-wide">Quick Links</h4>
+                <ul className="space-y-2">
+                  {["Courses", "Community", "About"].map((link) => (
                     <li key={link}>
                       <Link
-                        to={`/app/${link.toLowerCase()}`}
-                        className="text-sm text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group"
+                        to={link === "Courses" ? "/courses" : link === "Community" ? "/community" : "/about"}
+                        className="text-xs text-slate-400 hover:text-white transition-colors duration-200"
                       >
                         {link}
-                        <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Company Links */}
+              {/* Contact */}
               <div>
-                <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Company</h4>
-                <ul className="space-y-3">
-                  <li className="text-sm text-slate-400 leading-relaxed">
-                    <span className="text-slate-300 font-medium">About:</span> CTC Club helps students build practical tech skills with real projects and mentor support.
+                <h4 className="text-white text-xs font-semibold mb-4 tracking-wide">Contact</h4>
+                <ul className="space-y-2 text-xs text-slate-400">
+                  <li>
+                    <a href="tel:+251938890645" className="hover:text-white transition-colors">
+                      📞 0938890645
+                    </a>
                   </li>
-                  <li className="text-sm text-slate-400 leading-relaxed">
-                    <span className="text-slate-300 font-medium">Privacy Policy:</span> We protect your personal information and only use it for learning platform services.
+                  <li>
+                    <a href="mailto:abdisaawel313@gmail.com" className="hover:text-white transition-colors">
+                      ✉️ abdisaawel313@gmail.com
+                    </a>
                   </li>
-                  <li className="text-sm text-slate-400 leading-relaxed">
-                    <span className="text-slate-300 font-medium">Terms of Service:</span> Use the platform respectfully, submit original work, and follow community guidelines.
-                  </li>
-                  <li className="text-sm text-slate-400 leading-relaxed">
-                    <span className="text-slate-300 font-medium">Support:</span> For help with courses or your account, use the support page in your dashboard.
-                  </li>
-                  <li className="text-sm text-slate-400 leading-relaxed">
-                    <span className="text-slate-300 font-medium">Contact:</span>{" "}
-                    <a href="tel:0986182779" className="hover:text-white transition-colors">0986182779</a>
-                    {" "}|{" "}
-                    <a href="mailto:abdisaawel82@gmail.com" className="hover:text-white transition-colors">abdisaawel82@gmail.com</a>
+                  <li>
+                    <a href="https://t.me/bdisa38" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                      📱 @bdisa38
+                    </a>
                   </li>
                 </ul>
               </div>
-
-              {/* Newsletter */}
-              <div>
-                <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Stay Updated</h4>
-                <p className="text-sm text-slate-400 mb-4 leading-relaxed">
-                  Get the latest courses and events delivered to your inbox.
-                </p>
-                <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-                  <div className="flex gap-2">
-                    <Input
-                      type="email"
-                      placeholder="you@email.com"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-300 text-sm h-10 rounded-xl focus-visible:ring-indigo-500 focus-visible:border-indigo-500"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <Button type="submit" size="sm" className="bg-indigo-600 hover:bg-indigo-700 shrink-0 h-10 px-3.5 rounded-xl">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  {newsletterFeedback ? (
-                    <p className={`text-xs ${newsletterFeedback.type === "success" ? "text-emerald-400" : "text-rose-400"}`}>
-                      {newsletterFeedback.message}
-                    </p>
-                  ) : null}
-                </form>
-              </div>
             </div>
 
-            <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
               <p className="text-xs text-slate-300">
-                &copy; {new Date().getFullYear()} CTC Club Learning Platform. All rights reserved.
+                &copy; {new Date().getFullYear()} CTC Club. All rights reserved.
               </p>
-              <div className="flex gap-6">
-                {["Privacy", "Terms", "Cookies"].map((link) => (
-                  <a key={link} href="#" className="text-xs text-slate-300 hover:text-slate-400 transition-colors">
-                    {link}
-                  </a>
-                ))}
+              <div className="flex gap-4">
+                <a href="#" className="text-xs text-slate-300 hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="text-xs text-slate-300 hover:text-white transition-colors">Terms</a>
               </div>
             </div>
           </div>

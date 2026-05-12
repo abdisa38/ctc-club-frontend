@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
                 <Trophy className="w-4 h-4 text-white" />
               </div>
-              <span className="text-lg font-bold">CTC Club</span>
+              <span className="text-lg font-bold">CTC Club ✨ NEW</span>
             </div>
             <p className="text-xs text-gray-400 leading-relaxed">
               Tech learning platform for university students.

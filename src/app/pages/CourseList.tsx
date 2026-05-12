@@ -197,7 +197,7 @@ export function CourseList() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Course Catalog
+            Course Catalog ✨ NEW VERSION
           </h1>
           <p className="text-slate-500 dark:text-slate-400">Discover hundreds of university-grade courses.</p>
         </div>
@@ -303,7 +303,7 @@ export function CourseList() {
       ) : (
         <>
           <p className="text-sm text-slate-500">{filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found</p>
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
             {filteredCourses.map((course, i) => {
               const hasRatings = Number(course.numReviews || 0) > 0;
               const ratingLabel = hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A";
