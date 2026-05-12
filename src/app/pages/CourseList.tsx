@@ -251,11 +251,7 @@ export function CourseList() {
               >
                 <option value="">All Categories</option>
                 <option value="Development">Web Development</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="AI/ML">AI / ML</option>
                 <option value="Design">Design</option>
-                <option value="Cloud">Cloud / DevOps</option>
-                <option value="Tools">Tools</option>
               </select>
               <select
                 className="h-10 flex-1 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-slate-100"
@@ -303,7 +299,7 @@ export function CourseList() {
       ) : (
         <>
           <p className="text-sm text-slate-500">{filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found</p>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 px-4 sm:px-6 lg:px-8">
             {filteredCourses.map((course, i) => {
               const hasRatings = Number(course.numReviews || 0) > 0;
               const ratingLabel = hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A";

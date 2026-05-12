@@ -447,7 +447,7 @@ export function Home() {
               <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-br from-sky-500/15 to-emerald-500/10 rounded-3xl blur-2xl" />
                 <div className="relative rounded-2xl overflow-hidden border border-slate-200/40 dark:border-white/[0.06] shadow-2xl shadow-slate-900/10">
-                  <ImageWithFallback src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&h=500&fit=crop&q=80" alt="African students learning tech" className="w-full h-auto" />
+                  <ImageWithFallback src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=700&h=500&fit=crop" alt="Students learning" className="w-full h-auto" />
                 </div>
                 {/* Floating cards */}
                 <motion.div
