@@ -18,7 +18,6 @@ import {
   Plus,
   Trash2,
   ChevronRight,
-  Star,
   Share2,
   Heart,
   BookmarkPlus,
@@ -287,8 +286,6 @@ export function CourseDetail() {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteBusy, setFavoriteBusy] = useState(false);
-  const [myRating, setMyRating] = useState(0);
-  const [ratingBusy, setRatingBusy] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -588,12 +585,8 @@ export function CourseDetail() {
     return activeQuiz.questions[activeQuizQuestionIndex] || null;
   }, [activeQuiz, activeQuizQuestionIndex]);
 
-  const ratingValue = typeof course?.rating === "number" ? course.rating : 0;
-  const reviewCount = typeof course?.numReviews === "number" ? course.numReviews : 0;
-
   useEffect(() => {
     if (!id || role !== "student") {
-      setMyRating(0);
       setIsFavorite(false);
       return;
     }
@@ -602,20 +595,16 @@ export function CourseDetail() {
 
     const fetchStudentCourseState = async () => {
       try {
-        const [favoriteCourses, rating] = await Promise.all([
-          apiService.getFavoriteCourses(),
-          apiService.getMyCourseRating(id),
-        ]);
+        const favoriteCourses = await apiService.getFavoriteCourses();
 
         if (cancelled) {
           return;
         }
 
         setIsFavorite(Array.isArray(favoriteCourses) && favoriteCourses.some((item) => item._id === id));
-        setMyRating(Number(rating?.rating || 0));
       } catch {
         if (!cancelled) {
-          setMyRating(0);
+          setIsFavorite(false);
         }
       }
     };
@@ -705,34 +694,6 @@ export function CourseDetail() {
     }
   };
 
-  const handleRateCourse = async (value: number) => {
-    if (!id || role !== "student" || ratingBusy) {
-      return;
-    }
-
-    setRatingBusy(true);
-    setError("");
-
-    try {
-      const summary = await apiService.rateCourse(id, { rating: value });
-      setMyRating(Number(summary.myRating || value));
-      setCourse((prev) => {
-        if (!prev) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          rating: Number(summary.rating || prev.rating || 0),
-          numReviews: Number(summary.numReviews || prev.numReviews || 0),
-        };
-      });
-    } catch (ratingError: any) {
-      setError(ratingError?.response?.data?.message || "Failed to save rating");
-    } finally {
-      setRatingBusy(false);
-    }
-  };
 
   const handleUploadNewLessonResources = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -1400,13 +1361,6 @@ export function CourseDetail() {
                   <span className="px-3 py-1 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 text-xs font-semibold rounded-full">
                     {course.category}
                   </span>
-                  <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
-                    <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 mr-1" />
-                    <span className="font-medium text-slate-700 dark:text-slate-300 mr-1">
-                      {course.ratings?.average ? course.ratings.average.toFixed(1) : "0.0"}
-                    </span>
-                    ({course.ratings?.count || 0} reviews)
-                  </div>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                   {course.title}

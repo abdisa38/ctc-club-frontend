@@ -25,7 +25,6 @@ import {
   Shield,
   RefreshCw,
   Loader2,
-  Star,
 } from "lucide-react";
 import { Link } from "react-router";
 import apiService from "../../services/api";
@@ -64,9 +63,6 @@ export function AdminDashboard({ metrics }: { metrics?: any }) {
   const completion = useMemo(() => analytics?.courseCompletionData || [], [analytics]);
   const collectedRevenue = Number(analytics?.collectedRevenue || 0);
   const estimatedRevenue = Number(analytics?.estimatedRevenue || 0);
-  const avgCourseRating = Number(analytics?.ratings?.avgCourseRating || 0);
-  const totalReviews = Number(analytics?.ratings?.totalReviews || 0);
-
   const stats = [
     {
       title: "Total Users",
@@ -91,18 +87,6 @@ export function AdminDashboard({ metrics }: { metrics?: any }) {
       value: `${collectedRevenue.toLocaleString()} ETB`,
       icon: TrendingUp,
       sub: "Collected sales revenue",
-    },
-    {
-      title: "Avg Course Rating",
-      value: avgCourseRating.toFixed(2),
-      icon: Star,
-      sub: "Weighted by all reviews",
-    },
-    {
-      title: "Total Reviews",
-      value: totalReviews.toLocaleString(),
-      icon: MessageSquare,
-      sub: "Submitted course ratings",
     },
   ];
 

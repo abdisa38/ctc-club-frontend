@@ -56,9 +56,6 @@ export interface Course {
   isPublished?: boolean;
   status?: "draft" | "published" | "archived";
   level?: string;
-  rating?: number;
-  numReviews?: number;
-  ratings?: { average?: number; count?: number };
   createdAt?: string;
   updatedAt?: string;
 }
@@ -354,20 +351,6 @@ export interface StudentSearchData {
   };
 }
 
-export interface CourseRatingSummary {
-  courseId: string;
-  rating: number;
-  numReviews: number;
-  myRating: number;
-  myComment?: string;
-}
-
-export interface MyCourseRating {
-  rating: number;
-  comment?: string;
-  updatedAt?: string;
-}
-
 export interface Paginated<T> {
   items: T[];
   page: number;
@@ -639,16 +622,6 @@ export const apiService = {
   async approveCourseEmail(courseId: string, email: string): Promise<ApprovedEmailResult> {
     const res = await api.post(`/courses/${courseId}/approve-email`, { email });
     return pickData<ApprovedEmailResult>(res.data);
-  },
-
-  async rateCourse(courseId: string, input: { rating: number; comment?: string }): Promise<CourseRatingSummary> {
-    const res = await api.post(`/courses/${courseId}/rate`, input);
-    return pickData<CourseRatingSummary>(res.data);
-  },
-
-  async getMyCourseRating(courseId: string): Promise<MyCourseRating | null> {
-    const res = await api.get(`/courses/${courseId}/rate/me`);
-    return pickData<MyCourseRating | null>(res.data);
   },
 
   async getLessons(courseId: string): Promise<Lesson[]> {

@@ -123,9 +123,6 @@ export function InstructorCourses() {
             const students = Array.isArray(course.students) ? course.students.length : 0;
             const revenue = Number(course.price || 0) * students;
             const status = course.status || "draft";
-            const hasRatings = Number(course.numReviews || 0) > 0;
-            const ratingText = hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A";
-
             return (
               <Card key={course._id} className="overflow-hidden group hover:border-emerald-200 dark:hover:border-emerald-800 transition-all">
                 <div className="flex flex-col md:flex-row gap-6 p-6">
@@ -177,7 +174,7 @@ export function InstructorCourses() {
                       <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{course.description}</p>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
                       <div>
                         <p className="text-xs text-slate-500 mb-1">Students</p>
                         <p className="font-semibold text-slate-900 dark:text-white flex items-center gap-1">
@@ -188,10 +185,6 @@ export function InstructorCourses() {
                       <div>
                         <p className="text-xs text-slate-500 mb-1">Revenue</p>
                         <p className="font-semibold text-slate-900 dark:text-white">${revenue.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Rating</p>
-                        <p className="font-semibold text-slate-900 dark:text-white">{ratingText}</p>
                       </div>
                       <div className="flex items-end justify-end">
                         <Button variant="outline" asChild>
