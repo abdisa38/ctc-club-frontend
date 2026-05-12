@@ -532,6 +532,124 @@ export function Home() {
         </div>
       </section>
 
+      {/* ═══ 4. EXPLORE COURSES ═══ */}
+      <section className="py-24 lg:py-32 bg-transparent">
+        <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
+          <AnimatedSection>
+            <SectionHeader
+              badge="Courses"
+              badgeColor="emerald"
+              title="Explore Our"
+              highlight="Courses"
+              description="Start learning with our curated courses designed for beginners."
+            />
+          </AnimatedSection>
+
+          {/* Search Filter */}
+          <div className="max-w-md mx-auto mb-12">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input
+                placeholder="Search courses..."
+                className="pl-10 h-10 rounded-lg border-slate-300/70 bg-white/85 backdrop-blur-sm shadow-sm dark:bg-slate-900/70 dark:border-white/10 text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Course Cards - Single Column Layout */}
+          <div className="max-w-4xl mx-auto space-y-4">
+            {realCourses
+              .filter(course => 
+                !searchQuery || 
+                course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                course.category.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map((course, i) => {
+                const isPaid = Number(course.price || 0) > 0;
+                const hasRatings = Number(course.numReviews || 0) > 0;
+                
+                return (
+                  <AnimatedSection key={course.id} delay={i * 0.05}>
+                    <PremiumCard className="group overflow-hidden">
+                      <div className="flex flex-col sm:flex-row gap-4 p-4">
+                        {/* Course Image */}
+                        <div className="relative w-full sm:w-48 aspect-video sm:aspect-auto sm:h-32 rounded-lg overflow-hidden shrink-0">
+                          <ImageWithFallback 
+                            src={course.image} 
+                            alt={course.title} 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                          />
+                          <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                            <Badge className="bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-semibold border-0 shadow-sm py-0.5 px-2">
+                              {course.category}
+                            </Badge>
+                            <Badge className={`text-[10px] font-bold border-0 shadow-sm py-0.5 px-2 ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
+                              {isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "FREE"}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Course Info */}
+                        <div className="flex-1 flex flex-col">
+                          <h3 className="text-base font-bold text-white mb-1 line-clamp-1 group-hover:text-indigo-400 transition-colors">
+                            {course.title}
+                          </h3>
+                          <p className="text-sm text-slate-400 mb-2">{course.instructor}</p>
+                          
+                          {course.description && (
+                            <p className="text-sm text-slate-300 mb-3 line-clamp-2 leading-relaxed">
+                              {course.description}
+                            </p>
+                          )}
+
+                          <div className="flex items-center gap-4 mt-auto">
+                            <div className="flex items-center gap-1.5 text-sm">
+                              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                              <span className="font-semibold text-slate-300">
+                                {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
+                              </span>
+                              {hasRatings && (
+                                <span className="text-slate-400 text-xs">({course.numReviews})</span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1.5 text-sm text-slate-400">
+                              <Users className="h-4 w-4" />
+                              <span>{Number(course.students || 0)} students</span>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              className="ml-auto h-8 text-xs font-bold rounded-md shadow-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white" 
+                              asChild
+                            >
+                              <Link to={`/app/courses/${course.id}`}>Open Course</Link>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </PremiumCard>
+                  </AnimatedSection>
+                );
+              })}
+          </div>
+
+          {realCourses.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-slate-400">No courses available yet.</p>
+            </div>
+          )}
+
+          <AnimatedSection delay={0.3}>
+            <div className="mt-12 text-center">
+              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl h-11 px-8 font-semibold shadow-lg shadow-purple-500/20" asChild>
+                <Link to="/app/courses">View All Courses <ChevronRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
 
 
       {/* ═══ 6. HOW IT WORKS ═══ */}

@@ -39,7 +39,7 @@ export function About() {
               <Code2 className="w-6 h-6" />
             </div>
             <img
-              src={presidentPhoto}
+              src={developerPhoto}
               alt="Developer Abdisa Awel"
               className="h-24 w-24 rounded-2xl object-cover border border-indigo-500/30 mb-4"
               loading="lazy"
@@ -56,7 +56,7 @@ export function About() {
               <Award className="w-6 h-6" />
             </div>
             <img
-              src={developerPhoto}
+              src={presidentPhoto}
               alt="CTC President Shimelis Solomon"
               className="h-24 w-24 rounded-2xl object-cover border border-purple-500/30 mb-4"
               loading="lazy"
