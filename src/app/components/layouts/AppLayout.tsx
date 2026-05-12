@@ -484,7 +484,7 @@ export function AppLayout() {
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="group flex items-center gap-2 rounded-xl px-1 py-1 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                  className="group flex flex-col items-center gap-1 rounded-xl px-2 py-1 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <Avatar className={cn("h-9 w-9 cursor-pointer ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0c0f1a] transition-all group-hover:ring-indigo-400",
                     role === 'student' ? "ring-indigo-200 dark:ring-indigo-800" :
@@ -494,14 +494,9 @@ export function AppLayout() {
                     <AvatarImage src={avatarSrc} alt={displayName} />
                     <AvatarFallback className="text-xs font-semibold">{avatarFallback}</AvatarFallback>
                   </Avatar>
-                  <div className="hidden md:flex flex-col items-start leading-tight">
-                    <span className="max-w-[140px] truncate text-xs font-semibold text-slate-800 dark:text-slate-100">
-                      {displayName}
-                    </span>
-                    <span className="max-w-[180px] truncate text-[11px] text-slate-500 dark:text-slate-400">
-                      {displayEmail}
-                    </span>
-                  </div>
+                  <span className="max-w-[160px] truncate text-[11px] text-slate-500 dark:text-slate-400">
+                    {displayEmail}
+                  </span>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-slate-200/60 dark:border-white/10">
@@ -525,7 +520,7 @@ export function AppLayout() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 bg-slate-50/50 dark:bg-[#0c0f1a]">
+        <main className="flex-1 overflow-y-auto px-4 pb-4 pt-2 md:px-6 md:pb-6 md:pt-3 lg:px-8 lg:pb-8 lg:pt-4 bg-slate-50/50 dark:bg-[#0c0f1a]">
           <Outlet />
         </main>
       </div>
