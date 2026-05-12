@@ -143,7 +143,7 @@ export function PublicCourses() {
         </AnimatedSection>
 
         {/* Course Cards - Single Column Layout */}
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-5xl mx-auto space-y-4">
           {filteredCourses.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-slate-400">No courses found.</p>
@@ -158,7 +158,7 @@ export function PublicCourses() {
                   <PremiumCard className="group overflow-hidden">
                     <div className="flex flex-col sm:flex-row gap-4 p-4">
                       {/* Course Image */}
-                      <div className="relative w-full sm:w-48 aspect-video sm:aspect-auto sm:h-32 rounded-lg overflow-hidden shrink-0">
+                      <div className="relative w-full sm:w-64 aspect-video sm:aspect-auto sm:h-40 rounded-lg overflow-hidden shrink-0">
                         <ImageWithFallback 
                           src={course.image} 
                           alt={course.title} 
