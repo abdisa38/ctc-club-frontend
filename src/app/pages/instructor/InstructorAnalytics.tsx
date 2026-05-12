@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Download, TrendingUp, Users, DollarSign, CheckCircle } from "lucide-react";
+import { Download, Users, DollarSign, CheckCircle } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card";
 import {
