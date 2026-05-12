@@ -447,7 +447,7 @@ export function Home() {
               <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-br from-sky-500/15 to-emerald-500/10 rounded-3xl blur-2xl" />
                 <div className="relative rounded-2xl overflow-hidden border border-slate-200/40 dark:border-white/[0.06] shadow-2xl shadow-slate-900/10">
-                  <ImageWithFallback src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=700&h=500&fit=crop&q=80" alt="African student learning tech" className="w-full h-auto" />
+                  <ImageWithFallback src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&h=500&fit=crop&q=80" alt="African students learning tech" className="w-full h-auto" />
                 </div>
                 {/* Floating cards */}
                 <motion.div
@@ -801,7 +801,7 @@ export function Home() {
             />
           </AnimatedSection>
 
-          <div className="max-w-3xl mx-auto space-y-4">
+          <div className="max-w-3xl mx-auto space-y-3">
             {[
               {
                 q: "Is CTC Club really free?",
@@ -837,10 +837,15 @@ export function Home() {
               }
             ].map((faq, i) => (
               <AnimatedSection key={i} delay={i * 0.05}>
-                <PremiumCard className="p-6">
-                  <h3 className="text-[15px] font-semibold text-white mb-2">{faq.q}</h3>
-                  <p className="text-sm text-slate-300 leading-relaxed">{faq.a}</p>
-                </PremiumCard>
+                <details className="group">
+                  <summary className="flex items-center justify-between cursor-pointer list-none p-5 bg-[#0f0a29] border border-slate-800/50 rounded-xl hover:border-purple-500/30 transition-colors">
+                    <h3 className="text-[14px] font-semibold text-white">{faq.q}</h3>
+                    <ChevronRight className="h-5 w-5 text-slate-400 transition-transform group-open:rotate-90" />
+                  </summary>
+                  <div className="px-5 pb-5 pt-2 bg-[#0f0a29] border border-t-0 border-slate-800/50 rounded-b-xl">
+                    <p className="text-sm text-slate-300 leading-relaxed">{faq.a}</p>
+                  </div>
+                </details>
               </AnimatedSection>
             ))}
           </div>
