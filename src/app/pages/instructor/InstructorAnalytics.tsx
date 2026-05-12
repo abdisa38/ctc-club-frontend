@@ -322,7 +322,7 @@ export function InstructorAnalytics() {
                           <span className="text-sm text-slate-600 dark:text-slate-300">{item.name}</span>
                         </div>
                         <span className="text-sm font-medium text-slate-900 dark:text-white">
-                          {pct}% ({formatNumber(item.value)})
+                          {pct} ({formatNumber(item.value)})
                         </span>
                       </div>
                     );
