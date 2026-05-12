@@ -118,7 +118,7 @@ export function InstructorStudents() {
       student.name,
       student.email,
       student.courses.map((course) => course.title).join(" | "),
-      `${student.progress}%`,
+      `${student.progress}`,
       formatRelativeTime(student.lastActiveAt),
       student.status,
     ]);
@@ -194,7 +194,7 @@ export function InstructorStudents() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-slate-500">Avg. Completion Rate</p>
-              <h3 className="text-2xl font-bold mt-1 text-slate-900 dark:text-white">{filteredSummary.avgCompletionRate}%</h3>
+              <h3 className="text-2xl font-bold mt-1 text-slate-900 dark:text-white">{filteredSummary.avgCompletionRate}</h3>
             </div>
             <div className="p-3 bg-blue-100 text-blue-600 rounded-full dark:bg-blue-900/30">
               <Award className="h-5 w-5" />
@@ -286,7 +286,7 @@ export function InstructorStudents() {
 
                   <td className="px-6 py-4 w-48">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{student.progress}%</span>
+                      <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{student.progress}</span>
                     </div>
                   </td>
 
