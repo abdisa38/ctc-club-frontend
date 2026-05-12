@@ -105,7 +105,7 @@ export function PublicCourses() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050117] text-white pt-16 pb-16">
+    <div className="min-h-screen bg-[#050117] text-white pt-0 pb-16">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <AnimatedSection>
