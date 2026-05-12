@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
 import { Input } from "../components/ui/Input";
-import { Search, Star, Users } from "lucide-react";
+import { Search, Users } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import api from "../utils/api";
 
@@ -12,8 +12,6 @@ type FeaturedCourse = {
   id: string;
   title: string;
   instructor: string;
-  rating: number;
-  numReviews: number;
   students: number;
   category: string;
   price: number;
@@ -71,8 +69,6 @@ export function PublicCourses() {
             id: String(c._id),
             title: c.title,
             instructor: c.instructor?.name || 'Instructor',
-            rating: toNumber(c.rating, 0),
-            numReviews: toNumber(c.numReviews, 0),
             students: Array.isArray(c.students) ? c.students.length : 0,
             category: c.category || 'Tech',
             price: toNumber(c.price, 0),
@@ -151,8 +147,6 @@ export function PublicCourses() {
           ) : (
             filteredCourses.map((course, i) => {
               const isPaid = Number(course.price || 0) > 0;
-              const hasRatings = Number(course.numReviews || 0) > 0;
-              
               return (
                 <AnimatedSection key={course.id} delay={i * 0.05}>
                   <PremiumCard className="group overflow-hidden">
@@ -180,15 +174,6 @@ export function PublicCourses() {
                         )}
 
                         <div className="flex items-center gap-4 mt-auto">
-                          <div className="flex items-center gap-1.5 text-sm">
-                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                            <span className="font-semibold text-slate-300">
-                              {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
-                            </span>
-                            {hasRatings && (
-                              <span className="text-slate-400 text-xs">({course.numReviews})</span>
-                            )}
-                          </div>
                           <div className="flex items-center gap-1.5 text-sm text-slate-400">
                             <Users className="h-4 w-4" />
                             <span>{Number(course.students || 0)} students</span>
