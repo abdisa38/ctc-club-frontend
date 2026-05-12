@@ -55,6 +55,12 @@ export function About() {
             <div className="h-12 w-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center mb-6">
               <Award className="w-6 h-6" />
             </div>
+            <img
+              src={developerPhoto}
+              alt="CTC President Shimelis Solomon"
+              className="h-24 w-24 rounded-2xl object-cover border border-purple-500/30 mb-4"
+              loading="lazy"
+            />
             <h3 className="text-xl font-bold mb-2">CTC President</h3>
             <p className="text-purple-300 font-medium mb-4">Shimelis Solomon</p>
             <p className="text-slate-400 text-sm leading-relaxed">

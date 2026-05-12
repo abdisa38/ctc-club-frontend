@@ -126,21 +126,20 @@ function CourseCard({ course }: { course: FeaturedCourse }) {
           </Badge>
         </div>
       </div>
-      <div className="p-3">
-        <h3 className="text-[12px] font-semibold text-white mb-0.5 line-clamp-1">{course.title}</h3>
-        <p className="text-[10px] text-slate-300 mb-1.5">{course.instructor}</p>
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-0.5 text-[10px]">
-            <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
-            <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">
+      <div className="p-2.5">
+        <h3 className="text-[11px] font-semibold text-white mb-0.5 line-clamp-1">{course.title}</h3>
+        <p className="text-[9px] text-slate-300 mb-1">{course.instructor}</p>
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-0.5 text-[9px]">
+            <Star className="h-2 w-2 fill-amber-400 text-amber-400" />
+            <span className="text-[9px] font-semibold text-slate-700 dark:text-slate-300">
               {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
             </span>
-            <span className="text-[9px] text-slate-400">({Number(course.numReviews || 0)})</span>
           </div>
-          <span className="text-[9px] text-slate-400">{Number(course.students || 0)} students</span>
+          <span className="text-[8px] text-slate-400">{Number(course.students || 0)} students</span>
         </div>
-        <Button size="sm" className={`w-full h-7 text-[10px] font-bold rounded-lg shadow-sm ${isPaid ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`} asChild>
-          <Link to={`/app/courses/${course.id}`}>{isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "Enroll Free"}</Link>
+        <Button size="sm" className="w-full h-6 text-[9px] font-bold rounded-md shadow-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white" asChild>
+          <Link to={`/app/courses/${course.id}`}>Open Course</Link>
         </Button>
       </div>
     </PremiumCard>
