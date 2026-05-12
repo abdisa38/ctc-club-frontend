@@ -261,6 +261,37 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
     }
   };
 
+  const handleAvatarFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setErrorMsg('Please select a valid image file (JPG, PNG, GIF).');
+      setSuccessMsg('');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg('Image size must be less than 5MB.');
+      setSuccessMsg('');
+      return;
+    }
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result as string;
+      await updateProfile({ avatar: base64String }, "Profile picture updated.");
+    };
+    reader.onerror = () => {
+      setErrorMsg('Failed to read image file.');
+      setSuccessMsg('');
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleChangeAvatar = async () => {
     const nextAvatar = window.prompt("Paste your profile image URL (http/https)", profileForm.avatar || "");
     if (nextAvatar === null) {
@@ -496,22 +527,43 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
                   <CardTitle>Profile Picture</CardTitle>
                   <CardDescription>Upload a picture to help peers recognize you.</CardDescription>
                 </CardHeader>
-                <CardContent className="flex items-center gap-6">
-                  <Avatar className="h-24 w-24 border border-slate-200 dark:border-slate-800">
-                    <AvatarImage src={profileForm.avatar || undefined} alt="Profile" />
-                    <AvatarFallback>{profileInitials}</AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <Button onClick={handleChangeAvatar} disabled={isSavingProfile}>
-                        {isSavingProfile ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                        Change Avatar
-                      </Button>
-                      <Button variant="outline" className="text-red-500 hover:text-red-600" onClick={handleRemoveAvatar} disabled={isSavingProfile}>
-                        Remove
-                      </Button>
+                <CardContent className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <div className="flex items-center gap-6 w-full sm:w-auto">
+                    <Avatar className="h-24 w-24 border border-slate-200 dark:border-slate-800">
+                      <AvatarImage src={profileForm.avatar || undefined} alt="Profile" />
+                      <AvatarFallback>{profileInitials}</AvatarFallback>
+                    </Avatar>
+                    <div className="space-y-2 flex-1">
+                      <div className="flex flex-col gap-2">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarFileChange}
+                          className="hidden"
+                          id="avatar-upload"
+                          disabled={isSavingProfile}
+                        />
+                        <label htmlFor="avatar-upload">
+                          <Button asChild disabled={isSavingProfile}>
+                            <span className="cursor-pointer">
+                              {isSavingProfile ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                              Choose Image
+                            </span>
+                          </Button>
+                        </label>
+                        <Button variant="outline" className="text-red-500 hover:text-red-600" onClick={handleRemoveAvatar} disabled={isSavingProfile}>
+                          Remove
+                        </Button>
+                      </div>
+                      <p className="text-xs text-slate-500">Upload an image from your computer (JPG, PNG, GIF).</p>
                     </div>
-                    <p className="text-xs text-slate-500">Use a public image URL (http/https).</p>
+                  </div>
+                  <div className="ml-auto flex flex-col items-end gap-1">
+                    <Avatar className="h-16 w-16 border-2 border-indigo-200 dark:border-indigo-800">
+                      <AvatarImage src={profileForm.avatar || undefined} alt="Profile" />
+                      <AvatarFallback>{profileInitials}</AvatarFallback>
+                    </Avatar>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">{user?.email}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -565,201 +617,6 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
                   </Button>
                 </CardFooter>
               </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Social Links</CardTitle>
-                  <CardDescription>Connect your profiles to display on your public page.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center gap-2"><Github className="h-4 w-4" /> GitHub</label>
-                    <Input
-                      value={profileForm.github}
-                      onChange={(e) => setProfileForm((prev) => ({ ...prev, github: e.target.value }))}
-                      placeholder="https://github.com/your-username"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center gap-2"><Linkedin className="h-4 w-4" /> LinkedIn</label>
-                    <Input
-                      value={profileForm.linkedin}
-                      onChange={(e) => setProfileForm((prev) => ({ ...prev, linkedin: e.target.value }))}
-                      placeholder="https://linkedin.com/in/your-profile"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center gap-2"><Globe className="h-4 w-4" /> Personal Website</label>
-                    <Input
-                      value={profileForm.website}
-                      onChange={(e) => setProfileForm((prev) => ({ ...prev, website: e.target.value }))}
-                      placeholder="https://"
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter className="border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-end">
-                  <Button onClick={handleSaveSocialLinks} disabled={isSavingProfile}>
-                    {isSavingProfile ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                    Update Links
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Platform Status</CardTitle>
-                    <CardDescription>Your learning progress and account activity.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-5">
-                    <div>
-                      <div className="flex justify-between items-center text-sm font-medium mb-2">
-                        <span className="text-slate-900 dark:text-white flex items-center gap-2">
-                          <Award className="h-4 w-4 text-indigo-500" />
-                          Level {level}
-                        </span>
-                        <span className="text-indigo-600">{xp.toLocaleString()} XP</span>
-                      </div>
-                      <Progress value={xpProgress} className="h-2" />
-                      <p className="text-xs text-slate-500 mt-2 text-right">
-                        {Math.max(0, xpTarget - xp).toLocaleString()} XP to Level {level + 1}
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-900/40">
-                        <span className="block text-2xl font-bold text-slate-900 dark:text-white">{enrolledCourses}</span>
-                        <span className="text-xs text-slate-500 font-medium">Enrolled</span>
-                      </div>
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-900/40">
-                        <span className="block text-2xl font-bold text-slate-900 dark:text-white">{completedCourses}</span>
-                        <span className="text-xs text-slate-500 font-medium">Completed</span>
-                      </div>
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-900/40">
-                        <span className="block text-2xl font-bold text-slate-900 dark:text-white">{activeCoursesCount}</span>
-                        <span className="text-xs text-slate-500 font-medium">Active</span>
-                      </div>
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-900/40">
-                        <span className="block text-2xl font-bold text-slate-900 dark:text-white">{completionRate}%</span>
-                        <span className="text-xs text-slate-500 font-medium">Completion</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>About</CardTitle>
-                    <CardDescription>How your public profile appears to others.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
-                      {profileForm.bio || "No bio added yet. Add your short description above in Personal Information."}
-                    </p>
-                    <div className="text-xs text-slate-500">
-                      Headline: <span className="font-medium text-slate-700 dark:text-slate-300">{profileForm.headline || "Not set"}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-indigo-600" />
-                    Recent Project Submissions
-                  </CardTitle>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to="/app/courses">View Courses</Link>
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {recentSubmissions.length === 0 ? (
-                    <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500 dark:border-slate-700">
-                      No project submissions yet.
-                    </div>
-                  ) : (
-                    recentSubmissions.map((submission) => {
-                      const projectTitle = typeof submission.project === "string"
-                        ? "Project"
-                        : submission.project?.title || "Project";
-                      const courseTitle = typeof submission.course === "string"
-                        ? "Course"
-                        : submission.course?.title || "Course";
-
-                      return (
-                        <div key={submission._id} className="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-                          <div className="flex items-center justify-between gap-2">
-                            <h4 className="font-semibold text-slate-900 dark:text-white">{projectTitle}</h4>
-                            <Badge className={statusBadgeClass(submission.status)}>
-                              {submission.status.replace("_", " ")}
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-slate-500 mt-1">{courseTitle}</p>
-                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                            <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {formatDate(submission.updatedAt || submission.createdAt)}</span>
-                            {typeof submission.grade === "number" ? (
-                              <span className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Grade: {submission.grade}</span>
-                            ) : null}
-                            {typeof submission.xpEarned === "number" ? (
-                              <span className="flex items-center gap-1"><Award className="h-3 w-3" /> +{submission.xpEarned} XP</span>
-                            ) : null}
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </CardContent>
-              </Card>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Account</CardTitle>
-                    <CardDescription>Current access and sign-in details.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-                    <div className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 dark:border-slate-800">
-                      <span>Sign-in Method</span>
-                      <Badge variant="secondary">{((user as any)?.oauthProvider || "email").toUpperCase()}</Badge>
-                    </div>
-                    <div className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 dark:border-slate-800">
-                      <span>Premium</span>
-                      <Badge className={user?.isPremium ? "bg-emerald-600 text-white" : "bg-slate-200 text-slate-700"}>
-                        {user?.isPremium ? "Active" : "Standard"}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 dark:border-slate-800">
-                      <span>Recent Notifications</span>
-                      <span className="font-medium">{recentNotifications.length}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Bell className="h-5 w-5 text-indigo-600" />
-                      Recent Notifications
-                    </CardTitle>
-                    <CardDescription>Latest updates from your dashboard.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {recentNotifications.length === 0 ? (
-                      <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-500 dark:border-slate-700">
-                        No recent notifications.
-                      </div>
-                    ) : (
-                      recentNotifications.map((item: any) => (
-                        <div key={item._id} className="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
-                          <p className="font-medium text-slate-900 dark:text-white">{item.title}</p>
-                          <p className="text-sm text-slate-500 mt-0.5 line-clamp-2">{item.message}</p>
-                        </div>
-                      ))
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
             </TabsContent>
 
             <TabsContent value="account" className="mt-0 space-y-6">
