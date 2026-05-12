@@ -59,7 +59,7 @@ export function PublicLayout() {
 
   const navLinks = [
     { label: "Home", to: "/" },
-    { label: "Explore Courses", to: "/courses" },
+    { label: "Explore Courses", to: "/app/courses" },
     { label: "Community", to: "https://t.me/officialCTCclub" },
     { label: "About", to: "/about" },
   ];
@@ -233,7 +233,7 @@ export function PublicLayout() {
                   {["Courses", "Community", "About"].map((link) => (
                     <li key={link}>
                       <Link
-                        to={link === "Courses" ? "/courses" : link === "Community" ? "/community" : "/about"}
+                        to={link === "Courses" ? "/app/courses" : link === "Community" ? "/community" : "/about"}
                         className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
                       >
                         {link}
