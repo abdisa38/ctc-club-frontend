@@ -5,7 +5,7 @@ import { Button } from "../components/ui/Button";
 import { Card, CardContent } from "../components/ui/Card";
 import { Input } from "../components/ui/Input";
 import { Badge } from "../components/ui/Badge";
-import { Search, Filter, Star, Clock, Users, PlayCircle, PlusCircle, X, Heart } from "lucide-react";
+import { Search, Filter, Clock, Users, PlayCircle, PlusCircle, X, Heart } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import apiService, { Course as ApiCourse } from "../services/api";
 
@@ -301,8 +301,6 @@ export function CourseList() {
           <p className="text-sm text-slate-500">{filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found</p>
           <div className="space-y-4 max-w-6xl mx-auto">
             {filteredCourses.map((course, i) => {
-              const hasRatings = Number(course.numReviews || 0) > 0;
-              const ratingLabel = hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A";
               const isPaidCourse = Number(course.price || 0) > 0;
               const isEnrolled = isUserEnrolled(course);
 
@@ -362,13 +360,6 @@ export function CourseList() {
                         )}
 
                         <div className="flex flex-wrap items-center gap-4 mt-auto">
-                          <div className="flex items-center gap-1.5 text-sm">
-                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                            <span className="font-semibold text-slate-700 dark:text-slate-300">{ratingLabel}</span>
-                            {hasRatings && (
-                              <span className="text-slate-400 text-xs">({course.numReviews})</span>
-                            )}
-                          </div>
                           <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
                             <Users className="h-4 w-4" />
                             <span>{Array.isArray(course.students) ? course.students.length : 0} students</span>
