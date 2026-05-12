@@ -29,7 +29,7 @@ export function StudentDashboard({ metrics }: { metrics?: any }) {
     const quizActivity = quizResults.map((q: any) => ({
       id: `quiz-${q._id}`,
       title: `Quiz: ${q.quiz?.title || "Untitled Quiz"}`,
-      subtitle: `${Math.round(Number(q.percentage || 0))}% score`,
+      subtitle: `${Math.round(Number(q.percentage || 0))} score`,
       createdAt: q.createdAt,
       badge: q.isPassed ? "Passed" : "Retry",
     }));
@@ -152,7 +152,6 @@ export function StudentDashboard({ metrics }: { metrics?: any }) {
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{title}</p>
-                        <p className="mt-2 text-[11px] font-medium text-slate-500">Progress: {pct}%</p>
                       </div>
                       <ChevronRight className="h-4 w-4 text-slate-400" />
                     </Link>
