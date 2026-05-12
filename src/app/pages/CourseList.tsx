@@ -299,11 +299,12 @@ export function CourseList() {
       ) : (
         <>
           <p className="text-sm text-slate-500">{filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""} found</p>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 px-4 sm:px-6 lg:px-8">
+          <div className="space-y-4 max-w-6xl mx-auto">
             {filteredCourses.map((course, i) => {
               const hasRatings = Number(course.numReviews || 0) > 0;
               const ratingLabel = hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A";
               const isPaidCourse = Number(course.price || 0) > 0;
+              const isEnrolled = isUserEnrolled(course);
 
               return (
                 <motion.div
@@ -311,91 +312,97 @@ export function CourseList() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="h-full"
                 >
-                  <Card className="overflow-hidden group flex flex-col h-full hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 bg-white dark:bg-slate-900">
-                  <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900">
-                    <img
-                      src={course.coverImage || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800'}
-                      alt={course.title}
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <Button size="icon" className="rounded-full h-12 w-12 bg-white hover:bg-white shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-300" asChild>
-                        <Link to={`/app/courses/${course._id}`}><PlayCircle className="h-6 w-6 text-indigo-600" /></Link>
-                      </Button>
-                    </div>
-                    <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-                      <Badge className="bg-white/95 backdrop-blur-sm text-slate-900 hover:bg-white shadow-md font-semibold text-[10px] py-0.5 px-2">{course.category}</Badge>
-                      <Badge className={`font-bold tracking-wide shadow-md text-[10px] py-0.5 px-2 ${Number(course.price || 0) > 0 ? "bg-gradient-to-r from-rose-600 to-orange-500 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 text-white"}`}>
-                        {Number(course.price || 0) > 0 ? "PAID" : "FREE"}
-                      </Badge>
-                    </div>
-                    <button
-                      onClick={(e) => { e.preventDefault(); void toggleFavorite(course._id); }}
-                      disabled={role !== 'student' || favoritingIds.has(course._id)}
-                      className="absolute top-2 right-2 h-8 w-8 bg-white/95 backdrop-blur-sm hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:scale-110"
-                      title={role === 'student' ? (favorites.has(course._id) ? 'Remove from favorites' : 'Add to favorites') : 'Favorites are available for students'}
-                    >
-                      <Heart className={`h-4 w-4 transition-all ${favorites.has(course._id) ? "text-red-500 fill-red-500 scale-110" : "text-slate-600"}`} />
-                    </button>
-                    {isUserEnrolled(course) && (
-                      <Badge className="absolute bottom-2 left-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-md font-semibold text-[10px] py-0.5 px-2">Enrolled</Badge>
-                    )}
-                  </div>
-
-                  <CardContent className="p-4 flex-1 flex flex-col">
-                    <div className="flex items-center gap-2 text-xs font-semibold mb-2">
-                      <div className="flex items-center gap-1 text-amber-500">
-                        <Star className="h-3.5 w-3.5 fill-amber-500" />
-                        <span>{ratingLabel}</span>
+                  <Card className="overflow-hidden group hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 bg-white dark:bg-slate-900">
+                    <div className="flex flex-col sm:flex-row">
+                      {/* Course Image */}
+                      <div className="relative w-full sm:w-64 aspect-video sm:aspect-auto sm:h-40 shrink-0">
+                        <img
+                          src={course.coverImage || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800'}
+                          alt={course.title}
+                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <Button size="icon" className="rounded-full h-12 w-12 bg-white hover:bg-white shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-300" asChild>
+                            <Link to={`/app/courses/${course._id}`}><PlayCircle className="h-6 w-6 text-indigo-600" /></Link>
+                          </Button>
+                        </div>
+                        <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                          <Badge className="bg-white/95 backdrop-blur-sm text-slate-900 hover:bg-white shadow-md font-semibold text-[10px] py-0.5 px-2">{course.category}</Badge>
+                          <Badge className={`font-bold tracking-wide shadow-md text-[10px] py-0.5 px-2 ${isPaidCourse ? "bg-gradient-to-r from-rose-600 to-orange-500 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 text-white"}`}>
+                            {isPaidCourse ? "PAID" : "FREE"}
+                          </Badge>
+                        </div>
+                        <button
+                          onClick={(e) => { e.preventDefault(); void toggleFavorite(course._id); }}
+                          disabled={role !== 'student' || favoritingIds.has(course._id)}
+                          className="absolute top-2 right-2 h-8 w-8 bg-white/95 backdrop-blur-sm hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:scale-110"
+                          title={role === 'student' ? (favorites.has(course._id) ? 'Remove from favorites' : 'Add to favorites') : 'Favorites are available for students'}
+                        >
+                          <Heart className={`h-4 w-4 transition-all ${favorites.has(course._id) ? "text-red-500 fill-red-500 scale-110" : "text-slate-600"}`} />
+                        </button>
+                        {isEnrolled && (
+                          <Badge className="absolute bottom-2 left-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-md font-semibold text-[10px] py-0.5 px-2">Enrolled</Badge>
+                        )}
                       </div>
-                      <span className="text-slate-300 dark:text-slate-700">·</span>
-                      <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
-                        <Users className="h-3.5 w-3.5" />
-                        <span>{Array.isArray(course.students) ? course.students.length : 0}</span>
-                      </div>
+
+                      {/* Course Info */}
+                      <CardContent className="flex-1 p-4 flex flex-col">
+                        <Link to={`/app/courses/${course._id}`} className="block mb-2 group/title">
+                          <h3 className="font-bold text-lg leading-tight text-slate-900 dark:text-white group-hover/title:text-indigo-600 dark:group-hover/title:text-indigo-400 transition-colors">
+                            {course.title}
+                          </h3>
+                        </Link>
+
+                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-[10px]">
+                            {(course.instructor?.name || 'U')[0].toUpperCase()}
+                          </span>
+                          {course.instructor?.name || 'Unknown Instructor'}
+                        </p>
+
+                        {course.description && (
+                          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2 leading-relaxed">
+                            {course.description}
+                          </p>
+                        )}
+
+                        <div className="flex flex-wrap items-center gap-4 mt-auto">
+                          <div className="flex items-center gap-1.5 text-sm">
+                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{ratingLabel}</span>
+                            {hasRatings && (
+                              <span className="text-slate-400 text-xs">({course.numReviews})</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
+                            <Users className="h-4 w-4" />
+                            <span>{Array.isArray(course.students) ? course.students.length : 0} students</span>
+                          </div>
+                          <Badge variant="secondary" className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
+                            <Clock className="h-3 w-3 mr-1 inline" /> 10h
+                          </Badge>
+                          <Badge className={`text-xs px-2 py-1 font-bold shadow-sm ${isPaidCourse ? "bg-gradient-to-r from-rose-100 to-orange-100 text-rose-700" : "bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700"}`}>
+                            {isPaidCourse ? `${Number(course.price || 0).toFixed(2)} ETB` : "Free"}
+                          </Badge>
+                          
+                          {!isEnrolled && (
+                            <Button
+                              size="sm"
+                              className={`ml-auto h-9 px-6 text-xs font-extrabold rounded-lg border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105 ${isPaidCourse
+                                ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white"
+                                : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`}
+                              onClick={() => handleEnroll(course)}
+                              disabled={enrollingId === course._id}
+                            >
+                              {enrollingId === course._id
+                                ? (isPaidCourse ? "Opening..." : "Enrolling...")
+                                : (isPaidCourse ? "Request Access" : "Enroll Free")}
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
                     </div>
-
-                    <Link to={`/app/courses/${course._id}`} className="block mb-2 group/title">
-                      <h3 className="font-bold text-base leading-tight text-slate-900 dark:text-white group-hover/title:text-indigo-600 dark:group-hover/title:text-indigo-400 transition-colors line-clamp-2">
-                        {course.title}
-                      </h3>
-                    </Link>
-
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-[10px]">
-                        {(course.instructor?.name || 'U')[0].toUpperCase()}
-                      </span>
-                      {course.instructor?.name || 'Unknown Instructor'}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-3 mt-auto">
-                      <Badge variant="secondary" className="text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
-                        <Clock className="h-3 w-3 mr-1 inline" /> 10h
-                      </Badge>
-                      <Badge className={`text-[10px] px-2 py-0.5 font-bold shadow-sm ${Number(course.price || 0) > 0 ? "bg-gradient-to-r from-rose-100 to-orange-100 text-rose-700" : "bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700"}`}>
-                        {Number(course.price || 0) > 0
-                          ? `${Number(course.price || 0).toFixed(2)} ETB`
-                          : "Free"}
-                      </Badge>
-                    </div>
-
-                    {!isUserEnrolled(course) && (
-                      <Button
-                        size="sm"
-                        className={`w-full h-9 text-xs font-extrabold rounded-lg border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105 ${isPaidCourse
-                          ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white"
-                          : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`}
-                        onClick={() => handleEnroll(course)}
-                        disabled={enrollingId === course._id}
-                      >
-                        {enrollingId === course._id
-                          ? (isPaidCourse ? "Opening..." : "Enrolling...")
-                          : (isPaidCourse ? "Request Access" : "Enroll Free")}
-                      </Button>
-                    )}
-                  </CardContent>
                   </Card>
                 </motion.div>
               );
