@@ -453,14 +453,6 @@ export function LessonView() {
             <span className="text-xs text-slate-500">
               {completedCount}/{totalLessons} lessons
             </span>
-            <div className="w-24 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-indigo-600 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${progressPct}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -661,13 +653,12 @@ export function LessonView() {
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-          <div className="flex justify-between items-center text-xs text-slate-500 mb-1">
+          <div className="flex justify-between items-center text-xs text-slate-500 mb-3">
             <span>Progress: {progressPct}%</span>
             <span>
               {completedCount} / {totalLessons} Lessons
             </span>
           </div>
-          <Progress value={progressPct} className="h-1.5" />
         </div>
 
         <div className="flex-1 overflow-y-auto">

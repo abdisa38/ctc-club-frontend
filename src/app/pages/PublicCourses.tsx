@@ -164,14 +164,6 @@ export function PublicCourses() {
                           alt={course.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                         />
-                        <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                          <Badge className="bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-semibold border-0 shadow-sm py-0.5 px-2">
-                            {course.category}
-                          </Badge>
-                          <Badge className={`text-[10px] font-bold border-0 shadow-sm py-0.5 px-2 ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
-                            {isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "FREE"}
-                          </Badge>
-                        </div>
                       </div>
 
                       {/* Course Info */}

@@ -327,12 +327,6 @@ export function CourseList() {
                             <Link to={`/app/courses/${course._id}`}><PlayCircle className="h-6 w-6 text-indigo-600" /></Link>
                           </Button>
                         </div>
-                        <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                          <Badge className="bg-white/95 backdrop-blur-sm text-slate-900 hover:bg-white shadow-md font-semibold text-[10px] py-0.5 px-2">{course.category}</Badge>
-                          <Badge className={`font-bold tracking-wide shadow-md text-[10px] py-0.5 px-2 ${isPaidCourse ? "bg-gradient-to-r from-rose-600 to-orange-500 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 text-white"}`}>
-                            {isPaidCourse ? "PAID" : "FREE"}
-                          </Badge>
-                        </div>
                         <button
                           onClick={(e) => { e.preventDefault(); void toggleFavorite(course._id); }}
                           disabled={role !== 'student' || favoritingIds.has(course._id)}

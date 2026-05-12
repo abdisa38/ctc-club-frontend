@@ -2103,11 +2103,10 @@ export function CourseDetail() {
       <div className="w-full lg:w-[400px] border-l border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-950 h-full">
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
           <h3 className="font-semibold text-lg text-slate-900 dark:text-white mb-2">Course Content</h3>
-          <div className="flex justify-between items-center text-sm mb-1 text-slate-600 dark:text-slate-400">
+          <div className="flex justify-between items-center text-sm mb-3 text-slate-600 dark:text-slate-400">
             <span>Progress: {progress}%</span>
             <span>{completedCount} / {visibleLessons.length} Lessons</span>
           </div>
-          <Progress value={progress} className="h-2" />
 
           {isInstructor ? (
             <div className="mt-4 space-y-3">

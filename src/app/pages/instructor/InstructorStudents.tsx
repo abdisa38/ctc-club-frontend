@@ -286,12 +286,7 @@ export function InstructorStudents() {
 
                   <td className="px-6 py-4 w-48">
                     <div className="flex items-center gap-2">
-                      <Progress
-                        value={student.progress}
-                        className={`h-2 ${student.progress === 100 ? "bg-emerald-100" : ""}`}
-                        indicatorClassName={student.progress === 100 ? "bg-emerald-500" : "bg-indigo-600"}
-                      />
-                      <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{student.progress}%</span>
+                      <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{student.progress}%</span>
                     </div>
                   </td>
 
