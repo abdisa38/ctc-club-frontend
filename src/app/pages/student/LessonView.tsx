@@ -654,7 +654,7 @@ export function LessonView() {
             </Button>
           </div>
           <div className="flex justify-between items-center text-xs text-slate-500 mb-3">
-            <span>Progress: {progressPct}%</span>
+            <span>Progress: {progressPct}</span>
             <span>
               {completedCount} / {totalLessons} Lessons
             </span>

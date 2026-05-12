@@ -264,7 +264,7 @@ export function Profile() {
                   <span className="text-xs text-slate-500 font-medium">Active</span>
                 </div>
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center dark:border-slate-800 dark:bg-slate-900/40">
-                  <span className="block text-2xl font-bold text-slate-900 dark:text-white">{completionRate}%</span>
+                  <span className="block text-2xl font-bold text-slate-900 dark:text-white">{completionRate}</span>
                   <span className="text-xs text-slate-500 font-medium">Completion</span>
                 </div>
               </div>

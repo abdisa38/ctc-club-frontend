@@ -1498,7 +1498,7 @@ export function CourseDetail() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-medium text-slate-500">Passing score (%)</label>
+                        <label className="text-xs font-medium text-slate-500">Passing score</label>
                         <Input
                           type="number"
                           min={0}
@@ -1724,7 +1724,7 @@ export function CourseDetail() {
                   <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-4 dark:border-emerald-900/40 dark:bg-emerald-950/10 space-y-4">
                     <h3 className="font-semibold text-slate-900 dark:text-white">Quiz Complete</h3>
                     <p className="text-sm text-slate-600 dark:text-slate-300">
-                      Score: <span className="font-semibold">{Math.round(quizResult.percentage || 0)}%</span>
+                      Score: <span className="font-semibold">{Math.round(quizResult.percentage || 0)}</span>
                       {quizResult.xpEarned > 0 ? ` • XP earned: ${quizResult.xpEarned}` : ""}
                     </p>
                     <div className="flex gap-2">
@@ -2058,7 +2058,7 @@ export function CourseDetail() {
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
           <h3 className="font-semibold text-lg text-slate-900 dark:text-white mb-2">Course Content</h3>
           <div className="flex justify-between items-center text-sm mb-3 text-slate-600 dark:text-slate-400">
-            <span>Progress: {progress}%</span>
+            <span>Progress: {progress}</span>
             <span>{completedCount} / {visibleLessons.length} Lessons</span>
           </div>
 

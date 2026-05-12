@@ -194,7 +194,7 @@ export function Quizzes() {
             <Award className="h-12 w-12" />
           </div>
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Quiz Completed!</h2>
-          <p className="text-lg text-slate-500">You scored <strong className="text-indigo-600">{scorePct}%</strong></p>
+          <p className="text-lg text-slate-500">You scored <strong className="text-indigo-600">{scorePct}</strong></p>
           {quizResult.xpEarned > 0 && <p className="text-md text-purple-600 font-bold">+{quizResult.xpEarned} XP Earned!</p>}
         </div>
 
