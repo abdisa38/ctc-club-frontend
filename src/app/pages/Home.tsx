@@ -851,7 +851,7 @@ export function Home() {
             <div className="mt-12 text-center">
               <p className="text-slate-300 mb-4">Still have questions?</p>
               <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl h-11 px-6 font-semibold shadow-lg shadow-purple-500/20" asChild>
-                <Link to="/app/support">Contact Support</Link>
+                <a href="https://t.me/bdisa38" target="_blank" rel="noopener noreferrer">Contact Support</a>
               </Button>
             </div>
           </AnimatedSection>

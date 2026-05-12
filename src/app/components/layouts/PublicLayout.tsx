@@ -230,16 +230,30 @@ export function PublicLayout() {
               <div>
                 <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Quick Links</h4>
                 <ul className="space-y-3">
-                  {["Courses", "Community", "About"].map((link) => (
-                    <li key={link}>
-                      <Link
-                        to={link === "Courses" ? "/courses" : link === "Community" ? "/community" : "/about"}
-                        className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
-                      >
-                        {link}
-                      </Link>
-                    </li>
-                  ))}
+                  <li>
+                    <Link
+                      to="/courses"
+                      className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                    >
+                      Courses
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/login"
+                      className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                    >
+                      Community
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about"
+                      className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                    >
+                      About
+                    </Link>
+                  </li>
                 </ul>
               </div>
 

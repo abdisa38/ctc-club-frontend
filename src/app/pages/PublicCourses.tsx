@@ -142,8 +142,8 @@ export function PublicCourses() {
           </div>
         </AnimatedSection>
 
-        {/* Course Cards - Single Column Layout */}
-        <div className="max-w-4xl mx-auto space-y-4">
+        {/* Course Cards - Two Column Layout */}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredCourses.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-slate-400">No courses found.</p>
@@ -155,10 +155,10 @@ export function PublicCourses() {
               
               return (
                 <AnimatedSection key={course.id} delay={i * 0.05}>
-                  <PremiumCard className="group overflow-hidden">
-                    <div className="flex flex-col sm:flex-row gap-4 p-4">
+                  <PremiumCard className="group overflow-hidden h-full">
+                    <div className="flex flex-col h-full">
                       {/* Course Image */}
-                      <div className="relative w-full sm:w-48 aspect-video sm:aspect-auto sm:h-32 rounded-lg overflow-hidden shrink-0">
+                      <div className="relative w-full aspect-video overflow-hidden">
                         <ImageWithFallback 
                           src={course.image} 
                           alt={course.title} 
@@ -175,8 +175,8 @@ export function PublicCourses() {
                       </div>
 
                       {/* Course Info */}
-                      <div className="flex-1 flex flex-col">
-                        <h3 className="text-base font-bold text-white mb-1 line-clamp-1 group-hover:text-indigo-400 transition-colors">
+                      <div className="flex-1 flex flex-col p-4">
+                        <h3 className="text-base font-bold text-white mb-1 line-clamp-2 group-hover:text-indigo-400 transition-colors">
                           {course.title}
                         </h3>
                         <p className="text-sm text-slate-400 mb-2">{course.instructor}</p>
@@ -187,7 +187,7 @@ export function PublicCourses() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-4 mt-auto">
+                        <div className="flex flex-wrap items-center gap-3 mt-auto">
                           <div className="flex items-center gap-1.5 text-sm">
                             <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                             <span className="font-semibold text-slate-300">
@@ -199,7 +199,7 @@ export function PublicCourses() {
                           </div>
                           <div className="flex items-center gap-1.5 text-sm text-slate-400">
                             <Users className="h-4 w-4" />
-                            <span>{Number(course.students || 0)} students</span>
+                            <span>{Number(course.students || 0)}</span>
                           </div>
                           <Button 
                             size="sm" 
