@@ -118,24 +118,6 @@ export function StudentDashboard({ metrics }: { metrics?: any }) {
         <MetricCard title="Total XP" value={xp.toLocaleString()} icon={<Trophy className="h-5 w-5" />} />
       </div>
 
-      <Card className="border-0 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 text-white">
-        <CardContent className="p-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <p className="text-sm opacity-90">Level {level}</p>
-              <p className="text-2xl font-bold">{xp.toLocaleString()} XP</p>
-            </div>
-            <div className="w-full sm:w-72">
-              <div className="flex justify-between text-xs opacity-90 mb-1">
-                <span>Progress to Level {level + 1}</span>
-                <span>{xp}/{xpToNextLevel}</span>
-              </div>
-              <Progress value={progressToNext} className="h-2 bg-white/25" indicatorClassName="bg-white" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Card>
