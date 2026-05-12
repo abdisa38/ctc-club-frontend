@@ -119,28 +119,28 @@ function CourseCard({ course }: { course: FeaturedCourse }) {
       <div className="relative overflow-hidden aspect-video">
         <ImageWithFallback src={course.image} alt={course.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute top-3 left-3 flex items-center gap-2">
-          <Badge className="bg-white/90 backdrop-blur-sm text-slate-700 text-[11px] font-semibold border-0 shadow-sm">{course.category}</Badge>
-          <Badge className={`text-[11px] font-bold border-0 shadow-sm ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
-            {isPaid ? `PAID ${Number(course.price || 0).toFixed(2)} ${course.currency || "ETB"}` : "FREE"}
+        <div className="absolute top-2 left-2 flex items-center gap-1.5">
+          <Badge className="bg-white/90 backdrop-blur-sm text-slate-700 text-[10px] font-semibold border-0 shadow-sm py-0.5 px-2">{course.category}</Badge>
+          <Badge className={`text-[10px] font-bold border-0 shadow-sm py-0.5 px-2 ${isPaid ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"}`}>
+            {isPaid ? `${Number(course.price || 0).toFixed(0)} ETB` : "FREE"}
           </Badge>
         </div>
       </div>
-      <div className="p-5">
-        <h3 className="text-[15px] font-semibold text-white mb-1.5 line-clamp-1">{course.title}</h3>
-        <p className="text-[13px] text-slate-300 mb-3">{course.instructor}</p>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-1.5 text-[13px]">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            <span className="text-[13px] font-semibold text-slate-700 dark:text-slate-300">
+      <div className="p-4">
+        <h3 className="text-[13px] font-semibold text-white mb-1 line-clamp-1">{course.title}</h3>
+        <p className="text-[11px] text-slate-300 mb-2">{course.instructor}</p>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-1 text-[11px]">
+            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+            <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
               {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
             </span>
-            <span className="text-[11px] text-slate-400">({Number(course.numReviews || 0)} reviews)</span>
+            <span className="text-[10px] text-slate-400">({Number(course.numReviews || 0)})</span>
           </div>
-          <span className="text-[11px] text-slate-400">{Number(course.students || 0)} students</span>
+          <span className="text-[10px] text-slate-400">{Number(course.students || 0)} students</span>
         </div>
-        <Button size="sm" className={`w-full h-10 text-[12px] font-bold rounded-lg shadow-sm ${isPaid ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`} asChild>
-          <Link to={`/app/courses/${course.id}`}>{isPaid ? `Pay ${Number(course.price || 0).toFixed(2)} ${course.currency || "ETB"}` : "Enroll Free"}</Link>
+        <Button size="sm" className={`w-full h-8 text-[11px] font-bold rounded-lg shadow-sm ${isPaid ? "bg-gradient-to-r from-rose-600 to-orange-500 hover:from-rose-700 hover:to-orange-600 text-white" : "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white"}`} asChild>
+          <Link to={`/app/courses/${course.id}`}>{isPaid ? `Pay ${Number(course.price || 0).toFixed(0)} ETB` : "Enroll Free"}</Link>
         </Button>
       </div>
     </PremiumCard>
@@ -447,7 +447,7 @@ export function Home() {
               <div className="relative">
                   <div className="absolute -inset-4 bg-gradient-to-br from-sky-500/15 to-emerald-500/10 rounded-3xl blur-2xl" />
                 <div className="relative rounded-2xl overflow-hidden border border-slate-200/40 dark:border-white/[0.06] shadow-2xl shadow-slate-900/10">
-                  <ImageWithFallback src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=700&h=500&fit=crop" alt="Students learning" className="w-full h-auto" />
+                  <ImageWithFallback src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&h=500&fit=crop&q=80" alt="African students learning tech" className="w-full h-auto" />
                 </div>
                 {/* Floating cards */}
                 <motion.div
@@ -788,7 +788,75 @@ export function Home() {
         </div>
       </section>
 
-      {/* ═══ 13. FINAL CTA ═══ */}
+      {/* ═══ 13. FAQs ═══ */}
+      <section className="py-24 lg:py-32 bg-transparent">
+        <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
+          <AnimatedSection>
+            <SectionHeader
+              badge="FAQs"
+              badgeColor="purple"
+              title="Frequently Asked"
+              highlight="Questions"
+              description="Everything you need to know about CTC Club."
+            />
+          </AnimatedSection>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {[
+              {
+                q: "Is CTC Club really free?",
+                a: "Yes! The Frontend track is completely free forever. The Backend track costs 500 ETB for the complete course."
+              },
+              {
+                q: "Do I need prior programming experience?",
+                a: "No! Our courses are designed for complete beginners. We start from the basics and gradually build up your skills."
+              },
+              {
+                q: "How long does it take to complete a track?",
+                a: "It depends on your pace. Most students complete the Frontend track in 3-4 months and the Backend track in 2-3 months with consistent practice."
+              },
+              {
+                q: "Will I get a certificate?",
+                a: "Yes! You'll receive a certificate of completion after finishing each track and passing the final assessment."
+              },
+              {
+                q: "Can I access courses on mobile?",
+                a: "Yes! Our platform is fully responsive and works on all devices - desktop, tablet, and mobile."
+              },
+              {
+                q: "How do I get help if I'm stuck?",
+                a: "You can submit support tickets, ask questions in the community forum, join our Telegram group, or get mentor feedback on your projects."
+              },
+              {
+                q: "What payment methods do you accept?",
+                a: "We accept bank transfers, mobile money (Telebirr, CBE Birr), and other local payment methods for the Backend track."
+              },
+              {
+                q: "Can I switch from Frontend to Backend track?",
+                a: "Absolutely! We recommend completing the Frontend track first as it provides the foundation needed for Backend development."
+              }
+            ].map((faq, i) => (
+              <AnimatedSection key={i} delay={i * 0.05}>
+                <PremiumCard className="p-6">
+                  <h3 className="text-[15px] font-semibold text-white mb-2">{faq.q}</h3>
+                  <p className="text-sm text-slate-300 leading-relaxed">{faq.a}</p>
+                </PremiumCard>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          <AnimatedSection delay={0.4}>
+            <div className="mt-12 text-center">
+              <p className="text-slate-300 mb-4">Still have questions?</p>
+              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl h-11 px-6 font-semibold shadow-lg shadow-purple-500/20" asChild>
+                <Link to="/app/support">Contact Support</Link>
+              </Button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ═══ 14. FINAL CTA ═══ */}
       <section className="py-24 lg:py-32 relative overflow-hidden bg-gradient-to-br from-slate-900 via-sky-950 to-emerald-950">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:48px_48px]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-300/10 rounded-full blur-3xl" />

@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "../ui/Button";
-import { Menu, X, Github, Twitter, Linkedin, Instagram, Mail, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Menu, X, Github, Twitter, Linkedin, Instagram, Mail, ArrowRight, ArrowUpRight, Send } from "lucide-react";
 import { Input } from "../ui/Input";
 import { toast } from "sonner";
 import ctcLogo from "../../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png";
@@ -192,18 +192,18 @@ export function PublicLayout() {
       </main>
 
       {!isAuthPage && (
-        <footer className="bg-[#09090b] text-slate-400 py-8 border-t border-purple-500/10">
+        <footer className="bg-[#09090b] text-slate-400 py-12 border-t border-purple-500/10">
           <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-8">
               {/* Brand */}
               <div>
-                <Link to="/" className="flex items-center gap-2.5 mb-4 group">
-                  <img src={ctcLogo} alt="CTC Club" className="h-8 w-8 rounded-xl transition-transform group-hover:scale-105" />
-                  <span className="text-base font-bold text-white">
+                <Link to="/" className="flex items-center gap-2.5 mb-5 group">
+                  <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-xl transition-transform group-hover:scale-105" />
+                  <span className="text-lg font-bold text-white">
                     CTC <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Club</span>
                   </span>
                 </Link>
-                <p className="text-xs leading-relaxed text-slate-400 mb-4">
+                <p className="text-sm leading-relaxed text-slate-400 mb-5">
                   Tech learning platform for university students.
                 </p>
                 <div className="flex gap-2">
@@ -218,9 +218,9 @@ export function PublicLayout() {
                       href={href}
                       target="_blank"
                       rel="noreferrer"
-                      className="h-8 w-8 rounded-xl bg-white/5 hover:bg-indigo-600 flex items-center justify-center transition-all duration-200 hover:scale-105"
+                      className="h-10 w-10 rounded-xl bg-white/5 hover:bg-indigo-600 flex items-center justify-center transition-all duration-200 hover:scale-105"
                     >
-                      <Icon className="h-3.5 w-3.5" />
+                      <Icon className="h-4 w-4" />
                     </a>
                   ))}
                 </div>
@@ -228,13 +228,13 @@ export function PublicLayout() {
 
               {/* Quick Links */}
               <div>
-                <h4 className="text-white text-xs font-semibold mb-4 tracking-wide">Quick Links</h4>
-                <ul className="space-y-2">
+                <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Quick Links</h4>
+                <ul className="space-y-3">
                   {["Courses", "Community", "About"].map((link) => (
                     <li key={link}>
                       <Link
                         to={link === "Courses" ? "/courses" : link === "Community" ? "/community" : "/about"}
-                        className="text-xs text-slate-400 hover:text-white transition-colors duration-200"
+                        className="text-sm text-slate-400 hover:text-white transition-colors duration-200"
                       >
                         {link}
                       </Link>
@@ -245,34 +245,39 @@ export function PublicLayout() {
 
               {/* Contact */}
               <div>
-                <h4 className="text-white text-xs font-semibold mb-4 tracking-wide">Contact</h4>
-                <ul className="space-y-2 text-xs text-slate-400">
-                  <li>
-                    <a href="tel:+251938890645" className="hover:text-white transition-colors">
-                      📞 0938890645
-                    </a>
-                  </li>
-                  <li>
+                <h4 className="text-white text-sm font-semibold mb-5 tracking-wide">Contact</h4>
+                <ul className="space-y-3 text-sm text-slate-400">
+                  <li className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 flex-shrink-0 text-indigo-400" />
                     <a href="mailto:abdisaawel313@gmail.com" className="hover:text-white transition-colors">
-                      ✉️ abdisaawel313@gmail.com
+                      abdisaawel313@gmail.com
                     </a>
                   </li>
-                  <li>
+                  <li className="flex items-center gap-2">
+                    <svg className="h-4 w-4 flex-shrink-0 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                    </svg>
+                    <a href="tel:+251938890645" className="hover:text-white transition-colors">
+                      0938890645
+                    </a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Send className="h-4 w-4 flex-shrink-0 text-indigo-400" />
                     <a href="https://t.me/bdisa38" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-                      📱 @bdisa38
+                      @bdisa38
                     </a>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-              <p className="text-xs text-slate-300">
+            <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-slate-300">
                 &copy; {new Date().getFullYear()} CTC Club. All rights reserved.
               </p>
-              <div className="flex gap-4">
-                <a href="#" className="text-xs text-slate-300 hover:text-white transition-colors">Privacy</a>
-                <a href="#" className="text-xs text-slate-300 hover:text-white transition-colors">Terms</a>
+              <div className="flex gap-6">
+                <a href="#" className="text-sm text-slate-300 hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="text-sm text-slate-300 hover:text-white transition-colors">Terms</a>
               </div>
             </div>
           </div>
