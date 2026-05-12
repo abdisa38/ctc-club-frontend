@@ -9,7 +9,7 @@ import api from "../utils/api";
 import "../../styles/home.css";
 import ctcLogo from "../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png";
 import {
-  ArrowRight, CheckCircle2, Star, Users, BookOpen, GitMerge,
+  ArrowRight, CheckCircle2, Users, BookOpen, GitMerge,
   LifeBuoy, Shield, Award, TrendingUp, Code2, Terminal,
   Database, Play, Search, ChevronRight,
   Zap, Rocket, MessageSquare, Calendar,
@@ -100,8 +100,6 @@ type FeaturedCourse = {
   id: string;
   title: string;
   instructor: string;
-  rating: number;
-  numReviews: number;
   students: number;
   category: string;
   price: number;
@@ -112,7 +110,6 @@ type FeaturedCourse = {
 
 function CourseCard({ course }: { course: FeaturedCourse }) {
   const isPaid = Number(course.price || 0) > 0;
-  const hasRatings = Number(course.numReviews || 0) > 0;
 
   return (
     <PremiumCard className="group overflow-hidden">
@@ -130,12 +127,6 @@ function CourseCard({ course }: { course: FeaturedCourse }) {
         <h3 className="text-[11px] font-semibold text-white mb-0.5 line-clamp-1">{course.title}</h3>
         <p className="text-[9px] text-slate-300 mb-1">{course.instructor}</p>
         <div className="flex items-center justify-between mb-1">
-          <div className="flex items-center gap-0.5 text-[9px]">
-            <Star className="h-2 w-2 fill-amber-400 text-amber-400" />
-            <span className="text-[9px] font-semibold text-slate-700 dark:text-slate-300">
-              {hasRatings ? Number(course.rating || 0).toFixed(1) : "N/A"}
-            </span>
-          </div>
           <span className="text-[8px] text-slate-400">{Number(course.students || 0)} students</span>
         </div>
         <Button size="sm" className="w-full h-6 text-[9px] font-bold rounded-md shadow-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white" asChild>
@@ -232,8 +223,6 @@ export function Home() {
             id: String(c._id),
             title: c.title,
             instructor: c.instructor?.name || 'Instructor',
-            rating: toNumber(c.rating, 0),
-            numReviews: toNumber(c.numReviews, 0),
             students: Array.isArray(c.students) ? c.students.length : 0,
             category: c.category || 'Tech',
             price: toNumber(c.price, 0),
@@ -314,8 +303,6 @@ export function Home() {
       image: course.image,
       price: Number(course.price || 0),
       currency: String(course.currency || 'ETB'),
-      rating: Number(course.rating || 0),
-      numReviews: Number(course.numReviews || 0),
       href: typeof course.id === 'string' ? `/app/courses/${course.id}` : '/app/courses',
     }));
   }, [realCourses]);
