@@ -4,7 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsToolti
 import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card";
-import { Loader2, TrendingUp, Users, BookOpen, DollarSign, FileText, MessageSquare, Star } from "lucide-react";
+import { Loader2, TrendingUp, Users, BookOpen, DollarSign, FileText, MessageSquare } from "lucide-react";
 
 export function InstructorDashboard({ metrics }: { metrics?: any }) {
   const coursePerformance = Array.isArray(metrics?.coursePerformance) ? metrics.coursePerformance : [];
@@ -74,22 +74,6 @@ export function InstructorDashboard({ metrics }: { metrics?: any }) {
             icon: FileText,
             color: "text-amber-500",
             bg: "bg-amber-100",
-          },
-          {
-            title: "Avg Rating",
-            value: Number(metrics?.avgCourseRating || 0).toFixed(2),
-            icon: Star,
-            color: "text-violet-500",
-            bg: "bg-violet-100",
-            sub: "Weighted by reviews",
-          },
-          {
-            title: "Total Reviews",
-            value: Number(metrics?.totalReviews || 0).toLocaleString(),
-            icon: MessageSquare,
-            color: "text-rose-500",
-            bg: "bg-rose-100",
-            sub: "Learner ratings submitted",
           },
         ].map((stat) => (
           <Card key={stat.title}>
@@ -191,11 +175,6 @@ export function InstructorDashboard({ metrics }: { metrics?: any }) {
                 <div>
                   <p className="text-sm font-medium text-slate-900 dark:text-white">{course.name}</p>
                   <p className="text-xs text-slate-500 mt-0.5">{Number(course.students || 0).toLocaleString()} students</p>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-                    <Star className="h-3 w-3 text-amber-500" />
-                    {Number(course.numReviews || 0) > 0 ? Number(course.rating || 0).toFixed(1) : "N/A"}
-                    <span>({Number(course.numReviews || 0)} reviews)</span>
-                  </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-emerald-600">{Number(course.revenue || 0).toLocaleString()} ETB</p>

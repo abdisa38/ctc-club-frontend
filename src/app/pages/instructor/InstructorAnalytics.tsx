@@ -115,15 +115,13 @@ export function InstructorAnalytics() {
     }
 
     const rows: string[] = [
-      'Section,Label,Revenue,Enrollments,Completions,Rating,Reviews',
+      'Section,Label,Revenue,Enrollments,Completions',
       ...trendData.map((item) => [
         'Monthly Trend',
         item.month,
         item.revenue,
         item.enrollments,
         item.completions,
-        '',
-        '',
       ].map(escapeCsvValue).join(',')),
       ...analytics.coursePerformance.map((item) => [
         'Course Performance',
@@ -131,8 +129,6 @@ export function InstructorAnalytics() {
         item.revenue,
         item.enrollments,
         item.completions,
-        item.rating,
-        item.reviews,
       ].map(escapeCsvValue).join(',')),
     ];
 
@@ -211,14 +207,6 @@ export function InstructorAnalytics() {
                 icon: Users,
                 color: "text-blue-600",
                 bg: "bg-blue-100 dark:bg-blue-900/30",
-              },
-              {
-                title: "Avg. Course Rating",
-                value: (analytics?.summary.avgCourseRating || 0).toFixed(2),
-                subtitle: "Weighted by course reviews",
-                icon: TrendingUp,
-                color: "text-amber-600",
-                bg: "bg-amber-100 dark:bg-amber-900/30",
               },
               {
                 title: "Course Completions",
