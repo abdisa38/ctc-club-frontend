@@ -215,6 +215,7 @@ export function AppLayout() {
   const rc = roleConfig[role] || roleConfig.student;
 
   const displayName = (user?.name || user?.email?.split("@")[0] || "Student").trim();
+  const displayNickname = ((user as any)?.nickname || user?.name || user?.email?.split("@")[0] || "Student").trim();
   const displayEmail = user?.email || "";
   const avatarSrc = (user?.avatar || "").trim() || undefined;
   const avatarFallback = displayName
