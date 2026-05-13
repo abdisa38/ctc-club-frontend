@@ -184,7 +184,7 @@ export function InstructorCourses() {
                       </div>
                       <div>
                         <p className="text-xs text-slate-500 mb-1">Revenue</p>
-                        <p className="font-semibold text-slate-900 dark:text-white">${revenue.toLocaleString()}</p>
+                        <p className="font-semibold text-slate-900 dark:text-white">{revenue.toLocaleString()} ETB</p>
                       </div>
                       <div className="flex items-end justify-end">
                         <Button variant="outline" asChild>

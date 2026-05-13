@@ -16,6 +16,7 @@ export interface AuthUser {
   preferences?: UserPreferences;
   xp?: number;
   level?: number;
+  nickname?: string;
 }
 
 export type ThemePreference = "system" | "light" | "dark";
@@ -505,6 +506,7 @@ export const apiService = {
     bio?: string;
     avatar?: string;
     socialLinks?: SocialLinks;
+    nickname?: string;
   }): Promise<AuthUser> {
     const res = await api.put("/auth/profile", input);
     return pickData<AuthUser>(res.data);
