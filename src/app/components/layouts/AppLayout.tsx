@@ -485,8 +485,16 @@ export function AppLayout() {
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="group mt-1 flex flex-col items-center gap-1 rounded-xl px-2 py-1 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                  className="group flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm font-medium text-slate-900 dark:text-white">
+                      {displayNickname}
+                    </span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                      {displayEmail}
+                    </span>
+                  </div>
                   <Avatar className={cn("h-9 w-9 cursor-pointer ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0c0f1a] transition-all group-hover:ring-indigo-400",
                     role === 'student' ? "ring-indigo-200 dark:ring-indigo-800" :
                     role === 'instructor' ? "ring-emerald-200 dark:ring-emerald-800" :
@@ -495,15 +503,12 @@ export function AppLayout() {
                     <AvatarImage src={avatarSrc} alt={displayName} />
                     <AvatarFallback className="text-xs font-semibold">{avatarFallback}</AvatarFallback>
                   </Avatar>
-                  <span className="max-w-[160px] truncate text-[11px] text-slate-500 dark:text-slate-400">
-                    {displayEmail}
-                  </span>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-slate-200/60 dark:border-white/10">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-semibold leading-none capitalize">{displayName}</p>
+                    <p className="text-sm font-semibold leading-none capitalize">{displayNickname}</p>
                     <p className="text-xs leading-none text-slate-500">{displayEmail}</p>
                   </div>
                 </DropdownMenuLabel>

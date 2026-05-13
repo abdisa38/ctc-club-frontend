@@ -2259,6 +2259,82 @@ export function CourseDetail() {
                       Published (visible to students)
                     </label>
                   </div>
+
+                  {/* Resource Management */}
+                  <div className="space-y-2 pt-2 border-t border-indigo-200 dark:border-indigo-800">
+                    <label className="text-xs font-semibold text-indigo-900 dark:text-indigo-100">Lesson Resources (PDFs, Files)</label>
+                    
+                    {editLessonForm.attachments.length > 0 ? (
+                      <div className="space-y-1">
+                        {editLessonForm.attachments.map((attachment, index) => (
+                          <div key={`${attachment.url}-${index}`} className="flex items-center justify-between rounded border border-indigo-200 bg-white dark:border-indigo-700 dark:bg-indigo-950/40 px-2 py-1.5 text-xs">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <FileText className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                              <span className="truncate">{attachment.title || "Resource"}</span>
+                            </div>
+                            <button
+                              type="button"
+                              className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 ml-2 shrink-0"
+                              onClick={() => setEditLessonForm((prev) => ({
+                                ...prev,
+                                attachments: prev.attachments.filter((_, itemIndex) => itemIndex !== index),
+                              }))}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-500 italic">No resources attached yet</p>
+                    )}
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs"
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.multiple = true;
+                        input.onchange = async (e: any) => {
+                          const files = Array.from(e.target.files || []) as File[];
+                          if (files.length === 0) return;
+
+                          setContentActionBusy(true);
+                          const uploadedAttachments: typeof editLessonForm.attachments = [];
+
+                          for (const file of files) {
+                            try {
+                              const uploaded = await apiService.uploadLessonResource(file);
+                              uploadedAttachments.push({
+                                title: uploaded.originalName || file.name,
+                                url: uploaded.url,
+                                fileType: uploaded.fileType || file.type || "file",
+                              });
+                            } catch (uploadError: any) {
+                              setError(`Failed to upload: ${file.name}`);
+                            }
+                          }
+
+                          if (uploadedAttachments.length > 0) {
+                            setEditLessonForm((prev) => ({
+                              ...prev,
+                              attachments: [...prev.attachments, ...uploadedAttachments],
+                            }));
+                          }
+                          setContentActionBusy(false);
+                        };
+                        input.click();
+                      }}
+                      disabled={contentActionBusy}
+                    >
+                      <Plus className="mr-1.5 h-3.5 w-3.5" />
+                      {contentActionBusy ? "Uploading..." : "Add Resource Files"}
+                    </Button>
+                  </div>
+
                   <Button className="w-full bg-indigo-600 hover:bg-indigo-700" onClick={() => void handleUpdateLesson()} disabled={contentActionBusy}>
                     {contentActionBusy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                     Update Lesson
