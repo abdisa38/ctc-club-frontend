@@ -303,6 +303,9 @@ export function CourseDetail() {
   const [isUploadingLessonResources, setIsUploadingLessonResources] = useState(false);
   const lessonResourceInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+  const [editLessonForm, setEditLessonForm] = useState<NewLessonForm>(defaultLessonForm);
+
   const [quizForm, setQuizForm] = useState<CourseQuizForm>(defaultQuizForm);
   const [questionQuizId, setQuestionQuizId] = useState("");
   const [quizQuestionForm, setQuizQuestionForm] = useState<CourseQuizQuestionForm>(defaultQuestionForm);
@@ -788,6 +791,52 @@ export function CourseDetail() {
       setSuccessMsg("Lesson deleted successfully.");
     } catch (deleteError: any) {
       setError(extractErrorMessage(deleteError, "Failed to delete lesson"));
+    } finally {
+      setContentActionBusy(false);
+    }
+  };
+
+  const handleEditLesson = (lesson: Lesson) => {
+    setEditingLessonId(lesson._id);
+    setEditLessonForm({
+      title: lesson.title,
+      videoUrl: lesson.videoUrl || "",
+      duration: typeof lesson.duration === "number" ? String(lesson.duration) : String(lesson.duration || ""),
+      isPublished: lesson.isPublished !== false,
+      attachments: lesson.attachments || [],
+    });
+  };
+
+  const handleUpdateLesson = async () => {
+    if (!id || !editingLessonId) {
+      return;
+    }
+
+    if (!editLessonForm.title.trim()) {
+      setError("Lesson title is required");
+      return;
+    }
+
+    setContentActionBusy(true);
+    setError("");
+    setSuccessMsg("");
+
+    try {
+      const updatedLesson = await apiService.updateLesson(id, editingLessonId, {
+        title: editLessonForm.title.trim(),
+        content: editLessonForm.title.trim(),
+        videoUrl: editLessonForm.videoUrl.trim() || undefined,
+        duration: parseDurationInput(editLessonForm.duration),
+        isPublished: editLessonForm.isPublished,
+        attachments: editLessonForm.attachments,
+      });
+
+      setLessons((prev) => prev.map((lesson) => (lesson._id === editingLessonId ? updatedLesson : lesson)));
+      setEditingLessonId(null);
+      setEditLessonForm(defaultLessonForm);
+      setSuccessMsg("Lesson updated successfully.");
+    } catch (updateError: any) {
+      setError(extractErrorMessage(updateError, "Failed to update lesson"));
     } finally {
       setContentActionBusy(false);
     }
