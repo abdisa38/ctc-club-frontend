@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance pointing to the API
 const api = axios.create({
-  baseURL: 'https://ctc-14efa787b23a.herokuapp.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   withCredentials: true, // Enable credentials to send cookies
   headers: {
     'Content-Type': 'application/json',
