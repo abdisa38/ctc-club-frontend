@@ -2187,42 +2187,70 @@ export function CourseDetail() {
 
                   return (
                     <div key={lesson._id} className="flex flex-col border-b border-slate-100 dark:border-slate-800/50 last:border-0">
-                      <button
-                        className={`w-full flex items-start gap-3 p-4 transition-colors text-left ${
-                          !canAccessLessons
-                            ? "opacity-60 cursor-not-allowed"
-                            : isSelected
-                              ? "bg-indigo-50 dark:bg-indigo-950/20"
-                              : "hover:bg-slate-50 dark:hover:bg-slate-900"
-                        }`}
-                        onClick={() => {
-                          if (!canAccessLessons) return;
-                          setSelectedLessonId(lesson._id);
-                        }}
-                      >
-                        <div className="mt-0.5">
-                          {canAccessLessons && i < completedCount ? (
-                            <CheckCircle className="h-5 w-5 text-emerald-500" />
-                          ) : !canAccessLessons ? (
-                            <Lock className="h-5 w-5 text-slate-400" />
-                          ) : (
-                            <PlayCircle className="h-5 w-5 text-indigo-500" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p
-                            className={`text-sm truncate ${
-                              !canAccessLessons ? "text-slate-500" : "font-medium text-slate-900 dark:text-white"
-                            }`}
-                          >
-                            {lesson.title}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
-                            <PlayCircle className="h-3 w-3" />
-                            <span>{formatDuration(lesson.duration)}</span>
+                      <div className="flex items-start gap-3 p-4">
+                        <button
+                          className={`flex-1 flex items-start gap-3 transition-colors text-left ${
+                            !canAccessLessons
+                              ? "opacity-60 cursor-not-allowed"
+                              : isSelected
+                                ? "bg-indigo-50 dark:bg-indigo-950/20 rounded-lg p-3 -m-3"
+                                : "hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg p-3 -m-3"
+                          }`}
+                          onClick={() => {
+                            if (!canAccessLessons) return;
+                            setSelectedLessonId(lesson._id);
+                          }}
+                        >
+                          <div className="mt-0.5">
+                            {canAccessLessons && i < completedCount ? (
+                              <CheckCircle className="h-5 w-5 text-emerald-500" />
+                            ) : !canAccessLessons ? (
+                              <Lock className="h-5 w-5 text-slate-400" />
+                            ) : (
+                              <PlayCircle className="h-5 w-5 text-indigo-500" />
+                            )}
                           </div>
-                        </div>
-                      </button>
+                          <div className="flex-1 min-w-0">
+                            <p
+                              className={`text-sm truncate ${
+                                !canAccessLessons ? "text-slate-500" : "font-medium text-slate-900 dark:text-white"
+                              }`}
+                            >
+                              {lesson.title}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                              <PlayCircle className="h-3 w-3" />
+                              <span>{formatDuration(lesson.duration)}</span>
+                            </div>
+                          </div>
+                        </button>
+                        
+                        {isInstructor && (
+                          <div className="flex gap-1 shrink-0">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-slate-500 hover:text-indigo-600"
+                              onClick={() => {
+                                // TODO: Implement edit lesson modal
+                                alert("Edit lesson functionality coming soon!");
+                              }}
+                              disabled={contentActionBusy}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-slate-500 hover:text-red-600"
+                              onClick={() => void handleDeleteLesson(lesson._id)}
+                              disabled={contentActionBusy}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                       
                       {/* Render resources if any exist for this lesson. */}
                       {lesson.attachments && lesson.attachments.length > 0 && (
