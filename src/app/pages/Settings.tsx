@@ -124,6 +124,7 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
   const [profileForm, setProfileForm] = useState({
     firstName: "",
     lastName: "",
+    nickname: "",
     headline: "",
     bio: "",
     avatar: "",
@@ -172,6 +173,7 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
     setProfileForm({
       firstName,
       lastName,
+      nickname: String(payload?.nickname || ""),
       headline: String(payload?.headline || ""),
       bio: String(payload?.bio || ""),
       avatar: String(payload?.avatar || ""),
@@ -309,6 +311,7 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
     await updateProfile({
       firstName: profileForm.firstName,
       lastName: profileForm.lastName,
+      nickname: profileForm.nickname,
       headline: profileForm.headline,
       bio: profileForm.bio,
     }, "Personal information saved.");
@@ -591,6 +594,15 @@ export function Settings({ embedded = false }: { embedded?: boolean }) {
                         placeholder="Last name"
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Nickname (Display Name)</label>
+                    <Input
+                      value={profileForm.nickname}
+                      onChange={(e) => setProfileForm((prev) => ({ ...prev, nickname: e.target.value }))}
+                      placeholder="Your preferred display name"
+                    />
+                    <p className="text-xs text-slate-500">This will be shown instead of your email on your profile</p>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Headline / Bio</label>
