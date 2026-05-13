@@ -903,6 +903,11 @@ export const apiService = {
     };
   },
 
+  async createUser(input: { name: string; email: string; password: string; role?: Role }): Promise<AuthUser> {
+    const res = await api.post("/auth/users", input);
+    return pickData<AuthUser>(res.data);
+  },
+
   async updateUserRole(userId: string, role: Role): Promise<AuthUser> {
     const res = await api.put(`/auth/users/${userId}/role`, { role });
     return pickData<AuthUser>(res.data);
