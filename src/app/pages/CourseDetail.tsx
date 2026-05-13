@@ -1241,8 +1241,8 @@ export function CourseDetail() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
-      <div ref={scrollContainerRef} className="flex-1 flex flex-col overflow-y-auto bg-slate-50 dark:bg-slate-950/50">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div ref={scrollContainerRef} className="flex-1 flex flex-col overflow-visible lg:overflow-y-auto bg-slate-50 dark:bg-slate-950/50">
         {!canAccessLessons && isPaidCourse ? (
           <div className="mx-6 md:mx-8 mt-6 rounded-xl border border-indigo-200/70 bg-indigo-50/60 p-4 text-sm text-slate-700 dark:border-indigo-800/60 dark:bg-indigo-950/20 dark:text-slate-200">
             <div className="flex items-start gap-3">
@@ -1370,7 +1370,7 @@ export function CourseDetail() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 min-w-[200px]">
+                      <div className="flex flex-col gap-3 w-full sm:min-w-[200px] sm:w-auto">
                 {canAccessLessons ? (
                   <>
                     <Button
@@ -1393,7 +1393,7 @@ export function CourseDetail() {
                         {isEnrolling ? "Enrolling..." : "Enroll Free"}
                       </Button>
                     )}
-                    <div className="flex gap-2 mt-2 w-full justify-end">
+                    <div className="flex flex-wrap gap-2 mt-2 w-full justify-start sm:justify-end">
                       {role === "student" ? (
                         <Button variant="outline" size="icon" onClick={() => void handleToggleFavorite()} disabled={favoriteBusy}>
                           <Heart className={`h-5 w-5 ${isFavorite ? "text-red-500 fill-red-500" : ""}`} />
@@ -1413,13 +1413,13 @@ export function CourseDetail() {
             </div>
 
           <div className="border-b border-slate-200 dark:border-slate-800 mb-6">
-            <nav className="flex gap-6">
+            <nav className="flex gap-4 overflow-x-auto whitespace-nowrap -mx-2 px-2">
               {["overview", "discussion"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   disabled={!canAccessLessons && tab !== "overview"}
-                  className={`pb-4 text-sm font-medium capitalize border-b-2 transition-colors ${
+                  className={`pb-4 text-sm font-medium capitalize border-b-2 transition-colors shrink-0 ${
                     activeTab === tab
                       ? "border-indigo-600 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400"
                       : "border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-300"
@@ -1431,7 +1431,7 @@ export function CourseDetail() {
             </nav>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-visible lg:overflow-y-auto">
             {activeTab === "overview" ? (
               <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">About this course</h3>
@@ -2054,10 +2054,10 @@ export function CourseDetail() {
         </div>
       </div>
 
-      <div className="w-full lg:w-[400px] border-l border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-950 h-full">
+      <div className="w-full lg:w-[400px] border-t lg:border-l lg:border-t-0 border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-950 h-auto lg:h-full">
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
           <h3 className="font-semibold text-lg text-slate-900 dark:text-white mb-2">Course Content</h3>
-          <div className="flex justify-between items-center text-sm mb-3 text-slate-600 dark:text-slate-400">
+          <div className="flex flex-wrap justify-between items-center gap-2 text-sm mb-3 text-slate-600 dark:text-slate-400">
             <span>Progress: {progress}</span>
             <span>{completedCount} / {visibleLessons.length} Lessons</span>
           </div>
@@ -2145,7 +2145,7 @@ export function CourseDetail() {
           ) : null}
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-visible lg:overflow-y-auto">
           <div className="border-b border-slate-200 dark:border-slate-800 last:border-0">
             <button className="w-full flex items-center justify-between p-4 bg-slate-50/50 hover:bg-slate-100 dark:bg-slate-900/30 dark:hover:bg-slate-900 transition-colors">
               <div className="text-left">

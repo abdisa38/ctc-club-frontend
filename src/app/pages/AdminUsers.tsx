@@ -176,7 +176,7 @@ export function AdminUsers() {
             </div>
           ) : (
             <>
-              <Table>
+              <Table className="min-w-[720px]">
                 <TableHeader>
                   <TableRow>
                     <TableHead>User</TableHead>
