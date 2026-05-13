@@ -187,10 +187,16 @@ export function AdminAnnouncements() {
         </CardContent>
       </Card>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={(open) => {
+        setDialogOpen(open);
+        if (!open) {
+          setForm(initialForm);
+          setEditingId(null);
+        }
+      }}>
         <DialogContent className="sm:max-w-[560px]">
           <DialogHeader>
-            <DialogTitle>New Announcement</DialogTitle>
+            <DialogTitle>{editingId ? "Edit Announcement" : "New Announcement"}</DialogTitle>
             <DialogDescription>Use this for platform updates that should appear in the announcement feed.</DialogDescription>
           </DialogHeader>
 
@@ -216,7 +222,11 @@ export function AdminAnnouncements() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => {
+              setDialogOpen(false);
+              setForm(initialForm);
+              setEditingId(null);
+            }}>Cancel</Button>
             <Button
               className="bg-indigo-600 hover:bg-indigo-700"
               disabled={submitting || !form.title.trim() || !form.content.trim()}
@@ -225,12 +235,12 @@ export function AdminAnnouncements() {
               {submitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Publishing...
+                  {editingId ? "Updating..." : "Publishing..."}
                 </>
               ) : (
                 <>
                   <Megaphone className="h-4 w-4 mr-2" />
-                  Publish Announcement
+                  {editingId ? "Update Announcement" : "Publish Announcement"}
                 </>
               )}
             </Button>
