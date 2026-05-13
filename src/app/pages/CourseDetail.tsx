@@ -17,6 +17,7 @@ import {
   GraduationCap,
   Plus,
   Trash2,
+  Edit,
   ChevronRight,
   Share2,
   Heart,
@@ -762,6 +763,31 @@ export function CourseDetail() {
       setSuccessMsg("Lesson and resources added inside this course.");
     } catch (lessonSaveError: any) {
       setError(extractErrorMessage(lessonSaveError, "Failed to create lesson"));
+    } finally {
+      setContentActionBusy(false);
+    }
+  };
+
+  const handleDeleteLesson = async (lessonId: string) => {
+    if (!id || !confirm("Delete this lesson? This action cannot be undone.")) {
+      return;
+    }
+
+    setContentActionBusy(true);
+    setError("");
+
+    try {
+      await apiService.deleteLesson(id, lessonId);
+      setLessons((prev) => prev.filter((lesson) => lesson._id !== lessonId));
+      
+      if (selectedLessonId === lessonId) {
+        const remaining = lessons.filter((lesson) => lesson._id !== lessonId);
+        setSelectedLessonId(remaining.length > 0 ? remaining[0]._id : "");
+      }
+      
+      setSuccessMsg("Lesson deleted successfully.");
+    } catch (deleteError: any) {
+      setError(extractErrorMessage(deleteError, "Failed to delete lesson"));
     } finally {
       setContentActionBusy(false);
     }
