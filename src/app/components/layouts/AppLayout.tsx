@@ -487,14 +487,9 @@ export function AppLayout() {
                   type="button"
                   className="group flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
-                  <div className="flex flex-col items-end">
-                    <span className="text-sm font-medium text-slate-900 dark:text-white">
-                      {displayNickname}
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      {displayEmail}
-                    </span>
-                  </div>
+                  <span className="text-sm font-medium text-slate-900 dark:text-white">
+                    {displayNickname}
+                  </span>
                   <Avatar className={cn("h-9 w-9 cursor-pointer ring-2 ring-offset-2 ring-offset-white dark:ring-offset-[#0c0f1a] transition-all group-hover:ring-indigo-400",
                     role === 'student' ? "ring-indigo-200 dark:ring-indigo-800" :
                     role === 'instructor' ? "ring-emerald-200 dark:ring-emerald-800" :
