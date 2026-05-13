@@ -27,6 +27,10 @@ export function InstructorCourses() {
         const payload = await apiService.getCourses({ limit: 100 });
         const allCourses = payload.items;
 
+        console.log('Total courses fetched:', allCourses.length);
+        console.log('User role:', role);
+        console.log('Is admin view:', isAdminView);
+
         // For admin, show ALL courses regardless of instructor
         // For instructor, show only their own courses
         const filtered = isAdminView ? allCourses : allCourses.filter((course) => {
@@ -34,8 +38,10 @@ export function InstructorCourses() {
           return instructorId === user?._id;
         });
         
+        console.log('Filtered courses:', filtered.length);
         setCourses(filtered);
       } catch (err: any) {
+        console.error('Error loading courses:', err);
         setError(err?.response?.data?.message || "Failed to load courses");
       } finally {
         setIsLoading(false);
@@ -43,7 +49,7 @@ export function InstructorCourses() {
     };
 
     void loadCourses();
-  }, [isAdminView, user?._id]);
+  }, [isAdminView, user?._id, role]);
 
   const visibleCourses = useMemo(() => {
     return courses.filter((course) => {
