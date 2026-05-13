@@ -2280,10 +2280,7 @@ export function CourseDetail() {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-slate-500 hover:text-indigo-600"
-                              onClick={() => {
-                                // TODO: Implement edit lesson modal
-                                alert("Edit lesson functionality coming soon!");
-                              }}
+                              onClick={() => handleEditLesson(lesson)}
                               disabled={contentActionBusy}
                             >
                               <Edit className="h-4 w-4" />
