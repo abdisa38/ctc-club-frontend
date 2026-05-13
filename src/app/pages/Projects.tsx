@@ -610,7 +610,7 @@ export function Projects() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">My Projects</h1>
           <p className="text-slate-500 dark:text-slate-400">Submit assignments and track instructor feedback.</p>
@@ -641,7 +641,7 @@ export function Projects() {
 
                 return (
                   <Card key={project._id}>
-                    <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 space-y-0 pb-2">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="text-[10px] uppercase">
@@ -655,7 +655,7 @@ export function Projects() {
                         <CardDescription className="line-clamp-2 max-w-3xl mt-2 text-sm">{project.description}</CardDescription>
                       </div>
                       {isGraded && submission?.grade !== undefined ? (
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <span className="block text-sm text-slate-500 font-medium">Grade</span>
                           <span className="text-xl font-bold text-emerald-500">{submission.grade}</span>
                         </div>
@@ -806,7 +806,7 @@ function ReviewCard({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 space-y-0 pb-2">
         <div className="space-y-1">
           <div className="flex items-center gap-2 mb-1">
             <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400">
@@ -820,7 +820,7 @@ function ReviewCard({
           <CardTitle className="text-lg">{projectTitle}</CardTitle>
         </div>
         {submission.grade !== undefined ? (
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <span className="block text-sm text-slate-500 font-medium">Grade</span>
             <span className="text-xl font-bold text-emerald-500">{submission.grade}</span>
           </div>

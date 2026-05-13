@@ -200,7 +200,7 @@ export function Resources() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
           <Input placeholder="Search resources..." className="pl-10 h-12 bg-white dark:bg-slate-950" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <select
             className="h-12 w-full sm:w-44 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-950"
             value={filterType}

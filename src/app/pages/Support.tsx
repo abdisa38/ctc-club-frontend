@@ -161,7 +161,7 @@ export function Support() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[calc(100vh-8rem)] gap-6">
+    <div className="flex flex-col md:flex-row min-h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)] gap-6">
       <div className="w-full md:w-80 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">{isAdmin ? "Support Tickets" : "My Tickets"}</h2>
@@ -230,7 +230,7 @@ export function Support() {
           <Input placeholder="Search tickets..." className="pl-9 h-10" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+        <div className="flex-1 space-y-2 pr-2 md:overflow-y-auto">
           {filteredTickets.length === 0 ? (
             <div className="text-center p-4 text-slate-500 text-sm border border-dashed rounded-xl">No tickets found.</div>
           ) : (
