@@ -26,6 +26,7 @@ export function AdminAnnouncements() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<AnnouncementForm>(initialForm);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const published = useMemo(
     () =>
@@ -56,19 +57,38 @@ export function AdminAnnouncements() {
     setSubmitting(true);
     setError("");
     try {
-      await apiService.createAnnouncement({
-        title: form.title.trim(),
-        content: form.content.trim(),
-      });
+      if (editingId) {
+        // Edit existing announcement
+        await apiService.editCommunityPost(editingId, {
+          title: form.title.trim(),
+          content: form.content.trim(),
+        });
+      } else {
+        // Create new announcement
+        await apiService.createAnnouncement({
+          title: form.title.trim(),
+          content: form.content.trim(),
+        });
+      }
 
       setDialogOpen(false);
       setForm(initialForm);
+      setEditingId(null);
       await loadAnnouncements();
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to publish announcement");
+      setError(err?.response?.data?.message || `Failed to ${editingId ? "update" : "publish"} announcement`);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleEditAnnouncement = (announcement: Announcement) => {
+    setForm({
+      title: announcement.title,
+      content: announcement.content,
+    });
+    setEditingId(announcement.id);
+    setDialogOpen(true);
   };
 
   const handleDeleteAnnouncement = async (announcementId: string) => {
