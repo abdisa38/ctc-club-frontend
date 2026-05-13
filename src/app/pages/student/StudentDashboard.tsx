@@ -97,14 +97,14 @@ export function StudentDashboard({ metrics }: { metrics?: any }) {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Welcome back, {firstName}</h1>
           <p className="text-slate-500 dark:text-slate-400">Your learning progress and live platform updates.</p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" asChild>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <Button variant="outline" asChild className="w-full sm:w-auto">
             <Link to="/app/notifications">
               <Bell className="h-4 w-4 mr-2" />
               Notifications
             </Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="w-full sm:w-auto">
             <Link to="/app/courses">Explore Courses</Link>
           </Button>
         </div>

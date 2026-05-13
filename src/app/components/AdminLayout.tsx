@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router';
-import { LayoutDashboard, FileText, HelpCircle, Users, Trophy, MessageCircle, Settings } from 'lucide-react';
+import { LayoutDashboard, FileText, HelpCircle, Users, Trophy, MessageCircle, Settings, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -16,11 +17,24 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-black text-white flex flex-col fixed h-full">
+      <div
+        className={`w-64 bg-black text-white flex flex-col fixed inset-y-0 left-0 h-full z-50 transition-transform duration-300 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
         {/* Logo */}
         <div className="p-6 border-b border-white/10">
           <Link to="/admin/dashboard" className="flex items-center gap-2">
@@ -66,8 +80,29 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 flex-1">
-        {children}
+      <div className="flex-1 min-w-0 lg:ml-64">
+        <header className="sticky top-0 z-30 bg-white border-b border-gray-200 lg:hidden">
+          <div className="px-4 py-4 flex items-center justify-between">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-lg"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open admin navigation"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="text-sm font-semibold text-gray-700">Admin Panel</div>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-lg"
+              onClick={() => setSidebarOpen(false)}
+              aria-label="Close admin navigation"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </header>
+        <div className="px-4 lg:px-0">
+          {children}
+        </div>
       </div>
     </div>
   );

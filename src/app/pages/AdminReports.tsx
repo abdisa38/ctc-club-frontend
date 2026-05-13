@@ -103,7 +103,7 @@ export function AdminReports() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Reports & Analytics</h1>
           <p className="text-slate-500 dark:text-slate-400">Live platform performance and operational insights.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Tabs value={timeRange} onValueChange={(v) => setTimeRange(v as TimeRange)}>
             <TabsList>
               <TabsTrigger value="7d">7D</TabsTrigger>
@@ -230,7 +230,7 @@ export function AdminReports() {
           <CardDescription>Latest cross-platform events.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
+          <Table className="min-w-[720px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Action</TableHead>

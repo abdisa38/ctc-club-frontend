@@ -96,13 +96,13 @@ export function InstructorCourses() {
 
       {error ? <ErrorBanner message={error} /> : null}
 
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+        <div className="relative w-full sm:flex-1 sm:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <Input placeholder={isAdminView ? "Search all courses..." : "Search your courses..."} className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <select
-          className="h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-950"
+          className="h-10 w-full sm:w-auto rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-950"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -134,7 +134,7 @@ export function InstructorCourses() {
 
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
-                      <div className="flex justify-between items-start mb-2">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
                         <h3 className="text-xl font-bold text-slate-900 dark:text-white">{course.title}</h3>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

@@ -220,7 +220,7 @@ export function InstructorComments() {
         {filteredPosts.map((post) => (
           <Card key={post._id} className={(post.repliesCount || 0) === 0 ? "border-orange-200 dark:border-orange-900/30" : ""}>
             <CardContent className="p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex items-start gap-4">
                   <Avatar className="mt-1">
                     <AvatarImage src={post.user?.avatar} />
@@ -269,13 +269,13 @@ export function InstructorComments() {
               </div>
 
               {replyingTo !== post._id ? (
-                <div className="mt-4 ml-12">
+                <div className="mt-4 ml-0 sm:ml-12">
                   <Button variant="outline" size="sm" onClick={() => setReplyingTo(post._id)}>
                     <Reply className="h-4 w-4 mr-2" /> Write Reply
                   </Button>
                 </div>
               ) : (
-                <div className="mt-4 ml-12 space-y-3">
+                <div className="mt-4 ml-0 sm:ml-12 space-y-3">
                   <textarea
                     value={replyText}
                     onChange={(event) => setReplyText(event.target.value)}

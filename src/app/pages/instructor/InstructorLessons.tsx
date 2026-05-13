@@ -329,7 +329,7 @@ export function InstructorLessons() {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Lesson List (Drag and Drop) */}
         <Card className="lg:col-span-2 shadow-sm border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
             <div>
               <CardTitle>Course Curriculum</CardTitle>
               <CardDescription>Drag the handle to reorder lessons</CardDescription>
@@ -342,7 +342,7 @@ export function InstructorLessons() {
             <Reorder.Group axis="y" values={lessons} onReorder={setLessons} className="space-y-3">
               {lessons.map((lesson) => (
                 <Reorder.Item key={lesson._id} value={lesson} className="relative">
-                  <div className={`flex items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-lg border transition-all ${isEditing === lesson._id ? 'border-emerald-500 shadow-sm' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'}`}>
+                  <div className={`flex flex-col sm:flex-row sm:items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-lg border transition-all ${isEditing === lesson._id ? 'border-emerald-500 shadow-sm' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'}`}>
                     <div className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 p-1">
                       <GripVertical className="h-5 w-5" />
                     </div>
@@ -362,7 +362,7 @@ export function InstructorLessons() {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap">
                       <div className="flex items-center gap-2 mr-2">
                         <span className="text-xs font-medium text-slate-500">{lesson.isPublished === false ? 'Locked' : 'Unlocked'}</span>
                         <Switch checked={lesson.isPublished !== false} onCheckedChange={() => void toggleLock(lesson)} />
@@ -392,7 +392,7 @@ export function InstructorLessons() {
 
         {/* Editor Panel */}
         {isEditing && (
-          <Card className="lg:col-span-1 border-emerald-200 dark:border-emerald-800/50 shadow-md sticky top-6">
+          <Card className="lg:col-span-1 border-emerald-200 dark:border-emerald-800/50 shadow-md lg:sticky lg:top-6">
             <CardHeader className="flex flex-row items-center justify-between bg-emerald-50 dark:bg-emerald-950/20 pb-4 border-b border-emerald-100 dark:border-emerald-900/50">
               <CardTitle className="text-lg text-emerald-800 dark:text-emerald-400">
                 {isEditing === 'new' ? 'New Lesson' : 'Edit Lesson'}

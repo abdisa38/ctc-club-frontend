@@ -435,8 +435,8 @@ export function LessonView() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm -m-4 md:-m-6 lg:-m-8">
-      <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)] bg-white dark:bg-slate-950 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm -m-4 md:-m-6 lg:-m-8">
+      <div className="flex-1 flex flex-col overflow-visible lg:overflow-hidden">
         <div className="flex items-center justify-between px-4 py-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <Button variant="ghost" size="sm" asChild>
@@ -530,7 +530,7 @@ export function LessonView() {
           ) : null}
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-visible lg:overflow-y-auto">
           <div className="p-4 md:p-6 space-y-4">
             <AnimatePresence>
               {showCompleteBanner ? (
@@ -643,8 +643,15 @@ export function LessonView() {
         </div>
       </div>
 
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <div
-        className={`${sidebarOpen ? "block" : "hidden"} lg:block w-full lg:w-[360px] border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col h-full absolute lg:relative z-20 lg:z-0 top-0 right-0`}
+        className={`${sidebarOpen ? "block" : "hidden"} lg:block w-full sm:w-[320px] lg:w-[360px] border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col h-full fixed lg:relative z-20 lg:z-0 top-0 right-0`}
       >
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 shrink-0">
           <div className="flex items-center justify-between mb-3">

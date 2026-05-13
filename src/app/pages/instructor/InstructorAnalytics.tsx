@@ -157,11 +157,11 @@ export function InstructorAnalytics() {
           </h1>
           <p className="text-slate-500 dark:text-slate-400">Deep dive into your course performance, revenue, and student engagement.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <select 
             value={timeRange} 
             onChange={(e) => setTimeRange(e.target.value)}
-            className="h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-slate-800 dark:bg-slate-950"
+            className="h-10 w-full sm:w-auto rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-slate-800 dark:bg-slate-950"
           >
             <option value="30d">Last 30 Days</option>
             <option value="3m">Last 3 Months</option>

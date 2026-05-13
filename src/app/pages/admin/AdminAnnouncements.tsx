@@ -124,7 +124,7 @@ export function AdminAnnouncements() {
           ) : (
             published.map((item) => (
               <div key={item.id} className="rounded-lg border border-slate-200 p-4 dark:border-slate-800">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">{item.title}</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-3">{item.content}</p>

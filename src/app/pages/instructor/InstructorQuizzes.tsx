@@ -520,7 +520,7 @@ export function InstructorQuizzes() {
                         : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700"
                     }`}
                   >
-                    <div className="flex justify-between items-start mb-1">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-1">
                       <h4 className="font-semibold text-slate-900 dark:text-white">{quiz.title}</h4>
                       <Badge variant={quiz.isPublished ? "success" : "secondary"} className="text-[10px]">
                         {quiz.isPublished ? "active" : "draft"}
@@ -647,7 +647,7 @@ export function InstructorQuizzes() {
                   Publish immediately
                 </label>
 
-                <div className="flex gap-2 pt-2">
+                <div className="flex flex-wrap gap-2 pt-2">
                   <Button variant="outline" onClick={cancelCreateQuiz}>Cancel</Button>
                   <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => void handleSaveQuiz()} disabled={isSaving}>
                     {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
@@ -668,12 +668,12 @@ export function InstructorQuizzes() {
                     <ChevronRight className="h-4 w-4 rotate-180" /> Back to quizzes
                   </div>
 
-                  <div className="flex justify-between items-start gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div>
                       <CardTitle>{activeQuiz.title}</CardTitle>
                       <CardDescription>{toCourseTitle(activeQuiz, courses)}</CardDescription>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <Button variant="outline" size="sm" onClick={startEditInfo}>
                         <Edit className="h-4 w-4 mr-2" /> Edit Info
                       </Button>
@@ -771,7 +771,7 @@ export function InstructorQuizzes() {
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <Button variant="outline" onClick={cancelEditInfo}>Cancel</Button>
                         <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => void handleSaveQuiz()} disabled={isSaving}>
                           {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
@@ -781,7 +781,7 @@ export function InstructorQuizzes() {
                     </div>
                   ) : null}
 
-                  <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800 mb-6">
                     <div>
                       <p className="text-xs text-slate-500">Total Questions</p>
                       <p className="text-lg font-semibold text-slate-900 dark:text-white">{activeQuiz.questions?.length || 0}</p>
@@ -797,7 +797,7 @@ export function InstructorQuizzes() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">Questions</h3>
                       <Button size="sm" variant="outline" className="text-emerald-600 border-emerald-200 hover:bg-emerald-50" onClick={openAddQuestion}>
                         <Plus className="h-4 w-4 mr-2" /> Add Question

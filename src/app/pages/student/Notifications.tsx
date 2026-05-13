@@ -87,7 +87,7 @@ export function Notifications() {
             {unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}` : "You are all caught up."}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <div className="flex bg-slate-100 dark:bg-slate-900 rounded-lg p-0.5">
             <button
               onClick={() => setFilter("all")}
