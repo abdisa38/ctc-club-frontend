@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Search, Download, FileText, Image as ImageIcon, Code, Link as LinkIcon, Filter, Loader2, FolderOpen, Heart } from "lucide-react";
+import { Search, Download, FileText, Image as ImageIcon, Code, Link as LinkIcon, Filter, Loader2, FolderOpen, Heart, Trash2 } from "lucide-react";
 import apiService from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
@@ -69,6 +69,7 @@ const formatDate = (value?: string) => {
 export function Resources() {
   const { role } = useAuth();
   const canFavorite = role === "student";
+  const canDelete = role === "admin";
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -76,6 +77,7 @@ export function Resources() {
   const [resources, setResources] = useState<ResourceItem[]>([]);
   const [favoriteResourceIds, setFavoriteResourceIds] = useState<Set<string>>(new Set());
   const [favoritingIds, setFavoritingIds] = useState<Set<string>>(new Set());
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -133,6 +135,44 @@ export function Resources() {
       setError(err?.response?.data?.message || "Failed to update resource favorite");
     } finally {
       setFavoritingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(resourceId);
+        return next;
+      });
+    }
+  };
+
+  const handleDeleteResource = async (resourceId: string) => {
+    if (!canDelete || deletingIds.has(resourceId)) {
+      return;
+    }
+
+    if (!confirm("Are you sure you want to delete this resource? This action cannot be undone.")) {
+      return;
+    }
+
+    setDeletingIds((prev) => {
+      const next = new Set(prev);
+      next.add(resourceId);
+      return next;
+    });
+
+    try {
+      await apiService.deleteResource(resourceId);
+      
+      // Remove the resource from the local state
+      setResources((prev) => prev.filter((resource) => resource.id !== resourceId));
+      
+      // Also remove from favorites if it was favorited
+      setFavoriteResourceIds((prev) => {
+        const next = new Set(prev);
+        next.delete(resourceId);
+        return next;
+      });
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to delete resource");
+    } finally {
+      setDeletingIds((prev) => {
         const next = new Set(prev);
         next.delete(resourceId);
         return next;
@@ -257,6 +297,7 @@ export function Resources() {
                   const { Icon, color } = iconForKind(kind);
                   const hasUrl = Boolean(resource.url);
                   const isFavorite = favoriteResourceIds.has(resource.id);
+                  const isDeleting = deletingIds.has(resource.id);
 
                   return (
                     <Card key={resource.id} className="group hover:border-indigo-300 dark:hover:border-indigo-800 transition-colors bg-white dark:bg-slate-950 flex flex-col">
@@ -276,6 +317,17 @@ export function Resources() {
                                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                               >
                                 <Heart className={`h-4 w-4 ${isFavorite ? "text-red-500 fill-red-500" : "text-slate-500"}`} />
+                              </button>
+                            ) : null}
+                            {canDelete ? (
+                              <button
+                                type="button"
+                                onClick={() => void handleDeleteResource(resource.id)}
+                                disabled={isDeleting}
+                                className="rounded-full p-2 bg-red-50 hover:bg-red-100 dark:bg-red-950 dark:hover:bg-red-900 disabled:opacity-60 transition-colors"
+                                title="Delete resource"
+                              >
+                                <Trash2 className={`h-4 w-4 ${isDeleting ? "text-red-300 animate-pulse" : "text-red-600 dark:text-red-400"}`} />
                               </button>
                             ) : null}
                           </div>

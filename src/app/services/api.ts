@@ -980,6 +980,10 @@ export const apiService = {
     return pickData<any[]>(res.data);
   },
 
+  async deleteResource(resourceId: string): Promise<void> {
+    await api.delete(`/resources/${resourceId}`);
+  },
+
   async getPublicStats(): Promise<DashboardPublicStats> {
     const res = await api.get("/dashboard/public-stats");
     return pickData<DashboardPublicStats>(res.data);
