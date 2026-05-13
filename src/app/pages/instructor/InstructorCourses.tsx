@@ -27,7 +27,13 @@ export function InstructorCourses() {
         const payload = await apiService.getCourses({ limit: 100 });
         const allCourses = payload.items;
 
-        const filtered = role === "admin" ? allCourses : allCourses.filter((course) => course.instructor?._id === user?._id);
+        // For admin, show ALL courses regardless of instructor
+        // For instructor, show only their own courses
+        const filtered = isAdminView ? allCourses : allCourses.filter((course) => {
+          const instructorId = typeof course.instructor === 'string' ? course.instructor : course.instructor?._id;
+          return instructorId === user?._id;
+        });
+        
         setCourses(filtered);
       } catch (err: any) {
         setError(err?.response?.data?.message || "Failed to load courses");
@@ -37,7 +43,7 @@ export function InstructorCourses() {
     };
 
     void loadCourses();
-  }, [role, user?._id]);
+  }, [isAdminView, user?._id]);
 
   const visibleCourses = useMemo(() => {
     return courses.filter((course) => {

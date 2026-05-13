@@ -239,19 +239,19 @@ export function Resources() {
           <p className="text-sm text-slate-500 mt-1">Try a different course, file type, or search keyword.</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {groupedResources.map(([courseName, items]) => (
-            <section key={courseName} className="space-y-3">
+            <section key={courseName} className="space-y-5">
               <Card className="bg-slate-50/70 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800">
-                <CardHeader className="py-4">
-                  <CardTitle className="text-base text-slate-900 dark:text-white">{courseName}</CardTitle>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                <CardHeader className="py-5 px-6">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">{courseName}</CardTitle>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     {(items[0]?.courseCategory || "General")} category • {items.length} resource{items.length === 1 ? "" : "s"}
                   </p>
                 </CardHeader>
               </Card>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {items.map((resource) => {
                   const kind = toResourceKind(resource);
                   const { Icon, color } = iconForKind(kind);
@@ -259,39 +259,39 @@ export function Resources() {
                   const isFavorite = favoriteResourceIds.has(resource.id);
 
                   return (
-                    <Card key={resource.id} className="group hover:border-indigo-300 dark:hover:border-indigo-800 transition-colors bg-white dark:bg-slate-950">
-                      <CardContent className="p-5 flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-4">
-                          <div className={`p-3 rounded-lg bg-slate-100 dark:bg-slate-800 ${color}`}>
-                            <Icon className="h-8 w-8" />
+                    <Card key={resource.id} className="group hover:border-indigo-300 dark:hover:border-indigo-800 transition-colors bg-white dark:bg-slate-950 flex flex-col">
+                      <CardContent className="p-6 flex flex-col h-full">
+                        <div className="flex justify-between items-start mb-5">
+                          <div className={`p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 ${color}`}>
+                            <Icon className="h-9 w-9" />
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] uppercase text-slate-400">{kindLabel[kind]}</span>
+                            <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400">{kindLabel[kind]}</span>
                             {canFavorite ? (
                               <button
                                 type="button"
                                 onClick={() => void toggleFavoriteResource(resource.id)}
                                 disabled={favoritingIds.has(resource.id)}
-                                className="rounded-full p-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 disabled:opacity-60"
+                                className="rounded-full p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 disabled:opacity-60 transition-colors"
                                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                               >
-                                <Heart className={`h-3.5 w-3.5 ${isFavorite ? "text-red-500 fill-red-500" : "text-slate-500"}`} />
+                                <Heart className={`h-4 w-4 ${isFavorite ? "text-red-500 fill-red-500" : "text-slate-500"}`} />
                               </button>
                             ) : null}
                           </div>
                         </div>
 
-                        <h3 className="font-semibold text-slate-900 dark:text-white mb-1 line-clamp-2">{resource.title}</h3>
-                        <p className="text-xs text-indigo-600 font-medium mb-4">{resource.courseCategory || "General"}</p>
+                        <h3 className="font-semibold text-base text-slate-900 dark:text-white mb-2 line-clamp-2 leading-snug">{resource.title}</h3>
+                        <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mb-5">{resource.courseCategory || "General"}</p>
 
-                        <div className="mt-auto flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-100 dark:border-slate-800">
-                          <span>{resource.size || "-"}</span>
+                        <div className="mt-auto flex items-center justify-between text-xs text-slate-500 pt-5 border-t border-slate-100 dark:border-slate-800">
+                          <span className="font-medium">{resource.size || "-"}</span>
                           <span>{formatDate(resource.date)}</span>
                         </div>
                       </CardContent>
 
-                      <div className="p-4 pt-0 grid grid-cols-2 gap-2">
-                        <Button variant="secondary" className="w-full text-xs h-9" asChild={hasUrl} disabled={!hasUrl}>
+                      <div className="p-4 pt-0 pb-5 grid grid-cols-2 gap-3">
+                        <Button variant="secondary" className="w-full text-xs h-10 font-medium" asChild={hasUrl} disabled={!hasUrl}>
                           {hasUrl ? (
                             <a href={resource.url} target="_blank" rel="noreferrer">
                               <LinkIcon className="h-4 w-4 mr-2" />
@@ -305,7 +305,7 @@ export function Resources() {
                           )}
                         </Button>
 
-                        <Button className="w-full text-xs h-9" asChild={hasUrl} disabled={!hasUrl}>
+                        <Button className="w-full text-xs h-10 font-medium bg-indigo-600 hover:bg-indigo-700" asChild={hasUrl} disabled={!hasUrl}>
                           {hasUrl ? (
                             <a href={resource.url} target="_blank" rel="noreferrer">
                               <Download className="h-4 w-4 mr-2" />
