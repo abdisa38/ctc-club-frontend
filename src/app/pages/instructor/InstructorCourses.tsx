@@ -24,21 +24,44 @@ export function InstructorCourses() {
   useEffect(() => {
     const loadCourses = async () => {
       try {
+        // Fetch courses - for admin, this should return ALL courses
         const payload = await apiService.getCourses({ limit: 100 });
         const allCourses = payload.items;
 
-        console.log('Total courses fetched:', allCourses.length);
+        console.log('=== COURSE LOADING DEBUG ===');
+        console.log('Total courses fetched from API:', allCourses.length);
         console.log('User role:', role);
         console.log('Is admin view:', isAdminView);
+        console.log('User ID:', user?._id);
+        console.log('All courses:', allCourses.map(c => ({ 
+          id: c._id, 
+          title: c.title, 
+          instructor: typeof c.instructor === 'string' ? c.instructor : c.instructor?._id,
+          status: c.status 
+        })));
 
         // For admin, show ALL courses regardless of instructor
         // For instructor, show only their own courses
-        const filtered = isAdminView ? allCourses : allCourses.filter((course) => {
-          const instructorId = typeof course.instructor === 'string' ? course.instructor : course.instructor?._id;
-          return instructorId === user?._id;
-        });
+        let filtered;
+        if (isAdminView) {
+          // Admin sees everything
+          filtered = allCourses;
+          console.log('Admin mode: showing all courses');
+        } else {
+          // Instructor sees only their courses
+          filtered = allCourses.filter((course) => {
+            const instructorId = typeof course.instructor === 'string' ? course.instructor : course.instructor?._id;
+            const match = instructorId === user?._id;
+            if (!match) {
+              console.log(`Filtering out course "${course.title}" - instructor ${instructorId} !== user ${user?._id}`);
+            }
+            return match;
+          });
+          console.log('Instructor mode: filtered to own courses');
+        }
         
-        console.log('Filtered courses:', filtered.length);
+        console.log('Final filtered courses:', filtered.length);
+        console.log('===========================');
         setCourses(filtered);
       } catch (err: any) {
         console.error('Error loading courses:', err);
@@ -94,7 +117,7 @@ export function InstructorCourses() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{isAdminView ? "All Courses" : "My Courses"}</h1>
           <p className="text-slate-500 dark:text-slate-400">
             {isAdminView
-              ? "Manage all instructor courses across the platform."
+              ? `Manage all instructor courses across the platform. (${courses.length} total courses)`
               : "Manage your courses and build lessons, resources, quizzes, and projects directly inside each course."}
           </p>
         </div>
