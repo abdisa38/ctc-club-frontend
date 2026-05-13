@@ -179,50 +179,54 @@ export function Profile() {
 
       <Card className="overflow-hidden border-0 shadow-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950">
         <div className="h-44 bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600" />
-        <CardContent className="relative px-6 sm:px-8 pb-8 pt-0 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <Avatar className="h-32 w-32 border-4 border-white dark:border-slate-950 -mt-16 bg-white shrink-0">
-            <AvatarImage src={account?.avatar || ""} alt={account?.name || "User"} />
-            <AvatarFallback>{initials(account?.name)}</AvatarFallback>
-          </Avatar>
+        <CardContent className="relative px-6 sm:px-8 pb-8 pt-0">
+          <div className="flex flex-col sm:flex-row gap-6 items-start">
+            <Avatar className="h-32 w-32 border-4 border-white dark:border-slate-950 -mt-16 bg-white shrink-0">
+              <AvatarImage src={account?.avatar || ""} alt={account?.name || "User"} />
+              <AvatarFallback>{initials(account?.name)}</AvatarFallback>
+            </Avatar>
 
-          <div className="flex-1 text-center sm:text-left pt-2">
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{account?.name || "User"}</h1>
-                <p className="text-lg text-slate-500 font-medium mt-1">
-                  {account?.headline || `${roleLabel(account?.role)} at CTC Club`}
-                </p>
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  <span className="flex items-center gap-1"><Mail className="h-4 w-4" /> {account?.email || "No email"}</span>
-                  <span className="flex items-center gap-1"><ShieldCheck className="h-4 w-4" /> {roleLabel(account?.role)}</span>
-                  <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> Joined {formatDate(account?.createdAt)}</span>
+            <div className="flex-1 pt-2">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                <div className="flex-1">
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                    {(account as any)?.nickname || account?.name || "User"}
+                  </h1>
+                  <p className="text-lg text-slate-500 font-medium mt-1">
+                    {account?.headline || `${roleLabel(account?.role)} at CTC Club`}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-slate-600 dark:text-slate-400">
+                    <span className="flex items-center gap-1"><Mail className="h-4 w-4" /> {account?.email || "No email"}</span>
+                    <span className="flex items-center gap-1"><ShieldCheck className="h-4 w-4" /> {roleLabel(account?.role)}</span>
+                    <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> Joined {formatDate(account?.createdAt)}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-2 shrink-0">
-                {account?.socialLinks?.github ? (
-                  <Button asChild variant="outline" size="icon">
-                    <a href={account.socialLinks.github} target="_blank" rel="noreferrer" aria-label="GitHub profile">
-                      <Github className="h-5 w-5" />
-                    </a>
+                <div className="flex gap-2 shrink-0 sm:self-start">
+                  {account?.socialLinks?.github ? (
+                    <Button asChild variant="outline" size="icon">
+                      <a href={account.socialLinks.github} target="_blank" rel="noreferrer" aria-label="GitHub profile">
+                        <Github className="h-5 w-5" />
+                      </a>
+                    </Button>
+                  ) : null}
+                  {account?.socialLinks?.linkedin ? (
+                    <Button asChild variant="outline" size="icon">
+                      <a href={account.socialLinks.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+                        <Linkedin className="h-5 w-5" />
+                      </a>
+                    </Button>
+                  ) : null}
+                  {account?.socialLinks?.website ? (
+                    <Button asChild variant="outline" size="icon">
+                      <a href={account.socialLinks.website} target="_blank" rel="noreferrer" aria-label="Website">
+                        <Globe className="h-5 w-5" />
+                      </a>
+                    </Button>
+                  ) : null}
+                  <Button type="button" onClick={jumpToSettings}>
+                    Edit Profile
                   </Button>
-                ) : null}
-                {account?.socialLinks?.linkedin ? (
-                  <Button asChild variant="outline" size="icon">
-                    <a href={account.socialLinks.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
-                      <Linkedin className="h-5 w-5" />
-                    </a>
-                  </Button>
-                ) : null}
-                {account?.socialLinks?.website ? (
-                  <Button asChild variant="outline" size="icon">
-                    <a href={account.socialLinks.website} target="_blank" rel="noreferrer" aria-label="Website">
-                      <Globe className="h-5 w-5" />
-                    </a>
-                  </Button>
-                ) : null}
-                <Button type="button" onClick={jumpToSettings}>
-                  Edit Profile
-                </Button>
+                </div>
               </div>
             </div>
           </div>
