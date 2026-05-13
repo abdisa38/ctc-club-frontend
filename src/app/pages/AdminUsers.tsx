@@ -24,6 +24,8 @@ export function AdminUsers() {
   const [editingUser, setEditingUser] = useState<AuthUser | null>(null);
   const [newRole, setNewRole] = useState<AuthUser["role"]>("student");
   const [deleteConfirmId, setDeleteConfirmId] = useState<string>("");
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [newUser, setNewUser] = useState({ name: "", email: "", password: "", role: "student" as AuthUser["role"] });
 
   const fetchUsers = async () => {
     try {
@@ -115,6 +117,27 @@ export function AdminUsers() {
       setTotalUsers((prev) => Math.max(0, prev - 1));
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to delete user");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleCreateUser = async () => {
+    if (!newUser.name || !newUser.email || !newUser.password) {
+      setError("Name, email, and password are required");
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      const created = await apiService.createUser(newUser);
+      setUsers((prev) => [created, ...prev]);
+      setTotalUsers((prev) => prev + 1);
+      setShowCreateDialog(false);
+      setNewUser({ name: "", email: "", password: "", role: "student" });
+      setError("");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to create user");
     } finally {
       setIsUpdating(false);
     }
