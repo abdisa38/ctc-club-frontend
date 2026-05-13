@@ -753,7 +753,7 @@ export function Home() {
                 <h3 className="text-xl font-bold text-white">Backend Track</h3>
                 <p className="mt-2 text-sm text-slate-300">Node.js, Express.js, MySQL, and REST API training.</p>
                 <div className="my-8 flex items-baseline gap-1">
-                  <span className="text-5xl font-extrabold text-white tracking-tight">1000 ETB</span>
+                  <span className="text-5xl font-extrabold text-white tracking-tight">1500 ETB</span>
                   <span className="text-base text-slate-300 ml-1">/ backend track</span>
                 </div>
                 <ul className="space-y-3.5 mb-8">
