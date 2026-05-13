@@ -5,7 +5,7 @@ import { Badge } from "../../components/ui/Badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../../components/ui/Dialog";
 import { Input } from "../../components/ui/Input";
 import { Textarea } from "../../components/ui/Textarea";
-import { Megaphone, Plus, Loader2, Trash2 } from "lucide-react";
+import { Megaphone, Plus, Loader2, Trash2, Edit2 } from "lucide-react";
 import apiService, { Announcement } from "../../services/api";
 
 type AnnouncementForm = {
@@ -154,6 +154,15 @@ export function AdminAnnouncements() {
                     <div className="h-8 w-8 rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center">
                       <Megaphone className="h-4 w-4" />
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+                      onClick={() => handleEditAnnouncement(item)}
+                    >
+                      <Edit2 className="h-3.5 w-3.5 mr-1" />
+                      Edit
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
