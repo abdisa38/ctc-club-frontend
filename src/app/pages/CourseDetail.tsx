@@ -2216,6 +2216,55 @@ export function CourseDetail() {
                   </Button>
                 </div>
               ) : null}
+
+              {editingLessonId ? (
+                <div className="rounded-lg border-2 border-indigo-200 bg-indigo-50/50 p-3 space-y-2 dark:border-indigo-800 dark:bg-indigo-950/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-sm text-indigo-900 dark:text-indigo-100">Edit Lesson</h4>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setEditingLessonId(null);
+                        setEditLessonForm(defaultLessonForm);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                  <Input
+                    placeholder="Lesson title"
+                    value={editLessonForm.title}
+                    onChange={(event) => setEditLessonForm((prev) => ({ ...prev, title: event.target.value }))}
+                  />
+                  <Input
+                    placeholder="Video URL (optional)"
+                    value={editLessonForm.videoUrl}
+                    onChange={(event) => setEditLessonForm((prev) => ({ ...prev, videoUrl: event.target.value }))}
+                  />
+                  <Input
+                    placeholder="Duration in minutes (or hh:mm:ss)"
+                    value={editLessonForm.duration}
+                    onChange={(event) => setEditLessonForm((prev) => ({ ...prev, duration: event.target.value }))}
+                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="edit-lesson-published"
+                      checked={editLessonForm.isPublished}
+                      onChange={(event) => setEditLessonForm((prev) => ({ ...prev, isPublished: event.target.checked }))}
+                      className="h-4 w-4 rounded border-slate-300 text-indigo-600"
+                    />
+                    <label htmlFor="edit-lesson-published" className="text-sm text-slate-700 dark:text-slate-300">
+                      Published (visible to students)
+                    </label>
+                  </div>
+                  <Button className="w-full bg-indigo-600 hover:bg-indigo-700" onClick={() => void handleUpdateLesson()} disabled={contentActionBusy}>
+                    {contentActionBusy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                    Update Lesson
+                  </Button>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
