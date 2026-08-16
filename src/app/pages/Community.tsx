@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export function Community() {
   useEffect(() => {
-    window.location.href = "https://t.me/officialCTCclub";
+    window.location.href = "https://t.me/fullstackdeveloper_abdi";
   }, []);
 
   return (
@@ -11,7 +11,7 @@ export function Community() {
       <p className="text-slate-500 dark:text-slate-400">
         If you are not redirected automatically,{" "}
         <a 
-          href="https://t.me/officialCTCclub" 
+          href="https://t.me/fullstackdeveloper_abdi" 
           target="_blank"
           rel="noreferrer"
           className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
