@@ -417,9 +417,9 @@ export function Home() {
                     <img key={i} src={`https://images.unsplash.com/${id}?w=40&h=40&fit=crop&crop=face`} alt="" className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" />
                   ))}
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-white">Join us</span>
-                  <span className="text-slate-300 ml-1">and start learning</span>
+                <div className="flex flex-col text-sm">
+                  <span className="font-semibold text-white">{stats.activeStudents.toLocaleString()}+ Registered Students</span>
+                  <span className="text-slate-300">Join us and start learning</span>
                 </div>
               </motion.div>
             </div>
