@@ -14,6 +14,7 @@ function getImports(dir) {
       const matches = content.matchAll(/from\s+['"]([^'"]+)['"]/g);
       for (const m of matches) {
         if (!m[1].startsWith('.')) {
+        
           imports.add(m[1]);
         }
       }
