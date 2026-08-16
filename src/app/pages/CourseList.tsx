@@ -360,10 +360,7 @@ export function CourseList() {
                         )}
 
                         <div className="flex flex-wrap items-center gap-4 mt-auto">
-                          <div className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400">
-                            <Users className="h-4 w-4" />
-                            <span>{Array.isArray(course.students) ? course.students.length : 0} students</span>
-                          </div>
+                          {/* Student count removed here */}
                           <Badge variant="secondary" className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
                             <Clock className="h-3 w-3 mr-1 inline" /> 10h
                           </Badge>

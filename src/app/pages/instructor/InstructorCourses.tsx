@@ -209,14 +209,7 @@ export function InstructorCourses() {
                       <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{course.description}</p>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Students</p>
-                        <p className="font-semibold text-slate-900 dark:text-white flex items-center gap-1">
-                          <Users className="h-4 w-4 text-slate-400" />
-                          {students}
-                        </p>
-                      </div>
+                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
                       <div>
                         <p className="text-xs text-slate-500 mb-1">Revenue</p>
                         <p className="font-semibold text-slate-900 dark:text-white">{revenue.toLocaleString()} ETB</p>

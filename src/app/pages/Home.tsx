@@ -127,7 +127,6 @@ function CourseCard({ course }: { course: FeaturedCourse }) {
         <h3 className="text-[11px] font-semibold text-white mb-0.5 line-clamp-1">{course.title}</h3>
         <p className="text-[9px] text-slate-300 mb-1">{course.instructor}</p>
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[8px] text-slate-400">{Number(course.students || 0)} students</span>
         </div>
         <Button size="sm" className="w-full h-6 text-[9px] font-bold rounded-md shadow-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white" asChild>
           <Link to={`/app/courses/${course.id}`}>Open Course</Link>
@@ -418,9 +417,9 @@ export function Home() {
                     <img key={i} src={`https://images.unsplash.com/${id}?w=40&h=40&fit=crop&crop=face`} alt="" className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" />
                   ))}
                 </div>
-                <div className="text-sm">
-                  <span className="font-semibold text-white">{stats.activeStudents.toLocaleString()}+</span>
-                  <span className="text-slate-300 ml-1">students already learning</span>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-white">Join us</span>
+                  <span className="text-slate-300 ml-1">and start learning</span>
                 </div>
               </motion.div>
             </div>

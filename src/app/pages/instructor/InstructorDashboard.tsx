@@ -174,7 +174,6 @@ export function InstructorDashboard({ metrics }: { metrics?: any }) {
               <div key={course.name} className="flex items-center justify-between rounded-lg border border-slate-200 p-3 dark:border-slate-800">
                 <div>
                   <p className="text-sm font-medium text-slate-900 dark:text-white">{course.name}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{Number(course.students || 0).toLocaleString()} students</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-emerald-600">{Number(course.revenue || 0).toLocaleString()} ETB</p>

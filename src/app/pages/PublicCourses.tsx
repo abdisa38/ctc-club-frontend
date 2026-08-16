@@ -174,10 +174,7 @@ export function PublicCourses() {
                         )}
 
                         <div className="flex items-center gap-4 mt-auto">
-                          <div className="flex items-center gap-1.5 text-sm text-slate-400">
-                            <Users className="h-4 w-4" />
-                            <span>{Number(course.students || 0)} students</span>
-                          </div>
+
                           <Button 
                             size="sm" 
                             className="ml-auto h-8 text-xs font-bold rounded-md shadow-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white" 

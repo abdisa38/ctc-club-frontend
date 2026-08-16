@@ -211,12 +211,9 @@ export function Favorites() {
                       </h3>
                     </Link>
                     <p className="text-sm text-slate-500 mb-4">{course.instructor?.name || "Instructor"}</p>
-                    <div className="flex items-center justify-between text-sm text-slate-500 pt-4 mt-auto border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center text-sm text-slate-500 pt-4 mt-auto border-t border-slate-100 dark:border-slate-800">
                       <span className="flex items-center gap-1">
                         <Clock className="h-4 w-4" /> On demand
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="h-4 w-4" /> {Array.isArray(course.students) ? course.students.length : 0}
                       </span>
                     </div>
                   </CardContent>
