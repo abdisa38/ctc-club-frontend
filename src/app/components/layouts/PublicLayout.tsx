@@ -60,7 +60,7 @@ export function PublicLayout() {
   const navLinks = [
     { label: "Home", to: "/" },
     { label: "Explore Courses", to: "/courses" },
-    { label: "Community", to: "https://t.me/officialCTCclub" },
+    { label: "Community", to: "https://t.me/fullstackdeveloper_abdi" },
     { label: "About", to: "/about" },
   ];
 

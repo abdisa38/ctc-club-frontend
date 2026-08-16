@@ -621,7 +621,7 @@ export function Home() {
                 ))}
               </div>
               <Button size="lg" className="bg-white text-slate-900 hover:bg-cyan-50 rounded-xl h-12 px-8 font-semibold shadow-lg shadow-black/10 transition-all duration-300" asChild>
-                <a href="https://t.me/officialCTCclub" target="_blank" rel="noreferrer">
+                <a href="https://t.me/fullstackdeveloper_abdi" target="_blank" rel="noreferrer">
                   Join on Telegram <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
