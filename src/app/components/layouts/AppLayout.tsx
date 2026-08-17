@@ -326,11 +326,12 @@ export function AppLayout() {
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden h-full pb-16 md:pb-0">
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200/60 bg-white/80 backdrop-blur-xl px-4 md:px-6 dark:border-slate-800/40 dark:bg-[#0c0f1a]/80">
-          <div className="flex items-center gap-3 md:hidden">
+          <div className="flex items-center gap-2.5 md:hidden">
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
               <Menu className="h-5 w-5 text-slate-600 dark:text-slate-400" />
             </button>
-            <span className="font-bold text-base text-slate-900 dark:text-white">CTC Club</span>
+            <img src={ctcLogo} alt="CTC Logo" className="h-7 w-7 rounded-lg object-cover" />
+            <span className="font-extrabold text-base text-slate-900 dark:text-white">CTC Club</span>
           </div>
 
           <div className="hidden flex-1 items-center gap-4 md:flex max-w-sm">

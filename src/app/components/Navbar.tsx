@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
-import { Trophy, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import ctcLogo from '../../assets/f6c46c16a776a1f63a42e49b36947669f8dcc942.png';
 
 interface NavbarProps {
   isLoggedIn?: boolean;
@@ -17,11 +18,11 @@ export default function Navbar({ isLoggedIn = false, userRole }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold">Ofijan</span>
+            <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition group">
+              <img src={ctcLogo} alt="CTC Club" className="w-8 h-8 rounded-lg object-cover transition-transform group-hover:scale-105" />
+              <span className="text-xl font-extrabold tracking-tight text-white">
+                CTC <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Club</span>
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
