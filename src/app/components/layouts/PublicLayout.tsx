@@ -77,7 +77,7 @@ export function PublicLayout() {
           <div className="mx-auto flex h-16 items-center px-6 lg:px-8 gap-10 max-w-[1400px] w-full">
             <Link to="/" className="flex items-center gap-2.5 shrink-0 mr-auto group">
               <div className="relative">
-                <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-xl ring-1 ring-slate-200/50 dark:ring-slate-700/50 transition-transform duration-300 group-hover:scale-105" />
+                <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-full object-cover ring-2 ring-indigo-500/20 shadow-sm transition-transform duration-300 group-hover:scale-105" />
               </div>
               <span className="text-xl font-extrabold tracking-tight text-white">
                 CTC <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Club</span>
@@ -198,7 +198,7 @@ export function PublicLayout() {
               {/* Brand */}
               <div>
                 <Link to="/" className="flex items-center gap-2.5 mb-5 group">
-                  <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-xl transition-transform group-hover:scale-105" />
+                  <img src={ctcLogo} alt="CTC Club" className="h-9 w-9 rounded-full object-cover ring-2 ring-indigo-500/20 transition-transform group-hover:scale-105" />
                   <span className="text-lg font-bold text-white">
                     CTC <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Club</span>
                   </span>

@@ -237,7 +237,7 @@ export function AppLayout() {
       <div className="flex h-16 items-center border-b border-slate-100 dark:border-slate-800/50 px-5 shrink-0">
         <Link to="/app/dashboard" className="flex items-center gap-2.5 group">
           <div className="relative">
-            <img src={ctcLogo} alt="CTC" className="h-8 w-8 rounded-lg transition-transform group-hover:scale-105" />
+            <img src={ctcLogo} alt="CTC" className="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-500/20 transition-transform group-hover:scale-105" />
           </div>
           <div className="flex flex-col">
             <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
@@ -330,7 +330,7 @@ export function AppLayout() {
             <button onClick={() => setMobileMenuOpen(true)} className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
               <Menu className="h-5 w-5 text-slate-600 dark:text-slate-400" />
             </button>
-            <img src={ctcLogo} alt="CTC Logo" className="h-7 w-7 rounded-lg object-cover" />
+            <img src={ctcLogo} alt="CTC Logo" className="h-7 w-7 rounded-full object-cover ring-2 ring-indigo-500/20" />
             <span className="font-extrabold text-base text-slate-900 dark:text-white">CTC Club</span>
           </div>
 

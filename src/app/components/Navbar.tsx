@@ -19,7 +19,7 @@ export default function Navbar({ isLoggedIn = false, userRole }: NavbarProps) {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition group">
-              <img src={ctcLogo} alt="CTC Club" className="w-8 h-8 rounded-lg object-cover transition-transform group-hover:scale-105" />
+              <img src={ctcLogo} alt="CTC Club" className="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-500/20 transition-transform group-hover:scale-105" />
               <span className="text-xl font-extrabold tracking-tight text-white">
                 CTC <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Club</span>
               </span>
