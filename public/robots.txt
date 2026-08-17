@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow private user/admin routes from indexing
+Disallow: /app/admin/
+Disallow: /app/instructor/
+Disallow: /app/profile
+Disallow: /app/settings
+
+Sitemap: https://ctc2026.codes/sitemap.xml
+Sitemap: https://www.ctc2026.codes/sitemap.xml
