@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 // Create an Axios instance pointing to the API
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://web-production-d5e5f.up.railway.app/api';
+
 const api = axios.create({
-  baseURL: 'https://ctc-14efa787b23a.herokuapp.com/api',
+  baseURL: API_BASE_URL,
   withCredentials: true, // Enable credentials to send cookies
   headers: {
     'Content-Type': 'application/json',
