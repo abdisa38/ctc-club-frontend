@@ -353,7 +353,7 @@ export function Home() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
                 className="home-display text-4xl sm:text-5xl lg:text-[58px] font-extrabold tracking-tight text-white leading-[1.05]"
               >
-                CTC Club (CTC2026) — Learn Tech Skills.{" "}
+                CTC Club Learn Tech Skills.{" "}
                 <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Build Real Projects.</span><br />
               </motion.h1>
 
