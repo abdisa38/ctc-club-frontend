@@ -1,7 +1,15 @@
 import axios from 'axios';
 
-// Create an Axios instance pointing to the API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://web-production-d5e5f.up.railway.app/api';
+const getNormalizedApiUrl = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL || 'https://abdisa38-ctc-club-backend.onrender.com/api';
+  let cleanUrl = envUrl.trim().replace(/\/+$/, '');
+  if (!cleanUrl.endsWith('/api')) {
+    cleanUrl = `${cleanUrl}/api`;
+  }
+  return cleanUrl;
+};
+
+const API_BASE_URL = getNormalizedApiUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -14,7 +22,8 @@ const api = axios.create({
 // Configure Axios interceptors if needed
 api.interceptors.request.use(
   (config) => {
-    console.log('Making API request to:', config.baseURL + config.url);
+    const formattedUrl = (config.baseURL?.replace(/\/+$/, '') || '') + '/' + (config.url?.replace(/^\/+/, '') || '');
+    console.log('Making API request to:', formattedUrl);
     
     // Add JWT token from localStorage to Authorization header
     const token = localStorage.getItem('jwt_token');
