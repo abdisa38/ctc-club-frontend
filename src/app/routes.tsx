@@ -5,8 +5,15 @@ import { RouterFallback } from "./components/RouterFallback";
 
 const lazyComponent = <T extends Record<string, any>>(loader: () => Promise<T>, exportName: keyof T) => {
   return async () => {
-    const module = await loader();
-    return { Component: module[exportName] };
+    try {
+      const module = await loader();
+      return { Component: module[exportName] };
+    } catch (error) {
+      console.error("Failed to load chunk, auto-reloading page...", error);
+      // Auto-reload to fetch the newest index.html and chunk bundles after a deployment
+      window.location.reload();
+      return new Promise<any>(() => {});
+    }
   };
 };
 
