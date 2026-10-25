@@ -183,6 +183,7 @@ export function Home() {
     activeStudents: 0,
     videoCourses: 0,
     instructors: 0,
+  const [studentAvatars, setStudentAvatars] = useState<Array<{ name: string; avatar: string }>>([]);
   });
 
   const toNumber = (value: unknown, fallback = 0) => {
@@ -207,6 +208,9 @@ export function Home() {
             videoCourses: toNumber(payload?.videoCourses, prev.videoCourses),
             instructors: toNumber(payload?.instructors, prev.instructors),
           }));
+          if (Array.isArray(payload?.studentAvatars) && payload.studentAvatars.length > 0) {
+            setStudentAvatars(payload.studentAvatars);
+          }
         }
 
         const coursesPayload = coursesRes.data?.data ?? coursesRes.data;
@@ -409,8 +413,18 @@ export function Home() {
                 className="mt-10 flex items-center gap-4 justify-center lg:justify-start"
               >
                 <div className="flex -space-x-2">
-                  {["photo-1535713875002-d1d0cf377fde", "photo-1573497620166-aef748c8c792", "photo-1568880893176-fb2bdab44e41", "photo-1472099645785-5658abf4ff4e"].map((id, i) => (
-                    <img key={i} src={`https://images.unsplash.com/${id}?w=40&h=40&fit=crop&crop=face`} alt="" className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" />
+                  {(studentAvatars.length > 0 ? studentAvatars : ["Alex", "Sara", "David", "Hana"].map((name, i) => ({
+                    name,
+                    avatar: `https://images.unsplash.com/${["photo-1535713875002-d1d0cf377fde", "photo-1573497620166-aef748c8c792", "photo-1568880893176-fb2bdab44e41", "photo-1472099645785-5658abf4ff4e"][i]}?w=40&h=40&fit=crop&crop=face`
+                  }))).slice(0, 4).map((student, i) => (
+                    <img
+                      key={i}
+                      src={student.avatar}
+                      alt={student.name}
+                      title={student.name}
+                      className="h-8 w-8 rounded-full border-2 border-white dark:border-slate-900 object-cover bg-slate-800"
+                      onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name || "Student")}&background=0284c7&color=ffffff&bold=true`; }}
+                    />
                   ))}
                 </div>
                 <div className="flex flex-col text-sm">
