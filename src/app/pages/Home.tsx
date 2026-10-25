@@ -183,8 +183,8 @@ export function Home() {
     activeStudents: 0,
     videoCourses: 0,
     instructors: 0,
-  const [studentAvatars, setStudentAvatars] = useState<Array<{ name: string; avatar: string }>>([]);
   });
+  const [studentAvatars, setStudentAvatars] = useState<Array<{ name: string; avatar: string }>>([]);
 
   const toNumber = (value: unknown, fallback = 0) => {
     const parsed = Number(value);
