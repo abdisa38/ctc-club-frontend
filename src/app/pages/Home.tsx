@@ -716,7 +716,7 @@ export function Home() {
               badge="Pricing"
               title="Simple, Transparent"
               highlight="Pricing"
-              description="Frontend track is completely free. Backend track costs 200 ETB."
+              description="Frontend track is completely free. Backend track costs 1000 ETB."
             />
           </AnimatedSection>
 
@@ -787,7 +787,7 @@ export function Home() {
             {[
               {
                 q: "Is CTC Club really free?",
-                a: "Yes! The Frontend track is completely free forever. The Backend track costs 500 ETB for the complete course."
+                a: "Yes! The Frontend track is completely free forever. The Backend track costs 1000 ETB for the complete course."
               },
               {
                 q: "Do I need prior programming experience?",
@@ -799,7 +799,7 @@ export function Home() {
               },
               {
                 q: "Will I get a certificate?",
-                a: "Yes! You'll receive a certificate of completion after finishing each track and passing the final assessment."
+                a: "No"
               },
               {
                 q: "Can I access courses on mobile?",
