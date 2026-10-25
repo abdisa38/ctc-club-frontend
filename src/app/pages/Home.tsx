@@ -343,10 +343,7 @@ export function Home() {
             {/* Left content */}
             <div className="flex-1 text-center lg:text-left max-w-2xl lg:max-w-none">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                <Badge className="mb-8 py-1.5 px-4 text-[13px] font-semibold bg-cyan-50/90 text-cyan-700 border-cyan-200/70 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/20 backdrop-blur-sm">
-                  <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-                  Spring 2026 Registration Open
-                </Badge>
+              
               </motion.div>
 
               <motion.h1
