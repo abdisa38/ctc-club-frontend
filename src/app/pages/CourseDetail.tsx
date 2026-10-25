@@ -1326,7 +1326,7 @@ export function CourseDetail() {
                 <p className="font-semibold text-slate-900 dark:text-white">Manual Telebirr payment</p>
                 <ol className="list-decimal pl-4 space-y-1">
                   <li>Pay the course fee using Telebirr on this 0938890645 Abdisa.</li>
-                  <li>Send the payment screenshot to this telegram account{TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
+                  <li>Send the payment screenshot to this telegram account {TELEGRAM_PAYMENT_HANDLE} with your email and course name.</li>
                 </ol>
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
